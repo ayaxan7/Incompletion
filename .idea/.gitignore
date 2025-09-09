@@ -1,5 +1,8 @@
-# Default ignored files
+# IntelliJ / Android Studio user-specific files
 /shelf/
 /workspace.xml
-# Editor-based HTTP Client requests
 /httpRequests/
+/dataSources/
+/dataSources.local.xml
+/deploymentTargetDropDown.xml
+/render.experimental.xml
