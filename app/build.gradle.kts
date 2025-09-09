@@ -27,6 +27,7 @@ android {
         versionCode = 1
         versionName = "1.0"
         buildConfigField("String", "GMAPS_API_KEY", "\"$gmapsApiKey\"")
+        manifestPlaceholders["MAPS_API_KEY"] = gmapsApiKey
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -141,4 +142,5 @@ dependencies {
     implementation("com.google.android.gms:play-services-base:18.7.2")
     implementation("com.google.android.gms:play-services-auth:21.4.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.10.2")
+    implementation("com.google.android.libraries.places:places:4.4.1")
 }
