@@ -17,8 +17,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ayaan.incompletion.presentation.auth.components.GenderSelectionCard
-import com.ayaan.incompletion.presentation.auth.components.GradientButton
-import com.ayaan.incompletion.presentation.auth.components.ThemedTextField
+import com.ayaan.incompletion.presentation.common.components.GradientButton
+import com.ayaan.incompletion.presentation.common.components.ThemedTextField
 import kotlinx.coroutines.launch
 import com.ayaan.incompletion.ui.theme.*
 

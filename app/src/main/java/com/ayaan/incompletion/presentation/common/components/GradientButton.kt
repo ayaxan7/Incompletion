@@ -1,4 +1,4 @@
-package com.ayaan.incompletion.presentation.auth.components
+package com.ayaan.incompletion.presentation.common.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,7 +17,8 @@ fun GradientButton(
     text: String,
     isLoading: Boolean,
     enabled: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val gradient = Brush.horizontalGradient(
         colors = GradientPrimary

@@ -1,0 +1,33 @@
+package com.ayaan.incompletion.presentation.home.components
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.ayaan.incompletion.data.PlaceSuggestion
+
+@Composable
+fun SuggestionItem(
+    suggestion: PlaceSuggestion, onClick: () -> Unit
+) {
+    Column(modifier = Modifier
+        .fillMaxWidth()
+        .background(Color.White)
+        .clickable { onClick() }
+        .padding(16.dp)) {
+        Text(
+            text = suggestion.primaryText, fontWeight = FontWeight.Medium, fontSize = 16.sp
+        )
+        Text(
+            text = suggestion.secondaryText, fontSize = 14.sp, color = Color.Gray
+        )
+    }
+}
