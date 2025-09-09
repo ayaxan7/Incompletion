@@ -9,9 +9,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.ayaan.incompletion.HomeScreen
 import com.ayaan.incompletion.presentation.auth.signin.SignInScreen
 import com.ayaan.incompletion.presentation.auth.signup.SignUpScreen
+import com.ayaan.incompletion.presentation.home.HomeScreen
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
