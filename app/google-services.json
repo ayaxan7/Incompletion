@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "266840847196",
+    "project_id": "incomplete-project-9d49a",
+    "storage_bucket": "incomplete-project-9d49a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:266840847196:android:a6b50d685174836c75c799",
+        "android_client_info": {
+          "package_name": "com.ayaan.incompletion"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWRum0ewt42N45FRoQwqTw-HoF3A652a4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
