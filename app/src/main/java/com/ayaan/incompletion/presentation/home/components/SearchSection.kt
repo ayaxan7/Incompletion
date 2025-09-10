@@ -1,148 +1,223 @@
 package com.ayaan.incompletion.presentation.home.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DirectionsBus
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.SwapVert
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.ayaan.incompletion.BuildConfig
 import com.ayaan.incompletion.data.PlaceSuggestion
+import com.ayaan.incompletion.presentation.common.components.GradientButton
 import com.ayaan.incompletion.presentation.common.components.ThemedTextField
+import com.ayaan.incompletion.presentation.home.getLatLngFromPlaceId
 import com.ayaan.incompletion.presentation.home.getPlaceSuggestions
+import com.ayaan.incompletion.presentation.home.getRoutePolyline
+import com.ayaan.incompletion.presentation.navigation.Destinations
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.Places
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchSection() {
+fun SearchSection(
+    drawerState: DrawerState,
+    onRouteFetched: (List<LatLng>) -> Unit,
+    onValidityChanged: (Boolean) -> Unit,
+    onLocationsSet: (LatLng?, LatLng?) -> Unit,
+    navController: NavController
+) {
     var sourceText by remember { mutableStateOf("") }
     var destinationText by remember { mutableStateOf("") }
-    var sourceSuggestions by remember { mutableStateOf<List<PlaceSuggestion>>(emptyList()) }
-    var destinationSuggestions by remember { mutableStateOf<List<PlaceSuggestion>>(emptyList()) }
+    var sourcePlaceId by remember { mutableStateOf<String?>(null) }
+    var destinationPlaceId by remember { mutableStateOf<String?>(null) }
+    var suggestions by remember { mutableStateOf<List<PlaceSuggestion>>(emptyList()) }
     var activeField by remember { mutableStateOf<String?>(null) }
 
     val context = LocalContext.current
     val placesClient = remember { Places.createClient(context) }
     val scope = rememberCoroutineScope()
 
+    fun updateButtonState() {
+        onValidityChanged(!sourcePlaceId.isNullOrEmpty() && !destinationPlaceId.isNullOrEmpty())
+    }
+
+    fun fetchSuggestions(query: String, field: String) {
+        activeField = field
+        if (query.length > 2) {
+            scope.launch {
+                delay(300)
+                suggestions = getPlaceSuggestions(query, placesClient)
+            }
+        } else {
+            suggestions = emptyList()
+        }
+    }
+
+    fun fetchRouteIfReady() {
+        if (sourcePlaceId != null && destinationPlaceId != null) {
+            scope.launch {
+                val sourceLatLng = getLatLngFromPlaceId(sourcePlaceId!!, placesClient)
+                val destinationLatLng = getLatLngFromPlaceId(destinationPlaceId!!, placesClient)
+
+                if (sourceLatLng != null && destinationLatLng != null) {
+                    onLocationsSet(sourceLatLng, destinationLatLng)
+
+                    val routePoints = getRoutePolyline(
+                        origin = sourceLatLng,
+                        destination = destinationLatLng,
+                        apiKey = BuildConfig.GMAPS_API_KEY
+                    )
+                    onRouteFetched(routePoints)
+                }
+            }
+        }
+        updateButtonState()
+    }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .background(Color.White)
-            .padding(16.dp)
+            .padding(end = 16.dp, start = 16.dp, bottom = 24.dp, top = 16.dp)
     ) {
-        // Vehicle Type Indicator
         Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(bottom = 16.dp)
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
                 imageVector = Icons.Default.DirectionsBus,
-                contentDescription = "Bus",
-                tint = Color(0xFF1976D2)
+                contentDescription = "Bus Route",
+                tint = Color(0xFF2196F3),
+                modifier = Modifier.size(24.dp)
             )
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(22.dp))
             Text(
-                text = "Public Bus Routes",
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Medium,
-                color = Color(0xFF1976D2)
+                text = "Plan Your Journey",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFF333333)
             )
         }
 
-        ThemedTextField(
-            value = sourceText, onValueChange = { newText ->
-                sourceText = newText
-                activeField = "source"
+        Spacer(modifier = Modifier.height(16.dp))
 
-                if (newText.isNotBlank() && newText.length > 2) {
-                    scope.launch {
-                        delay(300) // debounce
-                        sourceSuggestions = getPlaceSuggestions(newText, placesClient)
-                    }
-                } else {
-                    sourceSuggestions = emptyList()
-                }
-            }, label = "From (Source)", icon = Icons.Default.LocationOn
+        ThemedTextField(
+            value = sourceText,
+            onValueChange = {
+                sourceText = it
+                sourcePlaceId = null
+                fetchSuggestions(it, "source")
+                updateButtonState()
+                onLocationsSet(null, null)
+            },
+            label = "From (Source)",
+            icon = Icons.Default.LocationOn
         )
 
-        if (activeField == "source" && sourceSuggestions.isNotEmpty()) {
+        // Show suggestions for source field
+        if (suggestions.isNotEmpty() && activeField == "source") {
             SuggestionsDropdown(
-                suggestions = sourceSuggestions, onItemClick = {
-                    sourceText = it.primaryText
-                    sourceSuggestions = emptyList()
+                suggestions = suggestions,
+                onItemClick = { suggestion ->
+                    sourceText = suggestion.primaryText
+                    sourcePlaceId = suggestion.placeId
+                    suggestions = emptyList()
                     activeField = null
-                })
+                    fetchRouteIfReady()
+                }
+            )
         }
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Swap Button Row
-        Row(
-            modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.Center
         ) {
             IconButton(
                 onClick = {
                     val temp = sourceText
                     sourceText = destinationText
                     destinationText = temp
-                }) {
+
+                    val tempId = sourcePlaceId
+                    sourcePlaceId = destinationPlaceId
+                    destinationPlaceId = tempId
+
+                    fetchRouteIfReady()
+                }
+            ) {
                 Icon(
                     imageVector = Icons.Default.SwapVert,
-                    contentDescription = "Swap",
-                    tint = Color.Gray
+                    contentDescription = "Swap Source and Destination",
+                    tint = Color(0xFF2196F3)
                 )
             }
         }
 
         ThemedTextField(
-            value = destinationText, onValueChange = { newText ->
-                destinationText = newText
-                activeField = "destination"
-
-                if (newText.isNotBlank() && newText.length > 2) {
-                    scope.launch {
-                        delay(300)
-                        destinationSuggestions = getPlaceSuggestions(newText, placesClient)
-                    }
-                } else {
-                    destinationSuggestions = emptyList()
-                }
-            }, label = "To (Destination)", icon = Icons.Default.LocationOn
+            value = destinationText,
+            onValueChange = {
+                destinationText = it
+                destinationPlaceId = null
+                fetchSuggestions(it, "destination")
+                updateButtonState()
+                onLocationsSet(null, null)
+            },
+            label = "To (Destination)",
+            icon = Icons.Default.LocationOn
         )
 
-        if (activeField == "destination" && destinationSuggestions.isNotEmpty()) {
+        // Show suggestions for destination field
+        if (suggestions.isNotEmpty() && activeField == "destination") {
             SuggestionsDropdown(
-                suggestions = destinationSuggestions, onItemClick = {
-                    destinationText = it.primaryText
-                    destinationSuggestions = emptyList()
+                suggestions = suggestions,
+                onItemClick = { suggestion ->
+                    destinationText = suggestion.primaryText
+                    destinationPlaceId = suggestion.placeId
+                    suggestions = emptyList()
                     activeField = null
-                })
+                    fetchRouteIfReady()
+                }
+            )
         }
+
+        Spacer(modifier=Modifier.height(16.dp))
+        GradientButton(
+            text = "Find Route",
+            isLoading = false,
+            enabled = !sourcePlaceId.isNullOrEmpty() && !destinationPlaceId.isNullOrEmpty(),
+            onClick = {
+                scope.launch {
+                    drawerState.close()
+                    fetchRouteIfReady()
+                }
+
+                // Navigate with source and destination data
+                val route = "${Destinations.BookTicket.route}?sourceName=${sourceText}&sourceId=${sourcePlaceId ?: ""}&destName=${destinationText}&destId=${destinationPlaceId ?: ""}"
+                navController.navigate(route) {
+                    popUpTo(Destinations.Home.route)
+                    launchSingleTop = true
+                }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp)
+                .height(48.dp)
+        )
     }
 }

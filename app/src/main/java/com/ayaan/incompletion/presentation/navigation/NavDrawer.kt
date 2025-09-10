@@ -1,5 +1,6 @@
 package com.ayaan.incompletion.presentation.navigation
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,6 +16,7 @@ import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import kotlinx.coroutines.CoroutineScope
@@ -22,10 +24,13 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun NavDrawer(drawerState: DrawerState, scope: CoroutineScope, navController: NavController) {
-    ModalDrawerSheet {
+    ModalDrawerSheet(
+        drawerContainerColor = Color.White,
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .background(Color.White)
                 .padding(horizontal = 16.dp, vertical = 6.dp)
         ) {
             Text(
