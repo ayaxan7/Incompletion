@@ -113,7 +113,9 @@ fun AddFavoriteDialog(
                             fetchSuggestions(it, "source")
                         },
                         label = "From (Source)",
-                        icon = Icons.Default.LocationOn
+                        icon = Icons.Default.LocationOn,
+                        focusedBorderColor = Color(0xFF4CAF50), // Green color
+                        unfocusedBorderColor = Color(0xFF4CAF50)
                     )
 
                     // Show suggestions for source field
@@ -164,7 +166,9 @@ fun AddFavoriteDialog(
                             fetchSuggestions(it, "destination")
                         },
                         label = "To (Destination)",
-                        icon = Icons.Default.LocationOn
+                        icon = Icons.Default.LocationOn,
+                        focusedBorderColor = Color(0xFFF44336), // Red color
+                        unfocusedBorderColor = Color(0xFFF44336)
                     )
 
                     // Show suggestions for destination field

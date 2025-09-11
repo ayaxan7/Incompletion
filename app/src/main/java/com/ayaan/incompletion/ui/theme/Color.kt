@@ -46,7 +46,7 @@ val PlaceholderTextColor = Color(0xFF9E9E9E)
 val IconColor = Color(0xFF6C6C70)
 val IconColorActive = Color(0xFF4ec283)
 val IconColorInactive = Color(0xFF9E9E9E)
-
+val IconColorRedActive= Color(0xFFF44336)
 // Card Colors
 val CardBackground = Color(0xFFFFFFFF)
 val CardElevation = Color(0x0A000000)

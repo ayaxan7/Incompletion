@@ -11,8 +11,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -29,7 +31,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.Places
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-
+import com.ayaan.incompletion.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchSection(
@@ -65,27 +67,6 @@ fun SearchSection(
             suggestions = emptyList()
         }
     }
-
-//    fun fetchRouteIfReady() {
-//        if (sourcePlaceId != null && destinationPlaceId != null) {
-//            scope.launch {
-//                val sourceLatLng = getLatLngFromPlaceId(sourcePlaceId!!, placesClient)
-//                val destinationLatLng = getLatLngFromPlaceId(destinationPlaceId!!, placesClient)
-//
-//                if (sourceLatLng != null && destinationLatLng != null) {
-//                    onLocationsSet(sourceLatLng, destinationLatLng)
-//
-//                    val routePoints = getRoutePolyline(
-//                        origin = sourceLatLng,
-//                        destination = destinationLatLng,
-//                        apiKey = BuildConfig.GMAPS_API_KEY
-//                    )
-//                    onRouteFetched(routePoints)
-//                }
-//            }
-//        }
-//        updateButtonState()
-//    }
 
     Column(
         modifier = Modifier
@@ -125,7 +106,9 @@ fun SearchSection(
                 onLocationsSet(null, null)
             },
             label = "From (Source)",
-            icon = Icons.Default.LocationOn
+            icon = Icons.Default.LocationOn,
+            focusedBorderColor = Color(0xFF4CAF50), // Green color
+            unfocusedBorderColor = Color(0xFF4CAF50)
         )
 
         // Show suggestions for source field
@@ -179,7 +162,9 @@ fun SearchSection(
                 onLocationsSet(null, null)
             },
             label = "To (Destination)",
-            icon = Icons.Default.LocationOn
+            painter = painterResource(R.drawable.destination),
+            focusedBorderColor = Color(0xFFF44336), // Red color
+            unfocusedBorderColor = Color(0xFFF44336)
         )
 
         // Show suggestions for destination field
