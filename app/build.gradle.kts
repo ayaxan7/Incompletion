@@ -5,10 +5,11 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.google.gms.google.services)
-    id("com.google.dagger.hilt.android")
-    id("com.google.devtools.ksp")
+    alias(libs.plugins.hilt.android)
+    alias(libs.plugins.ksp)
     id("kotlin-parcelize")
 }
+
 val localPropertiesFile = rootProject.file("local.properties")
 val localProperties = Properties().apply {
     if (localPropertiesFile.exists()) {
@@ -16,6 +17,7 @@ val localProperties = Properties().apply {
     }
 }
 val gmapsApiKey = localProperties.getProperty("GMAPS_API_KEY") ?: "MISSING_API_KEY"
+
 android {
     namespace = "com.ayaan.incompletion"
     compileSdk = 36
@@ -40,13 +42,16 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
     kotlinOptions {
         jvmTarget = "11"
     }
+
     buildFeatures {
         compose = true
         buildConfig = true
@@ -54,93 +59,69 @@ android {
 }
 
 dependencies {
+    // Core Android
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
+
+    // Compose
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.material.icons.extended)
+
+    // Navigation
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.hilt.navigation.compose)
+
+    // Hilt
     implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
+
+    // Firebase & Auth (using BOM for version management)
+    implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.googleid)
+
+    // Google Play Services
     implementation(libs.play.services.maps)
-    ksp(libs.google.hilt.compiler)
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.converter.gson)
-    implementation(libs.okhttp)
-    implementation(libs.androidx.biometric)
-    implementation(libs.kotlin.reflect)
-    implementation(libs.accompanist.systemuicontroller)
-
-    // Testing
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
-
-    // Hilt Testing
-    androidTestImplementation(libs.dagger.hilt.android.testing)
-    kspAndroidTest(libs.google.hilt.compiler)
-    testImplementation(libs.dagger.hilt.android.testing)
-    kspTest(libs.google.hilt.compiler)
-    implementation (libs.androidx.credentials)
-    implementation( libs.androidx.credentials.play.services.auth)
-    implementation (libs.googleid)
-//    implementation(platform("com.google.firebase:firebase-bom:33.16.0"))
-//    implementation("com.google.firebase:firebase-auth-ktx:22.3.0")
-//    implementation("com.google.android.gms:play-services-base:18.7.2")
-//    implementation("com.google.android.gms:play-services-auth:21.3.0")
-//    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.10.2")
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
-    implementation(libs.androidx.material.icons.extended)
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.hilt.navigation.compose)
-    implementation(libs.hilt.android)
-    implementation(libs.firebase.auth)
-    ksp(libs.google.hilt.compiler)
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.converter.gson)
-    implementation(libs.okhttp)
-    implementation(libs.androidx.biometric)
-    implementation(libs.kotlin.reflect)
-    implementation(libs.accompanist.systemuicontroller)
-
-    // Testing
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
-
-    // Hilt Testing
-    androidTestImplementation(libs.dagger.hilt.android.testing)
-    kspAndroidTest(libs.google.hilt.compiler)
-    testImplementation(libs.dagger.hilt.android.testing)
-    kspTest(libs.google.hilt.compiler)
-    implementation (libs.androidx.credentials)
-    implementation( libs.androidx.credentials.play.services.auth)
-    implementation (libs.googleid)
+    implementation(libs.play.services.auth)
+    implementation(libs.play.services.base)
     implementation(libs.maps.compose)
-    implementation(platform("com.google.firebase:firebase-bom:34.2.0"))
-    implementation("com.google.firebase:firebase-auth-ktx:23.2.1")
-    implementation("com.google.android.gms:play-services-base:18.7.2")
-    implementation("com.google.android.gms:play-services-auth:21.4.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.10.2")
-    implementation("com.google.android.libraries.places:places:4.4.1")
+    implementation(libs.places)
+    implementation(libs.coroutines.play.services)
+
+    // Network
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
+    implementation(libs.okhttp)
+
+    // Room Database
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
+
+    // Other
+    implementation(libs.androidx.biometric)
+    implementation(libs.kotlin.reflect)
+    implementation(libs.accompanist.systemuicontroller)
+
+    // Testing
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
+
+    // Hilt Testing
+    androidTestImplementation(libs.dagger.hilt.android.testing)
+    kspAndroidTest(libs.hilt.compiler)
+    testImplementation(libs.dagger.hilt.android.testing)
+    kspTest(libs.hilt.compiler)
 }

@@ -21,7 +21,7 @@ fun GradientButton(
     modifier: Modifier = Modifier
 ) {
     val gradient = Brush.horizontalGradient(
-        colors = GradientPrimary
+        colors = GradientBlue
     )
 
     val disabledGradient = Brush.horizontalGradient(

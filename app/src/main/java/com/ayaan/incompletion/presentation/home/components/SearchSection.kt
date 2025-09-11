@@ -11,7 +11,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -24,12 +23,13 @@ import com.ayaan.incompletion.presentation.common.components.GradientButton
 import com.ayaan.incompletion.presentation.common.components.ThemedTextField
 import com.ayaan.incompletion.presentation.home.getLatLngFromPlaceId
 import com.ayaan.incompletion.presentation.home.getPlaceSuggestions
-import com.ayaan.incompletion.presentation.home.getRoutePolyline
+//import com.ayaan.incompletion.presentation.home.getRoutePolyline
 import com.ayaan.incompletion.presentation.navigation.Destinations
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.Places
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchSection(
@@ -66,32 +66,32 @@ fun SearchSection(
         }
     }
 
-    fun fetchRouteIfReady() {
-        if (sourcePlaceId != null && destinationPlaceId != null) {
-            scope.launch {
-                val sourceLatLng = getLatLngFromPlaceId(sourcePlaceId!!, placesClient)
-                val destinationLatLng = getLatLngFromPlaceId(destinationPlaceId!!, placesClient)
-
-                if (sourceLatLng != null && destinationLatLng != null) {
-                    onLocationsSet(sourceLatLng, destinationLatLng)
-
-                    val routePoints = getRoutePolyline(
-                        origin = sourceLatLng,
-                        destination = destinationLatLng,
-                        apiKey = BuildConfig.GMAPS_API_KEY
-                    )
-                    onRouteFetched(routePoints)
-                }
-            }
-        }
-        updateButtonState()
-    }
+//    fun fetchRouteIfReady() {
+//        if (sourcePlaceId != null && destinationPlaceId != null) {
+//            scope.launch {
+//                val sourceLatLng = getLatLngFromPlaceId(sourcePlaceId!!, placesClient)
+//                val destinationLatLng = getLatLngFromPlaceId(destinationPlaceId!!, placesClient)
+//
+//                if (sourceLatLng != null && destinationLatLng != null) {
+//                    onLocationsSet(sourceLatLng, destinationLatLng)
+//
+//                    val routePoints = getRoutePolyline(
+//                        origin = sourceLatLng,
+//                        destination = destinationLatLng,
+//                        apiKey = BuildConfig.GMAPS_API_KEY
+//                    )
+//                    onRouteFetched(routePoints)
+//                }
+//            }
+//        }
+//        updateButtonState()
+//    }
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .background(Color.White)
-            .padding(end = 16.dp, start = 16.dp, bottom = 24.dp, top = 16.dp)
+            .padding(end = 16.dp, start = 16.dp, bottom = 24.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -132,12 +132,12 @@ fun SearchSection(
         if (suggestions.isNotEmpty() && activeField == "source") {
             SuggestionsDropdown(
                 suggestions = suggestions,
-                onItemClick = { suggestion ->
+                onItemClick = { suggestion: PlaceSuggestion ->
                     sourceText = suggestion.primaryText
                     sourcePlaceId = suggestion.placeId
                     suggestions = emptyList()
                     activeField = null
-                    fetchRouteIfReady()
+//                    fetchRouteIfReady()
                 }
             )
         }
@@ -158,7 +158,7 @@ fun SearchSection(
                     sourcePlaceId = destinationPlaceId
                     destinationPlaceId = tempId
 
-                    fetchRouteIfReady()
+//                    fetchRouteIfReady()
                 }
             ) {
                 Icon(
@@ -186,17 +186,18 @@ fun SearchSection(
         if (suggestions.isNotEmpty() && activeField == "destination") {
             SuggestionsDropdown(
                 suggestions = suggestions,
-                onItemClick = { suggestion ->
+                onItemClick = { suggestion: PlaceSuggestion ->
                     destinationText = suggestion.primaryText
                     destinationPlaceId = suggestion.placeId
                     suggestions = emptyList()
                     activeField = null
-                    fetchRouteIfReady()
+//                    fetchRouteIfReady()
                 }
             )
         }
 
-        Spacer(modifier=Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))
+
         GradientButton(
             text = "Find Route",
             isLoading = false,
@@ -204,7 +205,7 @@ fun SearchSection(
             onClick = {
                 scope.launch {
                     drawerState.close()
-                    fetchRouteIfReady()
+//                    fetchRouteIfReady()
                 }
 
                 // Navigate with source and destination data

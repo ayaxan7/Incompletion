@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CopilotDiffPersistence">
+    <option name="pendingDiffs">
+      <map>
+        <entry key="$PROJECT_DIR$/app/src/main/java/com/ayaan/incompletion/data/local/entity/FavoriteRoute.kt">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/app/src/main/java/com/ayaan/incompletion/data/local/entity/FavoriteRoute.kt" />
+              <option name="originalContent" value="package com.ayaan.incompletion.data.local.entity&#10;&#10;import androidx.room.Entity&#10;import androidx.room.PrimaryKey&#10;&#10;@Entity(tableName = &quot;favorite_routes&quot;)&#10;data class FavoriteRoute(&#10;    @PrimaryKey(autoGenerate = true)&#10;    val id: Long = 0,&#10;    val sourceName: String,&#10;    val sourceId: String,&#10;    val destinationName: String,&#10;    val destinationId: String,&#10;    val createdAt: Long = System.currentTimeMillis()&#10;)" />
+              <option name="updatedContent" value="package com.ayaan.incompletion.data.local.entity&#10;&#10;import androidx.room.Entity&#10;import androidx.room.PrimaryKey&#10;&#10;@Entity(tableName = &quot;favorite_routes&quot;)&#10;data class FavoriteRoute(&#10;    @PrimaryKey(autoGenerate = true)&#10;    val id: Long = 0,&#10;    val sourceName: String,&#10;    val sourceId: String,&#10;    val destinationName: String,&#10;    val destinationId: String,&#10;    val createdAt: Long = System.currentTimeMillis()&#10;)" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

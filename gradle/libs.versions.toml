@@ -1,36 +1,39 @@
 [versions]
 accompanistSystemuicontroller = "0.36.0"
-agp = "8.11.1"
-#speedchecker = "4.2.242"
+agp = "8.13.0"
 biometric = "1.4.0-alpha04"
-kotlin = "2.1.20"
-composeBom = "2025.06.01"
-hiltAndroid = "2.56.2"
-hiltAndroidTesting = "2.56.2"
+kotlin = "2.0.21"
+composeBom = "2024.12.01"
+hiltAndroid = "2.52"
 hiltNavigationCompose = "1.2.0"
-coreKtx = "1.16.0"
-lifecycleRuntimeKtx = "2.9.1"
-activityCompose = "1.10.1"
-materialIconsExtended = "1.7.8"
-navigationCompose = "2.9.0"
+coreKtx = "1.15.0"
+lifecycleRuntimeKtx = "2.8.7"
+activityCompose = "1.9.3"
+materialIconsExtended = "1.7.6"
+navigationCompose = "2.8.4"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 coil = "2.7.0"
 okhttp = "4.12.0"
 retrofit = "2.11.0"
-composeCompiler = "1.5.15"
-googleGmsGoogleServices = "4.4.3"
-firebaseAuth = "23.2.1"
+googleGmsGoogleServices = "4.4.2"
+firebaseAuth = "23.1.0"
+firebaseBom = "33.5.1"
 credentials = "1.5.0"
 googleid = "1.1.1"
-playServicesMaps = "19.2.0"
-maps-compose = "5.0.4"
+playServicesMaps = "19.0.0"
+playServicesAuth = "21.2.0"
+playServicesBase = "18.5.0"
+maps-compose = "4.4.1"
+ksp = "2.0.21-1.0.25"
+room = "2.6.1"
+places = "4.1.0"
+coroutinesPlayServices = "1.9.0"
 
 [libraries]
 maps-compose = { group = "com.google.maps.android", name = "maps-compose", version.ref = "maps-compose" }
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanistSystemuicontroller" }
-#android-sdk = { module = "com.speedchecker:android-sdk", version.ref = "speedchecker" }
 androidx-biometric = { module = "androidx.biometric:biometric", version.ref = "biometric" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
@@ -49,8 +52,8 @@ androidx-navigation-compose = { group = "androidx.navigation", name = "navigatio
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hiltAndroid" }
-dagger-hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hiltAndroidTesting" }
-google-hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hiltAndroidTesting" }
+hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hiltAndroid" }
+dagger-hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hiltAndroid" }
 
 coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
@@ -63,14 +66,30 @@ retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
-firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
+
+# Firebase & Auth
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
+firebase-auth = { group = "com.google.firebase", name = "firebase-auth-ktx" }
 androidx-credentials = { module = "androidx.credentials:credentials", version.ref = "credentials" }
 androidx-credentials-play-services-auth = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "credentials" }
 googleid = { module = "com.google.android.libraries.identity.googleid:googleid", version.ref = "googleid" }
+
+# Google Play Services
 play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
+play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "playServicesAuth" }
+play-services-base = { group = "com.google.android.gms", name = "play-services-base", version.ref = "playServicesBase" }
+places = { group = "com.google.android.libraries.places", name = "places", version.ref = "places" }
+coroutines-play-services = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-play-services", version.ref = "coroutinesPlayServices" }
+
+# Room
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
+hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hiltAndroid" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
