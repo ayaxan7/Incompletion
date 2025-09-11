@@ -68,6 +68,7 @@ val GradientPrimary = listOf(Color(0xFF4ec283), Color(0xFFfd772b))
 val GradientSecondary = listOf(Color(0xFFfd772b), Color(0xFF4ec283))
 val GradientLight = listOf(Color(0xFFE8F5E8), Color(0xFFFFE8D6))
 val GradientBlue= listOf(Color(0xFF2196F3), Color(0xFF21CBF3))
+val GradientLightBlue=Color(0xFF21CBF3)
 // Shadow Colors
 val ShadowColor = Color(0x1A000000)
 val ElevatedShadowColor = Color(0x26000000)

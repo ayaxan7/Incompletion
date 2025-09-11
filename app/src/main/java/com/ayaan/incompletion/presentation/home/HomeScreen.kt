@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.ayaan.incompletion.data.PlaceSuggestion
+import com.ayaan.incompletion.presentation.common.components.GradientExtendedFloatingActionButton
 import com.ayaan.incompletion.presentation.home.components.AddFavoriteDialog
 import com.ayaan.incompletion.presentation.home.components.FavoriteRoutesList
 import com.ayaan.incompletion.presentation.home.components.SearchSection
@@ -87,20 +88,27 @@ fun HomeScreen(
                 )
             }
         }, floatingActionButton = {
-            ExtendedFloatingActionButton(
-                onClick = {
-                    showAddFavoriteDialog = true
-                },
-                containerColor = Color(0xFF2196F3),
-                contentColor = Color.White,
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Add, contentDescription = "Add Favorites"
+                GradientExtendedFloatingActionButton(
+                    text="Add Favourites",
+                    icon=Icons.Default.Add,
+                    onClick= {showAddFavoriteDialog = true},
+                modifier= Modifier,
+                enabled=true,
                 )
-                Text(
-                    text = "Add Favourites", modifier = Modifier.padding(start = 8.dp)
-                )
-            }
+//            ExtendedFloatingActionButton(
+//                onClick = {
+//                    showAddFavoriteDialog = true
+//                },
+//                containerColor = Color(0xFF2196F3),
+//                contentColor = Color.White,
+//            ) {
+//                Icon(
+//                    imageVector = Icons.Default.Add, contentDescription = "Add Favorites"
+//                )
+//                Text(
+//                    text = "Add Favourites", modifier = Modifier.padding(start = 8.dp)
+//                )
+//            }
         }, containerColor = Color.White
         ) { innerPadding ->
             val bangalore = LatLng(12.9716, 77.5946)
