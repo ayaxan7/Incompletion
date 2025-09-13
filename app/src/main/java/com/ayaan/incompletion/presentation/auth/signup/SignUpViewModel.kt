@@ -104,6 +104,9 @@ class SignUpViewModel @Inject constructor(
         }
         return true
     }
+    fun resetState() {
+        _signUpState.value = SignUpState.Idle
+    }
 }
 
 sealed class SignUpState {
