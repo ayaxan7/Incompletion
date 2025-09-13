@@ -1,5 +1,6 @@
 package com.ayaan.incompletion.presentation.home
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,8 +14,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
@@ -39,6 +38,7 @@ import com.ayaan.incompletion.presentation.home.components.AddFavoriteDialog
 import com.ayaan.incompletion.presentation.home.components.FavoriteRoutesList
 import com.ayaan.incompletion.presentation.home.components.SearchSection
 import com.ayaan.incompletion.presentation.home.viewmodel.FavoriteRouteViewModel
+import com.ayaan.incompletion.presentation.home.viewmodel.PlacesViewModel
 import com.ayaan.incompletion.ui.theme.PrimaryBlue
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -55,7 +55,8 @@ import kotlinx.coroutines.tasks.await
 @Composable
 fun HomeScreen(
     navController: NavController,
-    favoriteRouteViewModel: FavoriteRouteViewModel = hiltViewModel()
+    favoriteRouteViewModel: FavoriteRouteViewModel = hiltViewModel(),
+    placesViewModel: PlacesViewModel= hiltViewModel()
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -95,20 +96,6 @@ fun HomeScreen(
                 modifier= Modifier,
                 enabled=true,
                 )
-//            ExtendedFloatingActionButton(
-//                onClick = {
-//                    showAddFavoriteDialog = true
-//                },
-//                containerColor = Color(0xFF2196F3),
-//                contentColor = Color.White,
-//            ) {
-//                Icon(
-//                    imageVector = Icons.Default.Add, contentDescription = "Add Favorites"
-//                )
-//                Text(
-//                    text = "Add Favourites", modifier = Modifier.padding(start = 8.dp)
-//                )
-//            }
         }, containerColor = Color.White
         ) { innerPadding ->
             val bangalore = LatLng(12.9716, 77.5946)
@@ -131,7 +118,8 @@ fun HomeScreen(
                         sourceLocation = source
                         destinationLocation = destination
                     },
-                    navController = navController
+                    navController = navController,
+                    placesViewModel = placesViewModel
                 )
 
                 // Add favorite routes list below search section
@@ -160,49 +148,49 @@ fun HomeScreen(
         )
     }
 }
-
-suspend fun getPlaceSuggestions(query: String, placesClient: PlacesClient): List<PlaceSuggestion> {
-    return try {
-        // Assume you have user's location (lat/lng)
-        val userLat = 12.9716  // get from FusedLocationProviderClient in real code
-        val userLng = 77.5946
-
-        val bounds = RectangularBounds.newInstance(
-            LatLng(userLat - 0.40, userLng - 0.40), LatLng(userLat + 0.40, userLng + 0.40)
-        )
-
-        val request =
-            FindAutocompletePredictionsRequest.builder().setQuery(query).setLocationBias(bounds)
-                .build()
-
-        val response = placesClient.findAutocompletePredictions(request)
-            .await<com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse>()
-
-        response.autocompletePredictions.map { prediction ->
-            PlaceSuggestion(
-                placeId = prediction.placeId,
-                primaryText = prediction.getPrimaryText(null).toString(),
-                secondaryText = prediction.getSecondaryText(null).toString(),
-                description = prediction.getFullText(null).toString()
-            )
-        }
-    } catch (e: Exception) {
-        e.printStackTrace()
-        emptyList()
-    }
-}
-
-suspend fun getLatLngFromPlaceId(placeId: String, placesClient: PlacesClient): LatLng? {
-    return try {
-        val placeFields = listOf(Place.Field.LAT_LNG)
-        val request = FetchPlaceRequest.builder(placeId, placeFields).build()
-        val response = placesClient.fetchPlace(request).await()
-        response.place.latLng
-    } catch (e: Exception) {
-        e.printStackTrace()
-        null
-    }
-}
+//
+//suspend fun getPlaceSuggestions(query: String, placesClient: PlacesClient): List<PlaceSuggestion> {
+//    return try {
+//        // Assume you have user's location (lat/lng)
+//        val userLat = 12.9716  // get from FusedLocationProviderClient in real code
+//        val userLng = 77.5946
+//
+//        val bounds = RectangularBounds.newInstance(
+//            LatLng(userLat - 0.40, userLng - 0.40), LatLng(userLat + 0.40, userLng + 0.40)
+//        )
+//
+//        val request =
+//            FindAutocompletePredictionsRequest.builder().setQuery(query).setLocationBias(bounds)
+//                .build()
+//
+//        val response = placesClient.findAutocompletePredictions(request)
+//            .await<com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse>()
+//
+//        response.autocompletePredictions.map { prediction ->
+//            PlaceSuggestion(
+//                placeId = prediction.placeId,
+//                primaryText = prediction.getPrimaryText(null).toString(),
+//                secondaryText = prediction.getSecondaryText(null).toString(),
+//                description = prediction.getFullText(null).toString()
+//            )
+//        }
+//    } catch (e: Exception) {
+//        e.printStackTrace()
+//        emptyList()
+//    }
+//}
+//
+//suspend fun getLatLngFromPlaceId(placeId: String, placesClient: PlacesClient): LatLng? {
+//    return try {
+//        val placeFields = listOf(Place.Field.LAT_LNG)
+//        val request = FetchPlaceRequest.builder(placeId, placeFields).build()
+//        val response = placesClient.fetchPlace(request).await()
+//        response.place.latLng
+//    } catch (e: Exception) {
+//        e.printStackTrace()
+//        null
+//    }
+//}
 
 //suspend fun getRoutePolyline(
 //    origin: LatLng, destination: LatLng, apiKey: String

@@ -11,16 +11,15 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.ayaan.incompletion.data.PlaceSuggestion
 import com.ayaan.incompletion.presentation.common.components.GradientButton
 import com.ayaan.incompletion.presentation.common.components.ThemedTextField
-import com.ayaan.incompletion.presentation.home.getPlaceSuggestions
-import com.google.android.libraries.places.api.Places
+import com.ayaan.incompletion.presentation.home.viewmodel.PlacesViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -29,17 +28,16 @@ import kotlinx.coroutines.launch
 fun AddFavoriteDialog(
     isVisible: Boolean,
     onDismiss: () -> Unit,
-    onAddFavorite: (String, String, String, String) -> Unit
+    onAddFavorite: (String, String, String, String) -> Unit,
+    placesViewModel: PlacesViewModel = hiltViewModel()
 ) {
     var sourceText by remember { mutableStateOf("") }
     var destinationText by remember { mutableStateOf("") }
     var sourcePlaceId by remember { mutableStateOf<String?>(null) }
     var destinationPlaceId by remember { mutableStateOf<String?>(null) }
-    var suggestions by remember { mutableStateOf<List<PlaceSuggestion>>(emptyList()) }
     var activeField by remember { mutableStateOf<String?>(null) }
 
-    val context = LocalContext.current
-    val placesClient = remember { Places.createClient(context) }
+    val suggestions by placesViewModel.suggestions.collectAsState()
     val scope = rememberCoroutineScope()
 
     fun fetchSuggestions(query: String, field: String) {
@@ -47,10 +45,11 @@ fun AddFavoriteDialog(
         if (query.length > 2) {
             scope.launch {
                 delay(300)
-                suggestions = getPlaceSuggestions(query, placesClient)
+                // Use bus station suggestions for both source and destination
+                placesViewModel.getBusStationSuggestions(query)
             }
         } else {
-            suggestions = emptyList()
+            placesViewModel.clearSuggestions()
         }
     }
 
@@ -59,7 +58,7 @@ fun AddFavoriteDialog(
         destinationText = ""
         sourcePlaceId = null
         destinationPlaceId = null
-        suggestions = emptyList()
+        placesViewModel.clearSuggestions()
         activeField = null
     }
 
@@ -125,7 +124,7 @@ fun AddFavoriteDialog(
                             onItemClick = { suggestion ->
                                 sourceText = suggestion.primaryText
                                 sourcePlaceId = suggestion.placeId
-                                suggestions = emptyList()
+                                placesViewModel.clearSuggestions()
                                 activeField = null
                             }
                         )
@@ -178,7 +177,7 @@ fun AddFavoriteDialog(
                             onItemClick = { suggestion ->
                                 destinationText = suggestion.primaryText
                                 destinationPlaceId = suggestion.placeId
-                                suggestions = emptyList()
+                                placesViewModel.clearSuggestions()
                                 activeField = null
                             }
                         )

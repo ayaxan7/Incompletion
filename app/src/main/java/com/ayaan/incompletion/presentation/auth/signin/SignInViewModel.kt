@@ -6,11 +6,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.tasks.await
+import javax.inject.Inject
 
-class SignInViewModel : ViewModel() {
-
-    private val auth = FirebaseAuth.getInstance()
+@HiltViewModel
+class SignInViewModel @Inject constructor(
+    private val auth: FirebaseAuth
+) : ViewModel() {
 
     private val _signInState = mutableStateOf<SignInState>(SignInState.Idle)
     val signInState: State<SignInState> get() = _signInState

@@ -6,12 +6,14 @@ import androidx.compose.runtime.State
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
-//import com.google.firebase.firestore.FirebaseFirestore
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.tasks.await
+import javax.inject.Inject
 
-class SignUpViewModel : ViewModel() {
-    private val auth = FirebaseAuth.getInstance()
-//    private val firestore = FirebaseFirestore.getInstance()
+@HiltViewModel
+class SignUpViewModel @Inject constructor(
+    private val auth: FirebaseAuth
+) : ViewModel() {
 
     private val _signUpState = mutableStateOf<SignUpState>(SignUpState.Idle)
     val signUpState: State<SignUpState> get() = _signUpState
@@ -50,15 +52,7 @@ class SignUpViewModel : ViewModel() {
                     "email" to email,
                     "gender" to gender,
                     "password" to password
-//                    "createdAt" to com.google.firebase.Timestamp.now(),
-//                    "lastLogin" to com.google.firebase.Timestamp.now()
                 )
-
-                // Create or update the user document in Firestore
-//                firestore.collection("users")
-//                    .document(user.uid)
-//                    .set(userData)
-//                    .await()
 
                 Log.d("SignUpViewModel", "User data stored in Firestore for user: ${user.uid}")
                 _signUpState.value = SignUpState.Success
@@ -80,22 +74,23 @@ class SignUpViewModel : ViewModel() {
         }
     }
 
-    private fun validateSignUpFields(fullName: String, email: String, password: String, confirmPassword: String): Boolean {
+    private fun validateSignUpFields(
+        fullName: String,
+        email: String,
+        password: String,
+        confirmPassword: String
+    ): Boolean {
         when {
             fullName.isBlank() -> {
-                _signUpState.value = SignUpState.Error("Please enter your full name")
+                _signUpState.value = SignUpState.Error("Full name is required")
                 return false
             }
             email.isBlank() -> {
-                _signUpState.value = SignUpState.Error("Please enter your email")
-                return false
-            }
-            !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
-                _signUpState.value = SignUpState.Error("Please enter a valid email address")
+                _signUpState.value = SignUpState.Error("Email is required")
                 return false
             }
             password.isBlank() -> {
-                _signUpState.value = SignUpState.Error("Please enter a password")
+                _signUpState.value = SignUpState.Error("Password is required")
                 return false
             }
             password.length < 6 -> {
@@ -103,15 +98,11 @@ class SignUpViewModel : ViewModel() {
                 return false
             }
             password != confirmPassword -> {
-                _signUpState.value = SignUpState.Error("Passwords don't match")
+                _signUpState.value = SignUpState.Error("Passwords do not match")
                 return false
             }
-            else -> return true
         }
-    }
-
-    fun resetState() {
-        _signUpState.value = SignUpState.Idle
+        return true
     }
 }
 

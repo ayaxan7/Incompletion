@@ -11,27 +11,22 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.ayaan.incompletion.BuildConfig
-import com.ayaan.incompletion.data.PlaceSuggestion
 import com.ayaan.incompletion.presentation.common.components.GradientButton
 import com.ayaan.incompletion.presentation.common.components.ThemedTextField
-import com.ayaan.incompletion.presentation.home.getLatLngFromPlaceId
-import com.ayaan.incompletion.presentation.home.getPlaceSuggestions
-//import com.ayaan.incompletion.presentation.home.getRoutePolyline
+import com.ayaan.incompletion.presentation.home.viewmodel.PlacesViewModel
 import com.ayaan.incompletion.presentation.navigation.Destinations
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.libraries.places.api.Places
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import com.ayaan.incompletion.R
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchSection(
@@ -39,17 +34,16 @@ fun SearchSection(
     onRouteFetched: (List<LatLng>) -> Unit,
     onValidityChanged: (Boolean) -> Unit,
     onLocationsSet: (LatLng?, LatLng?) -> Unit,
-    navController: NavController
+    navController: NavController,
+    placesViewModel: PlacesViewModel = hiltViewModel()
 ) {
     var sourceText by remember { mutableStateOf("") }
     var destinationText by remember { mutableStateOf("") }
     var sourcePlaceId by remember { mutableStateOf<String?>(null) }
     var destinationPlaceId by remember { mutableStateOf<String?>(null) }
-    var suggestions by remember { mutableStateOf<List<PlaceSuggestion>>(emptyList()) }
     var activeField by remember { mutableStateOf<String?>(null) }
 
-    val context = LocalContext.current
-    val placesClient = remember { Places.createClient(context) }
+    val suggestions by placesViewModel.suggestions.collectAsState()
     val scope = rememberCoroutineScope()
 
     fun updateButtonState() {
@@ -61,10 +55,11 @@ fun SearchSection(
         if (query.length > 2) {
             scope.launch {
                 delay(300)
-                suggestions = getPlaceSuggestions(query, placesClient)
+                // Use bus station suggestions for both source and destination
+                placesViewModel.getBusStationSuggestions(query)
             }
         } else {
-            suggestions = emptyList()
+            placesViewModel.clearSuggestions()
         }
     }
 
@@ -115,12 +110,12 @@ fun SearchSection(
         if (suggestions.isNotEmpty() && activeField == "source") {
             SuggestionsDropdown(
                 suggestions = suggestions,
-                onItemClick = { suggestion: PlaceSuggestion ->
+                onItemClick = { suggestion ->
                     sourceText = suggestion.primaryText
                     sourcePlaceId = suggestion.placeId
-                    suggestions = emptyList()
+                    placesViewModel.clearSuggestions()
                     activeField = null
-//                    fetchRouteIfReady()
+                    updateButtonState()
                 }
             )
         }
@@ -140,8 +135,7 @@ fun SearchSection(
                     val tempId = sourcePlaceId
                     sourcePlaceId = destinationPlaceId
                     destinationPlaceId = tempId
-
-//                    fetchRouteIfReady()
+                    updateButtonState()
                 }
             ) {
                 Icon(
@@ -171,12 +165,12 @@ fun SearchSection(
         if (suggestions.isNotEmpty() && activeField == "destination") {
             SuggestionsDropdown(
                 suggestions = suggestions,
-                onItemClick = { suggestion: PlaceSuggestion ->
+                onItemClick = { suggestion ->
                     destinationText = suggestion.primaryText
                     destinationPlaceId = suggestion.placeId
-                    suggestions = emptyList()
+                    placesViewModel.clearSuggestions()
                     activeField = null
-//                    fetchRouteIfReady()
+                    updateButtonState()
                 }
             )
         }
@@ -190,7 +184,6 @@ fun SearchSection(
             onClick = {
                 scope.launch {
                     drawerState.close()
-//                    fetchRouteIfReady()
                 }
 
                 // Navigate with source and destination data
