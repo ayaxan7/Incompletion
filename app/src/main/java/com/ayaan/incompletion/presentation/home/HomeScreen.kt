@@ -71,24 +71,22 @@ fun HomeScreen(
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
             topBar = {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(PrimaryBlue)
-                    .height(54.dp)
-            ) {
-                Text(
-                    text = "Hi, Ayaan",
+                Box(
                     modifier = Modifier
-                        .align(Alignment.Center)
+                        .fillMaxWidth()
+                        .height(56.dp) // 3/4 of standard TopAppBar height (56dp)
                         .background(PrimaryBlue)
-                        .padding(top = 16.dp),
-                    color = Color.White,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-        }, floatingActionButton = {
+                ) {
+                    Text(
+                        text = "Hi, Ayaan",
+                        modifier = Modifier
+                            .align(Alignment.Center),
+                        color = Color.White,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }, floatingActionButton = {
                 GradientExtendedFloatingActionButton(
                     text="Add Favourites",
                     icon=Icons.Default.Add,

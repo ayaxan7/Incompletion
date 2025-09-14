@@ -110,6 +110,7 @@ dependencies {
     implementation(libs.androidx.biometric)
     implementation(libs.kotlin.reflect)
     implementation(libs.accompanist.systemuicontroller)
+    implementation("com.google.accompanist:accompanist-swiperefresh:0.32.0")
 
     // Testing
     testImplementation(libs.junit)

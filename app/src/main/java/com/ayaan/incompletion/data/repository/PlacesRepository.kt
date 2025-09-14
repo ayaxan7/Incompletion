@@ -19,7 +19,6 @@ class PlacesRepository @Inject constructor(
 
     suspend fun getBusStationSuggestions(query: String): List<PlaceSuggestion> {
         return try {
-            // Get user's current location or fallback to default (Bangalore)
             val userLocation = locationService.getUserLocation()
             val userLat = userLocation?.latitude ?: 12.9716
             val userLng = userLocation?.longitude ?: 77.5946
