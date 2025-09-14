@@ -28,6 +28,7 @@ fun ThemedTextField(
     passwordVisible: Boolean = false,
     onPasswordVisibilityChange: (Boolean) -> Unit = {},
     enabled: Boolean = true,
+    readOnly: Boolean = false,
     focusedBorderColor: androidx.compose.ui.graphics.Color? = null,
     unfocusedBorderColor: androidx.compose.ui.graphics.Color? = null
 ) {
@@ -91,6 +92,7 @@ fun ThemedTextField(
         singleLine = true,
         modifier = Modifier.fillMaxWidth(),
         enabled = enabled,
+        readOnly = readOnly,
         colors = OutlinedTextFieldDefaults.colors(
             focusedBorderColor = actualFocusedBorderColor,
             unfocusedBorderColor = actualUnfocusedBorderColor,

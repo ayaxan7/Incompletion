@@ -133,18 +133,18 @@ fun BookTickets(
 
                     ThemedTextField(
                         value = sourceName,
-                        onValueChange = { sourceName = it },
+                        onValueChange = { }, // Empty lambda since it's read-only
                         label = "From",
-                        enabled = !uiState.isLoading
+                        readOnly = true // Prevents keyboard and cursor
                     )
 
                     Spacer(modifier = Modifier.height(12.dp))
 
                     ThemedTextField(
                         value = destinationName,
-                        onValueChange = { destinationName = it },
+                        onValueChange = { }, // Empty lambda since it's read-only
                         label = "To",
-                        enabled = !uiState.isLoading
+                        readOnly = true // Prevents keyboard and cursor
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
