@@ -8,6 +8,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.ayaan.incompletion.data.model.getRoute.Routes
+import com.ayaan.incompletion.data.directions.DirectionsService
+import com.ayaan.incompletion.ui.theme.GradientBlue
+import com.ayaan.incompletion.ui.theme.GradientLightBlue
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.*
 import com.google.maps.android.compose.*
@@ -16,7 +19,8 @@ import kotlinx.coroutines.delay
 @Composable
 fun RouteMapView(
     routes: List<Routes>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    directionsService: DirectionsService = DirectionsService()
 ) {
     val context = LocalContext.current
 
@@ -37,7 +41,7 @@ fun RouteMapView(
     }
 
     // Convert stops to LatLng points
-    val routePoints = remember(route) {
+    val busStops = remember(route) {
         route.stops.map { stop ->
             LatLng(
                 stop.location.coordinates[1], // latitude
@@ -46,6 +50,25 @@ fun RouteMapView(
         }
     }
 
+    // State for decoded route points
+    var decodedRoutePoints by remember { mutableStateOf<List<LatLng>>(emptyList()) }
+    var isLoadingRoute by remember { mutableStateOf(false) }
+
+    // Generate route using Directions API
+    LaunchedEffect(route) {
+        if (busStops.size >= 2) {
+            isLoadingRoute = true
+            try {
+                val routePoints = directionsService.getBusRouteDirections(busStops)
+                decodedRoutePoints = routePoints
+            } catch (e: Exception) {
+                // Fallback to simple line if directions fail
+                decodedRoutePoints = busStops
+            } finally {
+                isLoadingRoute = false
+            }
+        }
+    }
     // Create markers for bus stops
     val markers = remember(route) {
         route.stops.mapIndexed { index, stop ->
@@ -62,10 +85,10 @@ fun RouteMapView(
     }
 
     // Calculate bounds for the camera
-    val bounds = remember(routePoints) {
-        if (routePoints.isNotEmpty()) {
+    val bounds = remember(busStops) {
+        if (busStops.isNotEmpty()) {
             val builder = LatLngBounds.builder()
-            routePoints.forEach { builder.include(it) }
+            busStops.forEach { builder.include(it) }
             builder.build()
         } else null
     }
@@ -83,99 +106,138 @@ fun RouteMapView(
                 )
             } catch (e: Exception) {
                 // Fallback to center of route
-                if (routePoints.isNotEmpty()) {
-                    val center = routePoints[routePoints.size / 2]
+                if (busStops.isNotEmpty()) {
+                    val center = busStops[busStops.size / 2]
                     cameraPositionState.position = CameraPosition.fromLatLngZoom(center, 12f)
                 }
             }
         }
     }
 
-    GoogleMap(
-        modifier = modifier,
-        cameraPositionState = cameraPositionState,
-        properties = MapProperties(
-            mapType = MapType.NORMAL,
-            isTrafficEnabled = true
-        ),
-        uiSettings = MapUiSettings(
-            zoomControlsEnabled = true,
-            compassEnabled = true,
-            mapToolbarEnabled = true
-        )
-    ) {
-        // Add polyline for the route
-        if (routePoints.size > 1) {
-            Polyline(
-                points = routePoints,
-                color = Color(0xFF2196F3), // Blue color for route
-                width = 8f,
-                pattern = null,
-                geodesic = true
+    Box(modifier = modifier) {
+        GoogleMap(
+            modifier = Modifier.fillMaxSize(),
+            cameraPositionState = cameraPositionState,
+            properties = MapProperties(
+                mapType = MapType.NORMAL,
+                isTrafficEnabled = true
+            ),
+            uiSettings = MapUiSettings(
+                zoomControlsEnabled = true,
+                compassEnabled = true,
+                mapToolbarEnabled = true
             )
-        }
-
-        // Add markers for bus stops
-        markers.forEach { markerData ->
-            Marker(
-                state = MarkerState(position = markerData.position),
-                title = markerData.title,
-                snippet = markerData.snippet,
-                icon = if (markerData.isStartOrEnd) {
-                    BitmapDescriptorFactory.defaultMarker(
-                        if (markers.indexOf(markerData) == 0)
-                            BitmapDescriptorFactory.HUE_GREEN
-                        else
-                            BitmapDescriptorFactory.HUE_RED
-                    )
-                } else {
-                    BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)
-                }
-            )
-        }
-    }
-
-    // Route info overlay
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = Color.White.copy(alpha = 0.9f)
-        ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
-    ) {
-        Column(
-            modifier = Modifier.padding(16.dp)
         ) {
-            Text(
-                text = "Route ${route.routeNumber}",
-                style = MaterialTheme.typography.titleMedium,
-                color = Color(0xFF333333)
-            )
-            Text(
-                text = "Type: ${route.routeType}",
-                style = MaterialTheme.typography.bodyMedium,
-                color = Color(0xFF666666)
-            )
-            Text(
-                text = "${route.stops.size} stops",
-                style = MaterialTheme.typography.bodyMedium,
-                color = Color(0xFF666666)
-            )
+            // Draw the decoded route polyline
+            if (decodedRoutePoints.size > 1) {
+                Polyline(
+                    points = decodedRoutePoints,
+                    color = GradientLightBlue,
+                    width = 6f,
+                    pattern = null,
+                    geodesic = false // Set to false since we have detailed route points
+                )
+            }
 
-            Spacer(modifier = Modifier.height(8.dp))
+            // Add markers for bus stops
+            markers.forEach { markerData ->
+                Marker(
+                    state = MarkerState(position = markerData.position),
+                    title = markerData.title,
+                    snippet = markerData.snippet,
+                    icon = if (markerData.isStartOrEnd) {
+                        BitmapDescriptorFactory.defaultMarker(
+                            if (markers.indexOf(markerData) == 0)
+                                BitmapDescriptorFactory.HUE_GREEN
+                            else
+                                BitmapDescriptorFactory.HUE_RED
+                        )
+                    } else {
+                        BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)
+                    }
+                )
+            }
+        }
 
-            Text(
-                text = "From: ${route.stops.first().name}",
-                style = MaterialTheme.typography.bodySmall,
-                color = Color(0xFF4CAF50)
-            )
-            Text(
-                text = "To: ${route.stops.last().name}",
-                style = MaterialTheme.typography.bodySmall,
-                color = Color(0xFFF44336)
-            )
+        // Loading indicator for route generation
+        if (isLoadingRoute) {
+            Card(
+                modifier = Modifier
+                    .padding(16.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = Color.White.copy(alpha = 0.9f)
+                ),
+                elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+            ) {
+                Row(
+                    modifier = Modifier.padding(16.dp),
+                    verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+                ) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(24.dp),
+                        color = GradientLightBlue,
+                        strokeWidth = 2.dp
+                    )
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Text(
+                        text = "Generating route...",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Color(0xFF333333)
+                    )
+                }
+            }
+        }
+
+        // Route info overlay
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = Color.White.copy(alpha = 0.9f)
+            ),
+            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp)
+            ) {
+                Text(
+                    text = "Route ${route.routeNumber}",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = Color(0xFF333333)
+                )
+                Text(
+                    text = "Type: ${route.routeType}",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color(0xFF666666)
+                )
+                Text(
+                    text = "${route.stops.size} stops",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color(0xFF666666)
+                )
+
+                if (decodedRoutePoints.isNotEmpty()) {
+                    Text(
+                        text = "${decodedRoutePoints.size} route points",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Color(0xFF888888)
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = "From: ${route.stops.first().name}",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = Color(0xFF4CAF50)
+                )
+                Text(
+                    text = "To: ${route.stops.last().name}",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = Color(0xFFF44336)
+                )
+            }
         }
     }
 }

@@ -113,6 +113,10 @@ dependencies {
     implementation(libs.accompanist.systemuicontroller)
     implementation("com.google.accompanist:accompanist-swiperefresh:0.32.0")
 
+    // Google Directions API
+    implementation("com.google.maps:google-maps-services:2.2.0")
+    implementation("org.slf4j:slf4j-simple:1.7.25")
+
     // Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
