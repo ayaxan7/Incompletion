@@ -42,7 +42,7 @@ class RouteRepository @Inject constructor(
 
             if (response.isSuccessful) {
                 response.body()?.let { routeData ->
-                    emit(SingleRouteResult.Success(routeData))
+                    emit(SingleRouteResult.Success(listOf(routeData)))
                 } ?: emit(SingleRouteResult.Error("No data received from server"))
             } else {
                 val errorMessage = when (response.code()) {

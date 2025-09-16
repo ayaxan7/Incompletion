@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.ayaan.incompletion.presentation.home.viewmodel.RouteSelectionViewModel
 import com.ayaan.incompletion.presentation.routedetails.viewmodel.RouteDetailsViewModel
 import com.ayaan.incompletion.ui.theme.PrimaryBlue
@@ -28,7 +29,8 @@ import com.ayaan.incompletion.ui.theme.PrimaryBlue
 fun RouteSelectionSection(
     modifier: Modifier = Modifier,
     routeSelectionViewModel: RouteSelectionViewModel = hiltViewModel(),
-    routeDetailsViewModel: RouteDetailsViewModel=hiltViewModel()
+    routeDetailsViewModel: RouteDetailsViewModel=hiltViewModel(),
+    navController: NavController? = null
 ) {
     val uiState by routeSelectionViewModel.uiState.collectAsState()
     var sourceDropdownExpanded by remember { mutableStateOf(false) }
@@ -255,7 +257,8 @@ fun RouteSelectionSection(
                     routes = uiState.routeResponse!!.commonRoutes,
                     sourceId = uiState.selectedSourceId ?: "",
                     destinationId = uiState.selectedDestinationId ?: "",
-                    routeDetailsViewModel=routeDetailsViewModel
+                    routeDetailsViewModel=routeDetailsViewModel,
+                    navController = navController
                 )
             }
         }
@@ -267,7 +270,8 @@ private fun CommonRoutesDisplay(
     routes: List<String>,
     sourceId: String,
     destinationId: String,
-    routeDetailsViewModel: RouteDetailsViewModel=hiltViewModel()
+    routeDetailsViewModel: RouteDetailsViewModel=hiltViewModel(),
+    navController: androidx.navigation.NavController? = null
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -309,7 +313,10 @@ private fun CommonRoutesDisplay(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     items(routes) { route ->
-                        RouteItem(routeNumber = route,routeDetailsViewModel=routeDetailsViewModel)
+                        RouteItem(
+                            routeNumber = route,
+                            navController = navController
+                        )
                     }
                 }
             }
@@ -318,12 +325,15 @@ private fun CommonRoutesDisplay(
 }
 
 @Composable
-private fun RouteItem(routeNumber: String,routeDetailsViewModel: RouteDetailsViewModel) {
+private fun RouteItem(
+    routeNumber: String,
+    navController: androidx.navigation.NavController? = null
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .clickable{
-                routeDetailsViewModel.getRouteDetails(routeNumber)
+                navController?.navigate("route_details/$routeNumber")
             },
         colors = CardDefaults.cardColors(
             containerColor = Color.White

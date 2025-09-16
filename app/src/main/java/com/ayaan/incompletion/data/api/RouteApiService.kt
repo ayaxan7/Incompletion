@@ -19,11 +19,10 @@ interface RouteApiService {
     @GET("getRoute")
     suspend fun getRoutes(
         @Query("RouteId") routeNumber: String,
-    ): Response<List<Routes>>
+    ): Response<Routes> // Changed from List<Routes> to Routes since API returns single object
     @GET("test")
     suspend fun testEndpoint(): Response<String>
     @POST("getNearestBustops")
-//    @HTTP(method = "GET", path = "getNearestBustops", hasBody = true)
     suspend fun getNearestBusStops(
         @Body request: NearestBusStopRequest
     ): Response<NearestBusStopResponse>

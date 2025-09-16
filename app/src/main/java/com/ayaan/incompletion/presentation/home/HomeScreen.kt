@@ -76,8 +76,7 @@ fun HomeScreen(
                     .verticalScroll(rememberScrollState())
             ) {
                 // Replace SearchSection with RouteSelectionSection
-                RouteSelectionSection()
-
+                RouteSelectionSection(navController = navController)
                 // Action buttons section
                 ActionButtonsSection(
                     onFavoriteRoutesClick = {
