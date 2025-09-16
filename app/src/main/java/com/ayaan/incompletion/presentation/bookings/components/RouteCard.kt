@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ayaan.incompletion.data.model.RouteInfo
 import com.ayaan.incompletion.ui.theme.PrimaryBlue
+import java.util.Locale
 
 @Composable
 fun RouteCard(
@@ -80,7 +81,7 @@ fun RouteCard(
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = route.direction.capitalize(),
+                        text = route.direction.capitalize(Locale.ROOT),
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Medium,
                         color = if (route.direction == "forward")

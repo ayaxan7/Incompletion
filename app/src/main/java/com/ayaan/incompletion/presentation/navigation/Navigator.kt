@@ -1,10 +1,14 @@
 package com.ayaan.incompletion.presentation.navigation
 
+import android.util.Log
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -15,10 +19,36 @@ import com.ayaan.incompletion.presentation.auth.signin.SignInScreen
 import com.ayaan.incompletion.presentation.auth.signup.SignUpScreen
 import com.ayaan.incompletion.presentation.bookings.BookTickets
 import com.ayaan.incompletion.presentation.home.HomeScreen
+import com.ayaan.incompletion.presentation.favorites.FavoriteRoutesScreen
+import com.ayaan.incompletion.presentation.nearestbusstop.NearestBusStopScreen
+import com.ayaan.incompletion.presentation.test.TestResult
+import com.ayaan.incompletion.presentation.test.TestViewModel
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun Navigator(innerPadding: PaddingValues) {
+    val testViewModel: TestViewModel = hiltViewModel()
+    val testResult by testViewModel.testResult.collectAsState()
+
+    LaunchedEffect(Unit) {
+        testViewModel.executeTest()
+    }
+
+    LaunchedEffect(testResult) {
+        testResult?.let { result ->
+            when (result) {
+                is TestResult.Loading -> {
+                    Log.d("Navigator", "Test API call loading...")
+                }
+                is TestResult.Success -> {
+                    Log.d("Navigator", "Test API call successful: ${result.data}")
+                }
+                is TestResult.Error -> {
+                    Log.e("Navigator", "Test API call failed: ${result.message}")
+                }
+            }
+        }
+    }
     val auth = FirebaseAuth.getInstance()
     val user = auth.currentUser
     val start = if (user != null) Destinations.Home.route else Destinations.Login.route
@@ -36,10 +66,10 @@ fun Navigator(innerPadding: PaddingValues) {
         composable(route = Destinations.Login.route) {
             SignInScreen(
                 onSignInClick = {
-                navController.navigate(Destinations.Home.route) {
-                    popUpTo(Destinations.Login.route) { inclusive = true }
-                }
-            },
+                    navController.navigate(Destinations.Home.route) {
+                        popUpTo(Destinations.Login.route) { inclusive = true }
+                    }
+                },
                 onSignUpClick = { navController.navigate(Destinations.SignUp.route) },
                 onForgotPasswordClick = { navController.navigate(Destinations.ForgotPassword.route) })
         }
@@ -72,6 +102,12 @@ fun Navigator(innerPadding: PaddingValues) {
                 }
             }, onSignInClick = { navController.navigate(Destinations.Login.route) })
         }
+        composable(route = Destinations.FavoriteRoutes.route) {
+            FavoriteRoutesScreen(navController)
+        }
+        composable(route = Destinations.NearestBusStop.route) {
+            NearestBusStopScreen(navController)
+        }
     }
 }
 
@@ -81,4 +117,6 @@ sealed class Destinations(val route: String) {
     data object BookTicket : Destinations("bookticket")
     data object SignUp : Destinations("signup")
     data object ForgotPassword : Destinations("forgotpassword")
+    data object FavoriteRoutes : Destinations("favorite_routes")
+    data object NearestBusStop : Destinations("nearest_bus_stop")
 }

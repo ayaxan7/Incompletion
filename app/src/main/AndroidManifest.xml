@@ -12,7 +12,9 @@
     <uses-permission android:name="android.permission.VIBRATE"/>
     <application
         android:name=".IncompletionApplication"
+        android:usesCleartextTraffic="true"
         android:allowBackup="true"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
@@ -33,7 +35,7 @@
         </activity>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="${MAPS_API_KEY)"/>
+            android:value="${MAPS_API_KEY}"/>
     </application>
 
 </manifest>

@@ -3,6 +3,7 @@ package com.ayaan.incompletion.data.location
 import android.annotation.SuppressLint
 import android.content.Context
 import android.location.Location
+import android.util.Log
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
@@ -45,6 +46,15 @@ class LocationService @Inject constructor(
 
     suspend fun getUserLocation(): Location? {
         // Try to get current location first, fallback to last known location
-        return getCurrentLocation() ?: getLastKnownLocation()
+        val currentLocation = getCurrentLocation()
+        val lastKnownLocation = getLastKnownLocation()
+
+        Log.d("LocationService", "Current location: $currentLocation")
+        Log.d("LocationService", "Last known location: $lastKnownLocation")
+
+        val finalLocation = currentLocation ?: lastKnownLocation
+        Log.d("LocationService", "Final location being returned: $finalLocation")
+
+        return finalLocation
     }
 }

@@ -14,7 +14,6 @@ import com.ayaan.incompletion.presentation.navigation.Navigator
 import com.ayaan.incompletion.ui.theme.IncompletionTheme
 import com.google.android.libraries.places.api.Places
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.Locale
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
