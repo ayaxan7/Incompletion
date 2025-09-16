@@ -1,47 +1,23 @@
 package com.ayaan.incompletion.presentation.bookings
 
-import android.util.Log
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
-import com.ayaan.incompletion.presentation.bookings.components.ErrorDisplay
-import com.ayaan.incompletion.presentation.bookings.components.LoadingDisplay
 //import com.ayaan.incompletion.presentation.bookings.components.RouteResultsList
-import com.ayaan.incompletion.presentation.bookings.viewmodel.RouteFinderViewModel
-import com.ayaan.incompletion.presentation.common.components.GradientButton
-import com.ayaan.incompletion.presentation.common.components.ThemedTextField
-import com.ayaan.incompletion.ui.theme.PrimaryBlue
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun BookTickets(
-    navController: NavController,
-    sourceName: String = "",
-    sourceId: String = "",
-    destinationName: String = "",
-    destinationId: String = "",
-    viewModel: RouteFinderViewModel = hiltViewModel()
-){
-
-}
+//import androidx.compose.material3.ExperimentalMaterial3Api
+//import androidx.compose.runtime.Composable
+//import androidx.hilt.navigation.compose.hiltViewModel
+//import androidx.navigation.NavController
+//import com.ayaan.incompletion.presentation.bookings.viewmodel.RouteFinderViewModel
+//@OptIn(ExperimentalMaterial3Api::class)
+//@Composable
+//fun BookTickets(
+//    navController: NavController,
+//    sourceName: String = "",
+//    sourceId: String = "",
+//    destinationName: String = "",
+//    destinationId: String = "",
+//    viewModel: RouteFinderViewModel = hiltViewModel()
+//) {
+//
+//}
 //) {
 //    Log.d("BookTickets", "Source: $sourceName ($sourceId), Destination: $destinationName ($destinationId)")
 //

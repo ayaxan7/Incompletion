@@ -17,7 +17,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.ayaan.incompletion.presentation.auth.signin.SignInScreen
 import com.ayaan.incompletion.presentation.auth.signup.SignUpScreen
-import com.ayaan.incompletion.presentation.bookings.BookTickets
+//import com.ayaan.incompletion.presentation.bookings.BookTickets
 import com.ayaan.incompletion.presentation.home.HomeScreen
 import com.ayaan.incompletion.presentation.favorites.FavoriteRoutesScreen
 import com.ayaan.incompletion.presentation.nearestbusstop.NearestBusStopScreen
@@ -73,34 +73,37 @@ fun Navigator(innerPadding: PaddingValues) {
                 onSignUpClick = { navController.navigate(Destinations.SignUp.route) },
                 onForgotPasswordClick = { navController.navigate(Destinations.ForgotPassword.route) })
         }
-        composable(
-            route = "${Destinations.BookTicket.route}?sourceName={sourceName}&sourceId={sourceId}&destName={destName}&destId={destId}",
-            arguments = listOf(
-                navArgument("sourceName") { type = NavType.StringType; defaultValue = "" },
-                navArgument("sourceId") { type = NavType.StringType; defaultValue = "" },
-                navArgument("destName") { type = NavType.StringType; defaultValue = "" },
-                navArgument("destId") { type = NavType.StringType; defaultValue = "" }
-            )
-        ) { backStackEntry ->
-            val sourceName = backStackEntry.arguments?.getString("sourceName") ?: ""
-            val sourceId = backStackEntry.arguments?.getString("sourceId") ?: ""
-            val destName = backStackEntry.arguments?.getString("destName") ?: ""
-            val destId = backStackEntry.arguments?.getString("destId") ?: ""
-
-            BookTickets(
-                navController = navController,
-                sourceName = sourceName,
-                sourceId = sourceId,
-                destinationName = destName,
-                destinationId = destId
-            )
-        }
+//        composable(
+//            route = "${Destinations.BookTicket.route}?sourceName={sourceName}&sourceId={sourceId}&destName={destName}&destId={destId}",
+//            arguments = listOf(
+//                navArgument("sourceName") { type = NavType.StringType; defaultValue = "" },
+//                navArgument("sourceId") { type = NavType.StringType; defaultValue = "" },
+//                navArgument("destName") { type = NavType.StringType; defaultValue = "" },
+//                navArgument("destId") { type = NavType.StringType; defaultValue = "" }
+//            )
+//        ) { backStackEntry ->
+//            val sourceName = backStackEntry.arguments?.getString("sourceName") ?: ""
+//            val sourceId = backStackEntry.arguments?.getString("sourceId") ?: ""
+//            val destName = backStackEntry.arguments?.getString("destName") ?: ""
+//            val destId = backStackEntry.arguments?.getString("destId") ?: ""
+//
+//            BookTickets(
+//                navController = navController,
+//                sourceName = sourceName,
+//                sourceId = sourceId,
+//                destinationName = destName,
+//                destinationId = destId
+//            )
+//        }
         composable(route = Destinations.SignUp.route) {
             SignUpScreen(onSignUpClick = {
                 navController.navigate(Destinations.Home.route) {
                     popUpTo(Destinations.Login.route) { inclusive = true }
                 }
-            }, onSignInClick = { navController.navigate(Destinations.Login.route) })
+            },
+            onSignInClick = {
+                navController.navigate(Destinations.Login.route)
+            })
         }
         composable(route = Destinations.FavoriteRoutes.route) {
             FavoriteRoutesScreen(navController)

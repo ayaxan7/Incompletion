@@ -20,13 +20,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ayaan.incompletion.presentation.home.viewmodel.RouteSelectionViewModel
+import com.ayaan.incompletion.presentation.routedetails.viewmodel.RouteDetailsViewModel
 import com.ayaan.incompletion.ui.theme.PrimaryBlue
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RouteSelectionSection(
     modifier: Modifier = Modifier,
-    routeSelectionViewModel: RouteSelectionViewModel = hiltViewModel()
+    routeSelectionViewModel: RouteSelectionViewModel = hiltViewModel(),
+    routeDetailsViewModel: RouteDetailsViewModel=hiltViewModel()
 ) {
     val uiState by routeSelectionViewModel.uiState.collectAsState()
     var sourceDropdownExpanded by remember { mutableStateOf(false) }
@@ -73,9 +75,9 @@ fun RouteSelectionSection(
         ExposedDropdownMenuBox(
             expanded = sourceDropdownExpanded,
             onExpandedChange = { sourceDropdownExpanded = !sourceDropdownExpanded }
-        ) {
+            ) {
             OutlinedTextField(
-                value = uiState.selectedSourceId ?: "Select source stop",
+                value = uiState.selectedSourceId ?: "Select source",
                 onValueChange = { },
                 readOnly = true,
                 trailingIcon = {
@@ -95,7 +97,9 @@ fun RouteSelectionSection(
 
             ExposedDropdownMenu(
                 expanded = sourceDropdownExpanded,
-                onDismissRequest = { sourceDropdownExpanded = false }
+                onDismissRequest = { sourceDropdownExpanded = false },
+                modifier= Modifier.height(350.dp)
+                    .background(Color.White)
             ) {
                 routeSelectionViewModel.busStopOptions.forEach { stopId ->
                     DropdownMenuItem(
@@ -105,6 +109,7 @@ fun RouteSelectionSection(
                             sourceDropdownExpanded = false
                         }
                     )
+                    HorizontalDivider(modifier=Modifier.fillMaxWidth(0.95f).align(Alignment.CenterHorizontally))
                 }
             }
         }
@@ -141,10 +146,10 @@ fun RouteSelectionSection(
 
         ExposedDropdownMenuBox(
             expanded = destinationDropdownExpanded,
-            onExpandedChange = { destinationDropdownExpanded = !destinationDropdownExpanded }
+            onExpandedChange = { destinationDropdownExpanded = !destinationDropdownExpanded },
         ) {
             OutlinedTextField(
-                value = uiState.selectedDestinationId ?: "Select destination stop",
+                value = uiState.selectedDestinationId ?: "Select destination",
                 onValueChange = { },
                 readOnly = true,
                 trailingIcon = {
@@ -164,7 +169,9 @@ fun RouteSelectionSection(
 
             ExposedDropdownMenu(
                 expanded = destinationDropdownExpanded,
-                onDismissRequest = { destinationDropdownExpanded = false }
+                onDismissRequest = { destinationDropdownExpanded = false },
+                modifier= Modifier.height(350.dp)
+                    .background(Color.White)
             ) {
                 routeSelectionViewModel.busStopOptions.forEach { stopId ->
                     DropdownMenuItem(
@@ -174,6 +181,7 @@ fun RouteSelectionSection(
                             destinationDropdownExpanded = false
                         }
                     )
+                    HorizontalDivider(modifier=Modifier.fillMaxWidth(0.95f).align(Alignment.CenterHorizontally))
                 }
             }
         }
@@ -246,7 +254,8 @@ fun RouteSelectionSection(
                 CommonRoutesDisplay(
                     routes = uiState.routeResponse!!.commonRoutes,
                     sourceId = uiState.selectedSourceId ?: "",
-                    destinationId = uiState.selectedDestinationId ?: ""
+                    destinationId = uiState.selectedDestinationId ?: "",
+                    routeDetailsViewModel=routeDetailsViewModel
                 )
             }
         }
@@ -257,7 +266,8 @@ fun RouteSelectionSection(
 private fun CommonRoutesDisplay(
     routes: List<String>,
     sourceId: String,
-    destinationId: String
+    destinationId: String,
+    routeDetailsViewModel: RouteDetailsViewModel=hiltViewModel()
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -299,7 +309,7 @@ private fun CommonRoutesDisplay(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     items(routes) { route ->
-                        RouteItem(routeNumber = route)
+                        RouteItem(routeNumber = route,routeDetailsViewModel=routeDetailsViewModel)
                     }
                 }
             }
@@ -308,9 +318,13 @@ private fun CommonRoutesDisplay(
 }
 
 @Composable
-private fun RouteItem(routeNumber: String) {
+private fun RouteItem(routeNumber: String,routeDetailsViewModel: RouteDetailsViewModel) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable{
+                routeDetailsViewModel.getRouteDetails(routeNumber)
+            },
         colors = CardDefaults.cardColors(
             containerColor = Color.White
         ),

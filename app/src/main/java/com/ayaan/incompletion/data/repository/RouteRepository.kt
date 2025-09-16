@@ -4,6 +4,7 @@ import com.ayaan.incompletion.data.api.RouteApiService
 import com.ayaan.incompletion.data.model.RouteRequest
 import com.ayaan.incompletion.data.model.RouteResponse
 import com.ayaan.incompletion.data.model.ApiError
+import com.ayaan.incompletion.data.model.getRoute.Routes
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -16,11 +17,54 @@ sealed class RouteResult {
     object Loading : RouteResult()
 }
 
+sealed class SingleRouteResult {
+    data class Success(val data: List<Routes>) : SingleRouteResult()
+    data class Error(val message: String) : SingleRouteResult()
+    object Loading : SingleRouteResult()
+}
+
 @Singleton
 class RouteRepository @Inject constructor(
     private val routeApiService: RouteApiService,
     private val gson: Gson
 ) {
+    fun getRoutes(routeNumber: String): Flow<SingleRouteResult> = flow {
+        emit(SingleRouteResult.Loading)
+
+        try {
+            // Validate input
+            if (routeNumber.isBlank()) {
+                emit(SingleRouteResult.Error("Route number is required"))
+                return@flow
+            }
+
+            val response = routeApiService.getRoutes(routeNumber)
+
+            if (response.isSuccessful) {
+                response.body()?.let { routeData ->
+                    emit(SingleRouteResult.Success(routeData))
+                } ?: emit(SingleRouteResult.Error("No data received from server"))
+            } else {
+                val errorMessage = when (response.code()) {
+                    400 -> {
+                        try {
+                            val errorBody = response.errorBody()?.string()
+                            val apiError = gson.fromJson(errorBody, ApiError::class.java)
+                            apiError.message ?: "Invalid route number"
+                        } catch (e: Exception) {
+                            "Invalid route number"
+                        }
+                    }
+                    404 -> "Route not found"
+                    500 -> "Server error - please try again later"
+                    else -> "Failed to get route: ${response.message()}"
+                }
+                emit(SingleRouteResult.Error(errorMessage))
+            }
+        } catch (e: Exception) {
+            emit(SingleRouteResult.Error("Network error: ${e.localizedMessage ?: "Please check your connection"}"))
+        }
+    }
 
     fun getCommonRoutes(sourceId: String, destinationId: String): Flow<RouteResult> = flow {
         emit(RouteResult.Loading)

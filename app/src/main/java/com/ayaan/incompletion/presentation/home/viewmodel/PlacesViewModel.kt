@@ -53,6 +53,7 @@ class PlacesViewModel @Inject constructor(
                 val results = placesRepository.getPlaceSuggestions(query)
                 _suggestions.value = results
             } catch (e: Exception) {
+                e.printStackTrace()
                 _suggestions.value = emptyList()
             } finally {
                 _isLoading.value = false
