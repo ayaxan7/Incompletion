@@ -1,5 +1,7 @@
 package com.ayaan.incompletion.presentation.nearestbusstop
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -9,6 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -22,6 +25,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
 import kotlinx.coroutines.delay
 import kotlin.math.*
+import androidx.core.net.toUri
 
 // Utility function to calculate distance between two points using Haversine formula
 fun calculateDistance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
@@ -43,8 +47,25 @@ fun NearestBusStopScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val userLocation = LatLng(12.9098849, 77.5644359) // User's current location (matching repository)
-
+    
     // State to track if camera has been positioned
+    val context = LocalContext.current
+
+    // Function to open Google Maps with directions
+    fun openGoogleMapsDirections(destinationLat: Double, destinationLng: Double) {
+        val uri = "https://www.google.com/maps/dir/?api=1&origin=${userLocation.latitude},${userLocation.longitude}&destination=$destinationLat,$destinationLng&travelmode=transit".toUri()
+        val intent = Intent(Intent.ACTION_VIEW, uri)
+        intent.setPackage("com.google.android.apps.maps")
+
+        // Check if Google Maps is installed, otherwise open in browser
+        if (intent.resolveActivity(context.packageManager) != null) {
+            context.startActivity(intent)
+        } else {
+            // Fallback to browser if Google Maps app is not installed
+            val browserIntent = Intent(Intent.ACTION_VIEW, uri)
+            context.startActivity(browserIntent)
+        }
+    }
     var cameraPositioned by remember { mutableStateOf(false) }
 
     val cameraPositionState = rememberCameraPositionState {
@@ -81,10 +102,10 @@ fun NearestBusStopScreen(
 
                     // Immediately position camera to nearest bus stop with appropriate zoom
                     cameraPositionState.position = CameraPosition.fromLatLngZoom(nearestLocation, 17f)
-
+                    
                     // Mark camera as positioned to avoid repositioning
                     cameraPositioned = true
-
+                    
                     // Optional: Add a subtle animation after initial positioning
                     delay(100)
                     cameraPositionState.animate(
@@ -151,7 +172,14 @@ fun NearestBusStopScreen(
                     Marker(
                         state = MarkerState(position = position),
                         title = busStop.name,
-                        snippet = "Routes: ${busStop.routes?.joinToString(", ") { it.routeNumber } ?: "No routes available"}"
+                        snippet = "Routes: ${busStop.routes?.joinToString(", ") { it.routeNumber } ?: "No routes available"}",
+                        onClick = {
+                            openGoogleMapsDirections(
+                                destinationLat = busStop.location.coordinates[1],
+                                destinationLng = busStop.location.coordinates[0]
+                            )
+                            true // Return true to indicate we have handled the click
+                        },
                     )
                 }
             }
