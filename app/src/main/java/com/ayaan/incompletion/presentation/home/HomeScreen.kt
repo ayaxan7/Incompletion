@@ -35,18 +35,15 @@ import com.ayaan.incompletion.presentation.common.components.GradientExtendedFlo
 import com.ayaan.incompletion.presentation.home.components.AddFavoriteDialog
 import com.ayaan.incompletion.presentation.home.components.FavoriteRoutesList
 import com.ayaan.incompletion.presentation.navigation.Destinations
-import com.ayaan.incompletion.presentation.home.components.SearchSection
+import com.ayaan.incompletion.presentation.home.components.RouteSelectionSection
 import com.ayaan.incompletion.presentation.home.viewmodel.FavoriteRouteViewModel
-import com.ayaan.incompletion.presentation.home.viewmodel.PlacesViewModel
 import com.ayaan.incompletion.ui.theme.PrimaryBlue
-import com.google.android.gms.maps.model.LatLng
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     navController: NavController,
-    favoriteRouteViewModel: FavoriteRouteViewModel = hiltViewModel(),
-    placesViewModel: PlacesViewModel = hiltViewModel()
+    favoriteRouteViewModel: FavoriteRouteViewModel = hiltViewModel()
 ) {
     var showAddFavoriteDialog by remember { mutableStateOf(false) }
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -70,14 +67,6 @@ fun HomeScreen(
                     )
                 }
             },
-//            floatingActionButton = {
-//                GradientExtendedFloatingActionButton(
-//                    text = "Add Favourites",
-//                    icon = Icons.Default.Add,
-//                    onClick = { showAddFavoriteDialog = true },
-//                    enabled = true
-//                )
-//            },
             containerColor = Color.White
         ) { innerPadding ->
             Column(
@@ -86,23 +75,8 @@ fun HomeScreen(
                     .padding(innerPadding)
                     .verticalScroll(rememberScrollState())
             ) {
-                SearchSection(
-                    drawerState = drawerState,
-                    onRouteFetched = { _ -> /* Handle route data if needed */ },
-                    onValidityChanged = { _ -> /* Handle validity changes if needed */ },
-                    onLocationsSet = { _, _ -> /* Handle location updates if needed */ },
-                    navController = navController,
-                    placesViewModel = placesViewModel
-                )
-
-                // Add favorite routes list below search section
-//                FavoriteRoutesList(
-//                    favoriteRoutes = favoriteRoutes,
-//                    onDeleteFavorite = { favoriteRoute ->
-//                        favoriteRouteViewModel.removeFavoriteRoute(favoriteRoute)
-//                    },
-//                    navController = navController
-//                )
+                // Replace SearchSection with RouteSelectionSection
+                RouteSelectionSection()
 
                 // Action buttons section
                 ActionButtonsSection(
@@ -115,7 +89,5 @@ fun HomeScreen(
                 )
             }
         }
-
-
     }
 }

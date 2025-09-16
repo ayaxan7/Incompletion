@@ -3,8 +3,8 @@ package com.ayaan.incompletion.presentation.home.components
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.SwapVert
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -15,51 +15,28 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.ayaan.incompletion.data.PlaceSuggestion
 import com.ayaan.incompletion.presentation.common.components.GradientButton
-import com.ayaan.incompletion.presentation.common.components.ThemedTextField
-import com.ayaan.incompletion.presentation.home.viewmodel.PlacesViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddFavoriteDialog(
     isVisible: Boolean,
     onDismiss: () -> Unit,
-    onAddFavorite: (String, String, String, String) -> Unit,
-    placesViewModel: PlacesViewModel = hiltViewModel()
+    onAddFavorite: (String, String, String, String) -> Unit
 ) {
-    var sourceText by remember { mutableStateOf("") }
-    var destinationText by remember { mutableStateOf("") }
-    var sourcePlaceId by remember { mutableStateOf<String?>(null) }
-    var destinationPlaceId by remember { mutableStateOf<String?>(null) }
-    var activeField by remember { mutableStateOf<String?>(null) }
+    var sourceSelection by remember { mutableStateOf<String?>(null) }
+    var destinationSelection by remember { mutableStateOf<String?>(null) }
+    var sourceDropdownExpanded by remember { mutableStateOf(false) }
+    var destinationDropdownExpanded by remember { mutableStateOf(false) }
 
-    val suggestions by placesViewModel.suggestions.collectAsState()
-    val scope = rememberCoroutineScope()
-
-    fun fetchSuggestions(query: String, field: String) {
-        activeField = field
-        if (query.length > 2) {
-            scope.launch {
-                delay(300)
-                // Use bus station suggestions for both source and destination
-                placesViewModel.getBusStationSuggestions(query)
-            }
-        } else {
-            placesViewModel.clearSuggestions()
-        }
-    }
+    // Generate bus stop options (S1 to S25)
+    val busStopOptions = (1..25).map { "S$it" }
 
     fun resetFields() {
-        sourceText = ""
-        destinationText = ""
-        sourcePlaceId = null
-        destinationPlaceId = null
-        placesViewModel.clearSuggestions()
-        activeField = null
+        sourceSelection = null
+        destinationSelection = null
+        sourceDropdownExpanded = false
+        destinationDropdownExpanded = false
     }
 
     if (isVisible) {
@@ -104,30 +81,51 @@ fun AddFavoriteDialog(
                     Spacer(modifier = Modifier.height(16.dp))
 
                     // Source field
-                    ThemedTextField(
-                        value = sourceText,
-                        onValueChange = {
-                            sourceText = it
-                            sourcePlaceId = null
-                            fetchSuggestions(it, "source")
-                        },
-                        label = "From (Source)",
-                        icon = Icons.Default.LocationOn,
-                        focusedBorderColor = Color(0xFF4CAF50), // Green color
-                        unfocusedBorderColor = Color(0xFF4CAF50)
+                    Text(
+                        text = "From (Source)",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = Color(0xFF666666),
+                        modifier = Modifier.padding(bottom = 8.dp)
                     )
 
-                    // Show suggestions for source field
-                    if (suggestions.isNotEmpty() && activeField == "source") {
-                        SuggestionsDropdown(
-                            suggestions = suggestions,
-                            onItemClick = { suggestion ->
-                                sourceText = suggestion.primaryText
-                                sourcePlaceId = suggestion.placeId
-                                placesViewModel.clearSuggestions()
-                                activeField = null
-                            }
+                    ExposedDropdownMenuBox(
+                        expanded = sourceDropdownExpanded,
+                        onExpandedChange = { sourceDropdownExpanded = !sourceDropdownExpanded }
+                    ) {
+                        OutlinedTextField(
+                            value = sourceSelection ?: "Select source stop",
+                            onValueChange = { },
+                            readOnly = true,
+                            trailingIcon = {
+                                Icon(
+                                    imageVector = Icons.Default.ArrowDropDown,
+                                    contentDescription = "Dropdown"
+                                )
+                            },
+                            colors = OutlinedTextFieldDefaults.colors(
+                                focusedBorderColor = Color(0xFF4CAF50),
+                                unfocusedBorderColor = Color(0xFF4CAF50)
+                            ),
+                            modifier = Modifier
+                                .menuAnchor()
+                                .fillMaxWidth()
                         )
+
+                        ExposedDropdownMenu(
+                            expanded = sourceDropdownExpanded,
+                            onDismissRequest = { sourceDropdownExpanded = false }
+                        ) {
+                            busStopOptions.forEach { stopId ->
+                                DropdownMenuItem(
+                                    text = { Text(stopId) },
+                                    onClick = {
+                                        sourceSelection = stopId
+                                        sourceDropdownExpanded = false
+                                    }
+                                )
+                            }
+                        }
                     }
 
                     Spacer(modifier = Modifier.height(8.dp))
@@ -139,13 +137,9 @@ fun AddFavoriteDialog(
                     ) {
                         IconButton(
                             onClick = {
-                                val temp = sourceText
-                                sourceText = destinationText
-                                destinationText = temp
-
-                                val tempId = sourcePlaceId
-                                sourcePlaceId = destinationPlaceId
-                                destinationPlaceId = tempId
+                                val temp = sourceSelection
+                                sourceSelection = destinationSelection
+                                destinationSelection = temp
                             }
                         ) {
                             Icon(
@@ -157,30 +151,51 @@ fun AddFavoriteDialog(
                     }
 
                     // Destination field
-                    ThemedTextField(
-                        value = destinationText,
-                        onValueChange = {
-                            destinationText = it
-                            destinationPlaceId = null
-                            fetchSuggestions(it, "destination")
-                        },
-                        label = "To (Destination)",
-                        icon = Icons.Default.LocationOn,
-                        focusedBorderColor = Color(0xFFF44336), // Red color
-                        unfocusedBorderColor = Color(0xFFF44336)
+                    Text(
+                        text = "To (Destination)",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = Color(0xFF666666),
+                        modifier = Modifier.padding(bottom = 8.dp)
                     )
 
-                    // Show suggestions for destination field
-                    if (suggestions.isNotEmpty() && activeField == "destination") {
-                        SuggestionsDropdown(
-                            suggestions = suggestions,
-                            onItemClick = { suggestion ->
-                                destinationText = suggestion.primaryText
-                                destinationPlaceId = suggestion.placeId
-                                placesViewModel.clearSuggestions()
-                                activeField = null
-                            }
+                    ExposedDropdownMenuBox(
+                        expanded = destinationDropdownExpanded,
+                        onExpandedChange = { destinationDropdownExpanded = !destinationDropdownExpanded }
+                    ) {
+                        OutlinedTextField(
+                            value = destinationSelection ?: "Select destination stop",
+                            onValueChange = { },
+                            readOnly = true,
+                            trailingIcon = {
+                                Icon(
+                                    imageVector = Icons.Default.ArrowDropDown,
+                                    contentDescription = "Dropdown"
+                                )
+                            },
+                            colors = OutlinedTextFieldDefaults.colors(
+                                focusedBorderColor = Color(0xFFF44336),
+                                unfocusedBorderColor = Color(0xFFF44336)
+                            ),
+                            modifier = Modifier
+                                .menuAnchor()
+                                .fillMaxWidth()
                         )
+
+                        ExposedDropdownMenu(
+                            expanded = destinationDropdownExpanded,
+                            onDismissRequest = { destinationDropdownExpanded = false }
+                        ) {
+                            busStopOptions.forEach { stopId ->
+                                DropdownMenuItem(
+                                    text = { Text(stopId) },
+                                    onClick = {
+                                        destinationSelection = stopId
+                                        destinationDropdownExpanded = false
+                                    }
+                                )
+                            }
+                        }
                     }
 
                     Spacer(modifier = Modifier.height(24.dp))
@@ -189,10 +204,12 @@ fun AddFavoriteDialog(
                     GradientButton(
                         text = "Add to Favorites",
                         isLoading = false,
-                        enabled = !sourcePlaceId.isNullOrEmpty() && !destinationPlaceId.isNullOrEmpty(),
+                        enabled = !sourceSelection.isNullOrEmpty() && !destinationSelection.isNullOrEmpty(),
                         onClick = {
-                            if (!sourcePlaceId.isNullOrEmpty() && !destinationPlaceId.isNullOrEmpty()) {
-                                onAddFavorite(sourceText, sourcePlaceId!!, destinationText, destinationPlaceId!!)
+                            if (!sourceSelection.isNullOrEmpty() && !destinationSelection.isNullOrEmpty()) {
+                                // Pass: sourceName, sourceId, destinationName, destinationId
+                                // For bus stops like S1, S2, etc., the name and ID are the same
+                                onAddFavorite(sourceSelection!!, sourceSelection!!, destinationSelection!!, destinationSelection!!)
                                 resetFields()
                                 onDismiss()
                             }

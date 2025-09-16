@@ -11,7 +11,7 @@ import retrofit2.http.HTTP
 import retrofit2.http.POST
 
 interface RouteApiService {
-    @GET("getCommonRoutes")
+    @POST("getCommonRoutes")
     suspend fun getCommonRoutes(
         @Body request: RouteRequest
     ): Response<RouteResponse>

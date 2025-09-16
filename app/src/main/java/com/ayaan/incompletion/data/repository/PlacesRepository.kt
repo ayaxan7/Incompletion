@@ -16,7 +16,6 @@ class PlacesRepository @Inject constructor(
     private val placesClient: PlacesClient,
     private val locationService: LocationService
 ) {
-
     suspend fun getBusStationSuggestions(query: String): List<PlaceSuggestion> {
         return try {
             val userLocation = locationService.getUserLocation()

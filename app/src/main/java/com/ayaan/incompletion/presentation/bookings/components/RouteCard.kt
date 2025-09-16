@@ -4,9 +4,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.TrendingDown
+import androidx.compose.material.icons.automirrored.filled.TrendingUp
 import androidx.compose.material.icons.filled.DirectionsBus
-import androidx.compose.material.icons.filled.TrendingDown
-import androidx.compose.material.icons.filled.TrendingUp
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -17,7 +17,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ayaan.incompletion.data.model.RouteInfo
 import com.ayaan.incompletion.ui.theme.PrimaryBlue
-import java.util.Locale
 
 @Composable
 fun RouteCard(
@@ -69,9 +68,9 @@ fun RouteCard(
                 ) {
                     Icon(
                         imageVector = if (route.direction == "forward")
-                            Icons.Default.TrendingUp
+                            Icons.AutoMirrored.Filled.TrendingUp
                         else
-                            Icons.Default.TrendingDown,
+                            Icons.AutoMirrored.Filled.TrendingDown,
                         contentDescription = "Direction",
                         tint = if (route.direction == "forward")
                             Color(0xFF4CAF50)
@@ -81,7 +80,7 @@ fun RouteCard(
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = route.direction.capitalize(Locale.ROOT),
+                        text = route.direction.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() },
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Medium,
                         color = if (route.direction == "forward")
@@ -139,6 +138,27 @@ fun RouteCard(
                     text = "Total stops: $numberOfStops",
                     fontSize = 12.sp,
                     color = Color(0xFF666666)
+                )
+            }
+
+            // Optional: Show estimated time and distance if available
+            route.estimatedTime?.let { time ->
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = "Est. time: $time",
+                    fontSize = 12.sp,
+                    color = PrimaryBlue,
+                    fontWeight = FontWeight.Medium
+                )
+            }
+
+            route.distance?.let { distance ->
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = "Distance: $distance",
+                    fontSize = 12.sp,
+                    color = PrimaryBlue,
+                    fontWeight = FontWeight.Medium
                 )
             }
         }
