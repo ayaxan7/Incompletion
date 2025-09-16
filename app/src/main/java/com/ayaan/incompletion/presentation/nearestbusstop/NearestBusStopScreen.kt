@@ -21,7 +21,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.ayaan.incompletion.presentation.home.viewmodel.NearestBusStopViewModel
 import com.ayaan.incompletion.ui.theme.PrimaryBlue
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.CameraPosition
@@ -35,28 +34,9 @@ import com.ayaan.incompletion.data.model.BusStop
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.ayaan.incompletion.R
 import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import com.google.android.gms.maps.model.BitmapDescriptor
 import androidx.core.graphics.scale
-
-fun getScaledBitmapDescriptor(context: Context, resId: Int, width: Int, height: Int): BitmapDescriptor {
-    val bitmap = BitmapFactory.decodeResource(context.resources, resId)
-    val scaledBitmap = bitmap.scale(width, height, false)
-    return BitmapDescriptorFactory.fromBitmap(scaledBitmap)
-}
-
-// Utility function to calculate distance between two points using Haversine formula
-fun calculateDistance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
-    val R = 6371 // Radius of the earth in km
-    val dLat = Math.toRadians(lat2 - lat1)
-    val dLon = Math.toRadians(lon2 - lon1)
-    val a = sin(dLat / 2) * sin(dLat / 2) +
-            cos(Math.toRadians(lat1)) * cos(Math.toRadians(lat2)) *
-            sin(dLon / 2) * sin(dLon / 2)
-    val c = 2 * atan2(sqrt(a), sqrt(1 - a))
-    return R * c // Distance in km
-}
 
 @SuppressLint("DefaultLocale")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -407,4 +387,21 @@ fun NearestBusStopScreen(
             }
         }
     }
+}
+fun getScaledBitmapDescriptor(context: Context, resId: Int, width: Int, height: Int): BitmapDescriptor {
+    val bitmap = BitmapFactory.decodeResource(context.resources, resId)
+    val scaledBitmap = bitmap.scale(width, height, false)
+    return BitmapDescriptorFactory.fromBitmap(scaledBitmap)
+}
+
+// Utility function to calculate distance between two points using Haversine formula
+fun calculateDistance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
+    val R = 6371 // Radius of the earth in km
+    val dLat = Math.toRadians(lat2 - lat1)
+    val dLon = Math.toRadians(lon2 - lon1)
+    val a = sin(dLat / 2) * sin(dLat / 2) +
+            cos(Math.toRadians(lat1)) * cos(Math.toRadians(lat2)) *
+            sin(dLon / 2) * sin(dLon / 2)
+    val c = 2 * atan2(sqrt(a), sqrt(1 - a))
+    return R * c // Distance in km
 }

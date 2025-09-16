@@ -21,8 +21,8 @@ import com.ayaan.incompletion.presentation.bookings.BookTickets
 import com.ayaan.incompletion.presentation.home.HomeScreen
 import com.ayaan.incompletion.presentation.favorites.FavoriteRoutesScreen
 import com.ayaan.incompletion.presentation.nearestbusstop.NearestBusStopScreen
-import com.ayaan.incompletion.presentation.test.TestResult
-import com.ayaan.incompletion.presentation.test.TestViewModel
+import com.ayaan.incompletion.presentation.common.components.test.TestResult
+import com.ayaan.incompletion.presentation.common.components.test.TestViewModel
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable

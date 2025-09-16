@@ -1,4 +1,4 @@
-package com.ayaan.incompletion.presentation.test
+package com.ayaan.incompletion.presentation.common.components.test
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
