@@ -1,11 +1,15 @@
 package com.ayaan.incompletion.presentation.nearestbusstop
 
+import android.annotation.SuppressLint
 import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -24,8 +28,23 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlin.math.*
 import androidx.core.net.toUri
+import com.ayaan.incompletion.data.model.BusStop
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.ayaan.incompletion.R
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import com.google.android.gms.maps.model.BitmapDescriptor
+import androidx.core.graphics.scale
+
+fun getScaledBitmapDescriptor(context: Context, resId: Int, width: Int, height: Int): BitmapDescriptor {
+    val bitmap = BitmapFactory.decodeResource(context.resources, resId)
+    val scaledBitmap = bitmap.scale(width, height, false)
+    return BitmapDescriptorFactory.fromBitmap(scaledBitmap)
+}
 
 // Utility function to calculate distance between two points using Haversine formula
 fun calculateDistance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
@@ -39,6 +58,7 @@ fun calculateDistance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): D
     return R * c // Distance in km
 }
 
+@SuppressLint("DefaultLocale")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NearestBusStopScreen(
@@ -46,10 +66,37 @@ fun NearestBusStopScreen(
     viewModel: NearestBusStopViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val userLocation = LatLng(12.9098849, 77.5644359) // User's current location (matching repository)
-    
-    // State to track if camera has been positioned
+    val userLocation = LatLng(12.9098849, 77.5644359) // User's current location
+
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+
+    // BottomSheet state
+    val bottomSheetState = rememberModalBottomSheetState()
+    var showBottomSheet by remember { mutableStateOf(false) }
+    var cameraPositioned by remember { mutableStateOf(false) }
+
+    val cameraPositionState = rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(userLocation, 15f)
+    }
+
+    // Function to focus camera on a specific bus stop
+    fun focusOnBusStop(busStop: BusStop) {
+        val position = LatLng(
+            busStop.location.coordinates[1], // latitude
+            busStop.location.coordinates[0]  // longitude
+        )
+
+        scope.launch {
+            cameraPositionState.animate(
+                update = CameraUpdateFactory.newLatLngZoom(position, 17f),
+                durationMs = 1000
+            )
+        }
+
+        // Close the bottom sheet
+        showBottomSheet = false
+    }
 
     // Function to open Google Maps with directions
     fun openGoogleMapsDirections(destinationLat: Double, destinationLng: Double) {
@@ -65,11 +112,6 @@ fun NearestBusStopScreen(
             val browserIntent = Intent(Intent.ACTION_VIEW, uri)
             context.startActivity(browserIntent)
         }
-    }
-    var cameraPositioned by remember { mutableStateOf(false) }
-
-    val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(userLocation, 15f)
     }
 
     // Automatically fetch nearest bus stops when screen is displayed
@@ -157,11 +199,12 @@ fun NearestBusStopScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            // Google Map
             GoogleMap(
                 modifier = Modifier.fillMaxSize(),
                 cameraPositionState = cameraPositionState
             ) {
+
+                val busStopIcon = getScaledBitmapDescriptor(context, R.drawable.bus_marker, 120, 120)
                 // Add markers for nearest bus stops
                 uiState.busStopsResponse?.stops?.forEach { busStop ->
                     val position = LatLng(
@@ -171,6 +214,7 @@ fun NearestBusStopScreen(
 
                     Marker(
                         state = MarkerState(position = position),
+                        icon = busStopIcon,
                         title = busStop.name,
                         snippet = "Routes: ${busStop.routes?.joinToString(", ") { it.routeNumber } ?: "No routes available"}",
                         onClick = {
@@ -258,35 +302,106 @@ fun NearestBusStopScreen(
                 }
             }
 
-            // Bus stops info card
+            // FAB to show bus stops list (replaces the info card)
             uiState.busStopsResponse?.let { response ->
                 if (response.stops.isNotEmpty()) {
-                    Card(
+                    FloatingActionButton(
+                        onClick = { showBottomSheet = true },
+                        modifier = Modifier
+                            .align(Alignment.BottomEnd)
+                            .padding(16.dp),
+                        containerColor = PrimaryBlue,
+                        contentColor = Color.White
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.List,
+                            contentDescription = "Show bus stops list"
+                        )
+                    }
+                }
+            }
+        }
+
+        // BottomSheet
+        if (showBottomSheet) {
+            ModalBottomSheet(
+                onDismissRequest = { showBottomSheet = false },
+                sheetState = bottomSheetState
+            ) {
+                uiState.busStopsResponse?.let { response ->
+                    Column(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(16.dp)
-                            .align(Alignment.BottomCenter),
-                        colors = CardDefaults.cardColors(
-                            containerColor = Color.White
-                        ),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
                     ) {
-                        Column(
-                            modifier = Modifier.padding(16.dp)
+                        Text(
+                            text = "Found ${response.stops.size} nearby bus stop(s)",
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = PrimaryBlue,
+                            modifier = Modifier.padding(bottom = 16.dp)
+                        )
+
+                        LazyColumn(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            Text(
-                                text = "Found ${response.stops.size} nearby bus stop(s)",
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = PrimaryBlue
-                            )
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Text(
-                                text = "Tap on markers to see bus routes",
-                                fontSize = 14.sp,
-                                color = Color(0xFF666666)
-                            )
+                            items(response.stops) { busStop ->
+                                Card(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clickable {
+                                            focusOnBusStop(busStop)
+                                        },
+                                    colors = CardDefaults.cardColors(
+                                        containerColor = Color(0xFFF5F5F5)
+                                    ),
+                                    elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                                ) {
+                                    Column(
+                                        modifier = Modifier.padding(16.dp)
+                                    ) {
+                                        Text(
+                                            text = busStop.name,
+                                            fontSize = 16.sp,
+                                            fontWeight = FontWeight.Medium,
+                                            color = Color.Black
+                                        )
+
+                                        if (!busStop.routes.isNullOrEmpty()) {
+                                            Spacer(modifier = Modifier.height(4.dp))
+                                            Text(
+                                                text = "Routes: ${busStop.routes.joinToString(", ") { it.routeNumber }}",
+                                                fontSize = 14.sp,
+                                                color = Color(0xFF666666)
+                                            )
+                                        }
+
+                                        Spacer(modifier = Modifier.height(4.dp))
+                                        val distance = calculateDistance(
+                                            userLocation.latitude,
+                                            userLocation.longitude,
+                                            busStop.location.coordinates[1],
+                                            busStop.location.coordinates[0]
+                                        )
+                                        Text(
+                                            text = "Distance: ${String.format("%.2f", distance)} km",
+                                            fontSize = 12.sp,
+                                            color = PrimaryBlue,
+                                            fontWeight = FontWeight.Medium
+                                        )
+                                    }
+                                }
+                            }
                         }
+
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Text(
+                            text = "Tap on any bus stop to focus the map on it",
+                            fontSize = 14.sp,
+                            color = Color(0xFF666666),
+                            modifier = Modifier.padding(bottom = 32.dp)
+                        )
                     }
                 }
             }
