@@ -36,7 +36,7 @@ import com.ayaan.incompletion.presentation.home.components.AddFavoriteDialog
 import com.ayaan.incompletion.presentation.home.components.FavoriteRoutesList
 import com.ayaan.incompletion.presentation.navigation.Destinations
 import com.ayaan.incompletion.presentation.home.components.RouteSelectionSection
-import com.ayaan.incompletion.presentation.home.viewmodel.FavoriteRouteViewModel
+import com.ayaan.incompletion.presentation.favorites.FavoriteRouteViewModel
 import com.ayaan.incompletion.ui.theme.PrimaryBlue
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -77,6 +77,7 @@ fun HomeScreen(
             ) {
                 // Replace SearchSection with RouteSelectionSection
                 RouteSelectionSection(navController = navController)
+
                 // Action buttons section
                 ActionButtonsSection(
                     onFavoriteRoutesClick = {

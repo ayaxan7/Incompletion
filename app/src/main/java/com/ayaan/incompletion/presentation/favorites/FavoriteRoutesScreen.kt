@@ -1,5 +1,6 @@
 package com.ayaan.incompletion.presentation.favorites
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -18,17 +19,44 @@ import androidx.navigation.NavController
 import com.ayaan.incompletion.presentation.common.components.GradientExtendedFloatingActionButton
 import com.ayaan.incompletion.presentation.home.components.AddFavoriteDialog
 import com.ayaan.incompletion.presentation.home.components.FavoriteRoutesList
-import com.ayaan.incompletion.presentation.home.viewmodel.FavoriteRouteViewModel
+import com.ayaan.incompletion.presentation.favorites.FavoriteRouteViewModel
+import com.ayaan.incompletion.presentation.busstop.viewmodel.BusesForStopViewModel
 import com.ayaan.incompletion.ui.theme.PrimaryBlue
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FavoriteRoutesScreen(
     navController: NavController,
-    favoriteRouteViewModel: FavoriteRouteViewModel = hiltViewModel()
+    favoriteRouteViewModel: FavoriteRouteViewModel = hiltViewModel(),
+    busesForStopViewModel: BusesForStopViewModel = hiltViewModel()
 ) {
     val favoriteRoutes by favoriteRouteViewModel.favoriteRoutes.collectAsState()
+    val busesForStopUiState by busesForStopViewModel.uiState.collectAsState()
     var showAddFavoriteDialog by remember { mutableStateOf(false) }
+
+    // Call getBusesForStop endpoint when screen opens
+    LaunchedEffect(Unit) {
+        Log.d("FavoriteRoutesScreen", "Screen opened - calling getBusesForStop endpoint")
+        busesForStopViewModel.getBusesForStop("STOP001")
+    }
+
+    // Log the response from getBusesForStop
+    LaunchedEffect(busesForStopUiState) {
+        when {
+            busesForStopUiState.isLoading -> {
+                Log.d("FavoriteRoutesScreen", "getBusesForStop: Loading...")
+            }
+            busesForStopUiState.errorMessage != null -> {
+                Log.e("FavoriteRoutesScreen", "getBusesForStop Error: ${busesForStopUiState.errorMessage}")
+            }
+            busesForStopUiState.buses.isNotEmpty() -> {
+                Log.d("FavoriteRoutesScreen", "getBusesForStop Success: Found ${busesForStopUiState.buses.size} buses")
+                busesForStopUiState.buses.forEachIndexed { index, bus ->
+                    Log.d("FavoriteRoutesScreen", "Bus $index: ID=${bus.busId}, Route=${bus.routeNo}, Distance=${bus.distance}m, Duration=${bus.duration}s")
+                }
+            }
+        }
+    }
     Scaffold(
         topBar = {
             Box(

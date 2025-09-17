@@ -1,4 +1,4 @@
-package com.ayaan.incompletion.presentation.home.viewmodel
+package com.ayaan.incompletion.presentation.favorites
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

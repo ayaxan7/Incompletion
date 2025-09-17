@@ -1,5 +1,6 @@
 package com.ayaan.incompletion.presentation.home.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -114,7 +115,8 @@ fun AddFavoriteDialog(
 
                         ExposedDropdownMenu(
                             expanded = sourceDropdownExpanded,
-                            onDismissRequest = { sourceDropdownExpanded = false }
+                            onDismissRequest = { sourceDropdownExpanded = false },
+                            modifier= Modifier.background(Color.White)
                         ) {
                             busStopOptions.forEach { stopId ->
                                 DropdownMenuItem(

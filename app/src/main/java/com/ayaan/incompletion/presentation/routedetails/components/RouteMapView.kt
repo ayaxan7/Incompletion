@@ -1,20 +1,22 @@
 package com.ayaan.incompletion.presentation.routedetails.components
 
+import android.content.Context
+import android.graphics.BitmapFactory
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.ayaan.incompletion.data.model.getRoute.Routes
 import com.ayaan.incompletion.data.directions.DirectionsService
-import com.ayaan.incompletion.ui.theme.GradientBlue
 import com.ayaan.incompletion.ui.theme.GradientLightBlue
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.*
 import com.google.maps.android.compose.*
 import kotlinx.coroutines.delay
+import androidx.core.graphics.scale
 
 @Composable
 fun RouteMapView(
@@ -22,15 +24,12 @@ fun RouteMapView(
     modifier: Modifier = Modifier,
     directionsService: DirectionsService = DirectionsService()
 ) {
-    val context = LocalContext.current
-
-    // Get the first route (assuming we're showing one route at a time)
     val route = routes.firstOrNull()
 
     if (route == null) {
         Box(
             modifier = modifier,
-            contentAlignment = androidx.compose.ui.Alignment.Center
+            contentAlignment = Alignment.Center
         ) {
             Text(
                 text = "No route data available",
@@ -39,8 +38,6 @@ fun RouteMapView(
         }
         return
     }
-
-    // Convert stops to LatLng points
     val busStops = remember(route) {
         route.stops.map { stop ->
             LatLng(
@@ -54,7 +51,6 @@ fun RouteMapView(
     var decodedRoutePoints by remember { mutableStateOf<List<LatLng>>(emptyList()) }
     var isLoadingRoute by remember { mutableStateOf(false) }
 
-    // Generate route using Directions API
     LaunchedEffect(route) {
         if (busStops.size >= 2) {
             isLoadingRoute = true
@@ -62,7 +58,7 @@ fun RouteMapView(
                 val routePoints = directionsService.getBusRouteDirections(busStops)
                 decodedRoutePoints = routePoints
             } catch (e: Exception) {
-                // Fallback to simple line if directions fail
+                e.printStackTrace()
                 decodedRoutePoints = busStops
             } finally {
                 isLoadingRoute = false
@@ -93,12 +89,12 @@ fun RouteMapView(
         } else null
     }
 
-    var cameraPositionState = rememberCameraPositionState()
+    val cameraPositionState = rememberCameraPositionState()
 
     // Set camera to show all route points
     LaunchedEffect(bounds) {
         bounds?.let {
-            delay(100) // Small delay to ensure map is ready
+            delay(100)
             try {
                 cameraPositionState.animate(
                     CameraUpdateFactory.newLatLngBounds(it, 100),
@@ -128,12 +124,11 @@ fun RouteMapView(
                 mapToolbarEnabled = true
             )
         ) {
-            // Draw the decoded route polyline
             if (decodedRoutePoints.size > 1) {
                 Polyline(
                     points = decodedRoutePoints,
-                    color = GradientLightBlue,
-                    width = 6f,
+                    color = Color.Red,
+                    width = 14f,
                     pattern = null,
                     geodesic = false // Set to false since we have detailed route points
                 )
@@ -241,7 +236,11 @@ fun RouteMapView(
         }
     }
 }
-
+fun getScaledBitmapDescriptor(context: Context, resId: Int, width: Int, height: Int): BitmapDescriptor {
+    val bitmap = BitmapFactory.decodeResource(context.resources, resId)
+    val scaledBitmap = bitmap.scale(width, height, false)
+    return BitmapDescriptorFactory.fromBitmap(scaledBitmap)
+}
 data class MarkerData(
     val position: LatLng,
     val title: String,
