@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -31,9 +29,6 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.ayaan.incompletion.presentation.home.components.ActionButtonsSection
-import com.ayaan.incompletion.presentation.common.components.GradientExtendedFloatingActionButton
-import com.ayaan.incompletion.presentation.home.components.AddFavoriteDialog
-import com.ayaan.incompletion.presentation.home.components.FavoriteRoutesList
 import com.ayaan.incompletion.presentation.navigation.Destinations
 import com.ayaan.incompletion.presentation.home.components.RouteSelectionSection
 import com.ayaan.incompletion.presentation.favorites.FavoriteRouteViewModel
@@ -75,7 +70,6 @@ fun HomeScreen(
                     .padding(innerPadding)
                     .verticalScroll(rememberScrollState())
             ) {
-                // Replace SearchSection with RouteSelectionSection
                 RouteSelectionSection(navController = navController)
 
                 // Action buttons section

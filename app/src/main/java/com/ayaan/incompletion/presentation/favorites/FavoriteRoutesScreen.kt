@@ -17,9 +17,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.ayaan.incompletion.presentation.common.components.GradientExtendedFloatingActionButton
-import com.ayaan.incompletion.presentation.home.components.AddFavoriteDialog
-import com.ayaan.incompletion.presentation.home.components.FavoriteRoutesList
-import com.ayaan.incompletion.presentation.favorites.FavoriteRouteViewModel
+import com.ayaan.incompletion.presentation.favorites.components.AddFavoriteDialog
+import com.ayaan.incompletion.presentation.favorites.components.FavoriteRoutesList
 import com.ayaan.incompletion.presentation.busstop.viewmodel.BusesForStopViewModel
 import com.ayaan.incompletion.ui.theme.PrimaryBlue
 

@@ -1,4 +1,4 @@
-package com.ayaan.incompletion.presentation.home.components
+package com.ayaan.incompletion.presentation.favorites.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -116,7 +116,8 @@ fun AddFavoriteDialog(
                         ExposedDropdownMenu(
                             expanded = sourceDropdownExpanded,
                             onDismissRequest = { sourceDropdownExpanded = false },
-                            modifier= Modifier.background(Color.White)
+                            modifier= Modifier.height(300.dp)
+                                .background(Color.White)
                         ) {
                             busStopOptions.forEach { stopId ->
                                 DropdownMenuItem(
@@ -126,6 +127,7 @@ fun AddFavoriteDialog(
                                         sourceDropdownExpanded = false
                                     }
                                 )
+                                HorizontalDivider(modifier=Modifier.fillMaxWidth(0.95f).align(Alignment.CenterHorizontally))
                             }
                         }
                     }
@@ -186,7 +188,9 @@ fun AddFavoriteDialog(
 
                         ExposedDropdownMenu(
                             expanded = destinationDropdownExpanded,
-                            onDismissRequest = { destinationDropdownExpanded = false }
+                            onDismissRequest = { destinationDropdownExpanded = false },
+                            modifier= Modifier.height(300.dp)
+                                .background(Color.White)
                         ) {
                             busStopOptions.forEach { stopId ->
                                 DropdownMenuItem(
@@ -196,6 +200,7 @@ fun AddFavoriteDialog(
                                         destinationDropdownExpanded = false
                                     }
                                 )
+                                HorizontalDivider(modifier=Modifier.fillMaxWidth(0.95f).align(Alignment.CenterHorizontally))
                             }
                         }
                     }

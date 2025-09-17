@@ -49,6 +49,7 @@ class BusesForStopRepository @Inject constructor(
                                 "Invalid request"
                             }
                         } catch (e: Exception) {
+                            e.printStackTrace()
                             "Invalid request"
                         }
                     }
@@ -64,6 +65,7 @@ class BusesForStopRepository @Inject constructor(
                 is java.net.SocketTimeoutException -> "Request timeout. Please try again."
                 else -> "An unexpected error occurred: ${e.message}"
             }
+            e.printStackTrace()
             emit(BusesForStopResult.Error(errorMessage))
         }
     }
