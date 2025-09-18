@@ -10,7 +10,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.DirectionsBus
+import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -50,7 +51,7 @@ fun NearestBusStopScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val busesForStopUiState by busesForStopViewModel.uiState.collectAsState()
-    val userLocation = LatLng(12.9098849, 77.5644359) // User's current location
+    val userLocation = LatLng(12.9098849, 77.5644359)
 
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -63,11 +64,14 @@ fun NearestBusStopScreen(
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(userLocation, 15f)
     }
+
     LaunchedEffect(Unit) {
         Log.d("NearestBusStopScreen", "Screen opened - calling getBusesForStop endpoint")
-        busesForStopViewModel.getBusesForStop("1")
+        busesForStopViewModel.getBusesForStop("S1")
     }
+
     LaunchedEffect(busesForStopUiState) {
+        Log.d("NearestBusStopScreen", "busesForStopUiState changed: isLoading=${busesForStopUiState.isLoading}, buses.size=${busesForStopUiState.buses.size}, errorMessage=${busesForStopUiState.errorMessage}")
         when {
             busesForStopUiState.isLoading -> {
                 Log.d("NearestBusStopScreen", "getBusesForStop: Loading...")
@@ -78,8 +82,11 @@ fun NearestBusStopScreen(
             busesForStopUiState.buses.isNotEmpty() -> {
                 Log.d("NearestBusStopScreen", "getBusesForStop Success: Found ${busesForStopUiState.buses.size} buses")
                 busesForStopUiState.buses.forEachIndexed { index, bus ->
-                    Log.d("NearestBusStopScreen", "Bus $index: ID=${bus.busId}, Route=${bus.routeNo}, Distance=${bus.distance}m, Duration=${bus.duration}s")
+                    Log.d("NearestBusStopScreen", "Bus $index: ID=${bus.busId}, Route=${bus.routeNo}, Distance=${bus.distance}m, Duration=${bus.duration}s, Crowd:${bus.crowdDensity}")
                 }
+            }
+            else -> {
+                Log.d("NearestBusStopScreen", "getBusesForStop: Success but no buses found (empty list)")
             }
         }
     }
@@ -118,12 +125,10 @@ fun NearestBusStopScreen(
         }
     }
 
-    // Automatically fetch nearest bus stops when screen is displayed
     LaunchedEffect(Unit) {
         viewModel.findNearestBusStops()
     }
 
-    // Move camera to nearest bus stop when bus stops are loaded
     LaunchedEffect(uiState.busStopsResponse) {
         uiState.busStopsResponse?.let { response ->
             if (response.stops.isNotEmpty() && !cameraPositioned) {
@@ -142,17 +147,9 @@ fun NearestBusStopScreen(
                         stop.location.coordinates[1], // latitude
                         stop.location.coordinates[0]  // longitude
                     )
-
-                    // Add a small delay to ensure GoogleMap is fully initialized
                     delay(300)
-
-                    // Immediately position camera to nearest bus stop with appropriate zoom
                     cameraPositionState.position = CameraPosition.fromLatLngZoom(nearestLocation, 17f)
-                    
-                    // Mark camera as positioned to avoid repositioning
                     cameraPositioned = true
-                    
-                    // Optional: Add a subtle animation after initial positioning
                     delay(100)
                     cameraPositionState.animate(
                         update = CameraUpdateFactory.newLatLngZoom(nearestLocation, 17f),
@@ -198,129 +195,225 @@ fun NearestBusStopScreen(
             }
         }
     ) { paddingValues ->
-        Box(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            GoogleMap(
-                modifier = Modifier.fillMaxSize(),
-                cameraPositionState = cameraPositionState
-            ) {
-
-                val busStopIcon = getScaledBitmapDescriptor(context, R.drawable.bus_marker, 120, 120)
-                // Add markers for nearest bus stops
-                uiState.busStopsResponse?.stops?.forEach { busStop ->
-                    val position = LatLng(
-                        busStop.location.coordinates[1], // latitude
-                        busStop.location.coordinates[0]  // longitude
-                    )
-
-                    Marker(
-                        state = MarkerState(position = position),
-                        icon = busStopIcon,
-                        title = busStop.name,
-                        snippet = "Routes: ${busStop.routes?.joinToString(", ") { it.routeNumber } ?: "No routes available"}",
-                        onClick = {
-                            openGoogleMapsDirections(
-                                destinationLat = busStop.location.coordinates[1],
-                                destinationLng = busStop.location.coordinates[0]
-                            )
-                            true // Return true to indicate we have handled the click
-                        },
-                    )
-                }
-            }
-
-            // Loading indicator
-            if (uiState.isLoading) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(Color.Black.copy(alpha = 0.3f)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Card(
-                        colors = CardDefaults.cardColors(containerColor = Color.White),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
-                    ) {
-                        Column(
-                            modifier = Modifier.padding(24.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            CircularProgressIndicator(
-                                color = PrimaryBlue,
-                                modifier = Modifier.size(48.dp)
-                            )
-                            Spacer(modifier = Modifier.height(16.dp))
-                            Text(
-                                text = "Finding nearest bus stops...",
-                                fontSize = 16.sp,
-                                color = Color(0xFF666666)
-                            )
-                        }
-                    }
-                }
-            }
-
-            // Error message
-            uiState.errorMessage?.let { error ->
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                        .align(Alignment.BottomCenter),
-                    colors = CardDefaults.cardColors(
-                        containerColor = Color(0xFFFFEBEE)
-                    ),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-                ) {
-                    Column(
-                        modifier = Modifier.padding(16.dp)
-                    ) {
-                        Text(
-                            text = "Error",
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color(0xFFD32F2F)
-                        )
-                        Spacer(modifier = Modifier.height(4.dp))
-                        Text(
-                            text = error,
-                            fontSize = 14.sp,
-                            color = Color(0xFF666666)
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Button(
-                            onClick = {
-                                viewModel.clearError()
-                                viewModel.findNearestBusStops()
-                            },
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = PrimaryBlue
-                            )
-                        ) {
-                            Text("Retry")
-                        }
-                    }
-                }
-            }
-
-            // FAB to show bus stops list (replaces the info card)
+            // Elevated card showing buses approaching nearest stop
             uiState.busStopsResponse?.let { response ->
                 if (response.stops.isNotEmpty()) {
-                    FloatingActionButton(
-                        onClick = { showBottomSheet = true },
-                        modifier = Modifier
-                            .align(Alignment.BottomEnd)
-                            .padding(16.dp),
-                        containerColor = PrimaryBlue,
-                        contentColor = Color.White
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.List,
-                            contentDescription = "Show bus stops list"
+                    // Find the nearest bus stop
+                    val nearestBusStop = response.stops.minByOrNull { busStop ->
+                        calculateDistance(
+                            userLocation.latitude,
+                            userLocation.longitude,
+                            busStop.location.coordinates[1], // latitude
+                            busStop.location.coordinates[0]  // longitude
                         )
+                    }
+
+                    nearestBusStop?.let { stop ->
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            colors = CardDefaults.cardColors(
+                                containerColor = Color.White
+                            ),
+                            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                // Bus icon
+                                Icon(
+                                    imageVector = Icons.Default.DirectionsBus,
+                                    contentDescription = "Buses",
+                                    tint = PrimaryBlue,
+                                    modifier = Modifier.size(24.dp)
+                                )
+
+                                Spacer(modifier = Modifier.width(12.dp))
+
+                                Column(
+                                    modifier = Modifier.weight(1f)
+                                ) {
+                                    val busCount = busesForStopUiState.buses.size
+                                    val busText = if (busCount == 1) "bus is" else "buses are"
+
+                                    Text(
+                                        text = "$busCount $busText approaching",
+                                        fontSize = 16.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = Color(0xFF333333)
+                                    )
+
+                                    Text(
+                                        text = stop.name,
+                                        fontSize = 14.sp,
+                                        color = PrimaryBlue,
+                                        fontWeight = FontWeight.Medium
+                                    )
+
+                                    if (busesForStopUiState.buses.isNotEmpty()) {
+                                        val nearestBus = busesForStopUiState.buses.minByOrNull { it.duration }
+                                        nearestBus?.let { bus ->
+                                            Text(
+                                                text = "Route: ${bus.routeNo}",
+                                                fontSize = 12.sp,
+                                                color = Color(0xFF666666)
+                                            )
+                                            Text(
+                                                text = "Approaching in: ${bus.duration}s",
+                                                fontSize = 12.sp,
+                                                color = Color(0xFF666666)
+                                            )
+                                            Text(
+                                                text = "Distance: ${bus.distance} metres away",
+                                                fontSize = 12.sp,
+                                                color = Color(0xFF666666)
+                                            )
+                                            Text(
+                                                text = "Crowd Density: ${bus.crowdDensity}",
+                                                fontSize = 12.sp,
+                                                color = Color(0xFF666666)
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Map container
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+                GoogleMap(
+                    modifier = Modifier.fillMaxSize(),
+                    cameraPositionState = cameraPositionState
+                ) {
+                    val busStopIcon = getScaledBitmapDescriptor(context, R.drawable.bus_marker, 120, 120)
+                    // Add markers for nearest bus stops
+                    uiState.busStopsResponse?.stops?.forEach { busStop ->
+                        val position = LatLng(
+                            busStop.location.coordinates[1], // latitude
+                            busStop.location.coordinates[0]  // longitude
+                        )
+
+                        Marker(
+                            state = MarkerState(position = position),
+                            icon = busStopIcon,
+                            title = busStop.name,
+                            snippet = "Routes: ${busStop.routes?.joinToString(", ") { it.routeNumber } ?: "No routes available"}",
+                            onClick = {
+                                openGoogleMapsDirections(
+                                    destinationLat = busStop.location.coordinates[1],
+                                    destinationLng = busStop.location.coordinates[0]
+                                )
+                                true // Return true to indicate we have handled the click
+                            },
+                        )
+                    }
+                }
+
+                // Loading indicator
+                if (uiState.isLoading) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(Color.Black.copy(alpha = 0.3f)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Card(
+                            colors = CardDefaults.cardColors(containerColor = Color.White),
+                            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+                        ) {
+                            Column(
+                                modifier = Modifier.padding(24.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                CircularProgressIndicator(
+                                    color = PrimaryBlue,
+                                    modifier = Modifier.size(48.dp)
+                                )
+                                Spacer(modifier = Modifier.height(16.dp))
+                                Text(
+                                    text = "Finding nearest bus stops...",
+                                    fontSize = 16.sp,
+                                    color = Color(0xFF666666)
+                                )
+                            }
+                        }
+                    }
+                }
+
+                // Error message
+                uiState.errorMessage?.let { error ->
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                            .align(Alignment.BottomCenter),
+                        colors = CardDefaults.cardColors(
+                            containerColor = Color(0xFFFFEBEE)
+                        ),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(16.dp)
+                        ) {
+                            Text(
+                                text = "Error",
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color(0xFFD32F2F)
+                            )
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Text(
+                                text = error,
+                                fontSize = 14.sp,
+                                color = Color(0xFF666666)
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Button(
+                                onClick = {
+                                    viewModel.clearError()
+                                    viewModel.findNearestBusStops()
+                                },
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = PrimaryBlue
+                                )
+                            ) {
+                                Text("Retry")
+                            }
+                        }
+                    }
+                }
+
+                // FAB to show bus stops list
+                uiState.busStopsResponse?.let { response ->
+                    if (response.stops.isNotEmpty()) {
+                        FloatingActionButton(
+                            onClick = { showBottomSheet = true },
+                            modifier = Modifier
+                                .align(Alignment.BottomEnd)
+                                .padding(16.dp),
+                            containerColor = PrimaryBlue,
+                            contentColor = Color.White
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.List,
+                                contentDescription = "Show bus stops list"
+                            )
+                        }
                     }
                 }
             }
@@ -412,10 +505,12 @@ fun NearestBusStopScreen(
         }
     }
 }
+
 fun getScaledBitmapDescriptor(context: Context, resId: Int, width: Int, height: Int): BitmapDescriptor {
     val bitmap = BitmapFactory.decodeResource(context.resources, resId)
     val scaledBitmap = bitmap.scale(width, height, false)
     return BitmapDescriptorFactory.fromBitmap(scaledBitmap)
+
 }
 
 // Utility function to calculate distance between two points using Haversine formula

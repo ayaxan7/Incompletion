@@ -15,7 +15,9 @@ data class BusForStop(
     @SerializedName("distance")
     val distance: Int,
     @SerializedName("duration")
-    val duration: Int
+    val duration: Int,
+    @SerializedName("crowdDensity")
+    val crowdDensity: String
 )
 
 typealias BusesForStopResponse = List<BusForStop>
