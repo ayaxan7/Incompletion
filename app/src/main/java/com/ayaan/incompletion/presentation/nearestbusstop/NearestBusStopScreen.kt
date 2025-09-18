@@ -499,12 +499,12 @@ fun NearestBusStopScreen(
                                             busStop.location.coordinates[1],
                                             busStop.location.coordinates[0]
                                         )
-                                        Text(
-                                            text = "Distance: ${formatDistanceFromKm(distance)}",
-                                            fontSize = 12.sp,
-                                            color = PrimaryBlue,
-                                            fontWeight = FontWeight.Medium
-                                        )
+//                                        Text(
+//                                            text = "Distance: ${formatDistanceFromKm(distance)}",
+//                                            fontSize = 12.sp,
+//                                            color = PrimaryBlue,
+//                                            fontWeight = FontWeight.Medium
+//                                        )
                                     }
                                 }
                             }
@@ -567,7 +567,7 @@ fun formatTime(timeInSeconds: Int): String {
 
 // Utility function to calculate distance between two points using Haversine formula
 fun calculateDistance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
-    val R = 6371 // Radius of the earth in km
+    val R = 6371
     val dLat = Math.toRadians(lat2 - lat1)
     val dLon = Math.toRadians(lon2 - lon1)
     val a = sin(dLat / 2) * sin(dLat / 2) +
