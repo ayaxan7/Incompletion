@@ -2,6 +2,7 @@ package com.ayaan.incompletion.presentation.nearestbusstop
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -37,15 +38,18 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import com.google.android.gms.maps.model.BitmapDescriptor
 import androidx.core.graphics.scale
+import com.ayaan.incompletion.presentation.busstop.viewmodel.BusesForStopViewModel
 
 @SuppressLint("DefaultLocale")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NearestBusStopScreen(
     navController: NavController,
-    viewModel: NearestBusStopViewModel = hiltViewModel()
+    viewModel: NearestBusStopViewModel = hiltViewModel(),
+    busesForStopViewModel: BusesForStopViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val busesForStopUiState by busesForStopViewModel.uiState.collectAsState()
     val userLocation = LatLng(12.9098849, 77.5644359) // User's current location
 
     val context = LocalContext.current
@@ -59,12 +63,32 @@ fun NearestBusStopScreen(
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(userLocation, 15f)
     }
+    LaunchedEffect(Unit) {
+        Log.d("NearestBusStopScreen", "Screen opened - calling getBusesForStop endpoint")
+        busesForStopViewModel.getBusesForStop("1")
+    }
+    LaunchedEffect(busesForStopUiState) {
+        when {
+            busesForStopUiState.isLoading -> {
+                Log.d("NearestBusStopScreen", "getBusesForStop: Loading...")
+            }
+            busesForStopUiState.errorMessage != null -> {
+                Log.e("NearestBusStopScreen", "getBusesForStop Error: ${busesForStopUiState.errorMessage}")
+            }
+            busesForStopUiState.buses.isNotEmpty() -> {
+                Log.d("NearestBusStopScreen", "getBusesForStop Success: Found ${busesForStopUiState.buses.size} buses")
+                busesForStopUiState.buses.forEachIndexed { index, bus ->
+                    Log.d("NearestBusStopScreen", "Bus $index: ID=${bus.busId}, Route=${bus.routeNo}, Distance=${bus.distance}m, Duration=${bus.duration}s")
+                }
+            }
+        }
+    }
 
     // Function to focus camera on a specific bus stop
     fun focusOnBusStop(busStop: BusStop) {
         val position = LatLng(
-            busStop.location.coordinates[1], // latitude
-            busStop.location.coordinates[0]  // longitude
+            busStop.location.coordinates[1],
+            busStop.location.coordinates[0]
         )
 
         scope.launch {
