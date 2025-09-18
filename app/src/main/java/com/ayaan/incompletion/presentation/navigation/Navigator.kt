@@ -24,10 +24,15 @@ import com.ayaan.incompletion.presentation.nearestbusstop.NearestBusStopScreen
 import com.ayaan.incompletion.presentation.common.components.test.TestResult
 import com.ayaan.incompletion.presentation.common.components.test.TestViewModel
 import com.ayaan.incompletion.presentation.routedetails.RouteDetailsScreen
+import com.ayaan.incompletion.data.location.LocationService
 import com.google.firebase.auth.FirebaseAuth
+import javax.inject.Inject
 
 @Composable
-fun Navigator(innerPadding: PaddingValues) {
+fun Navigator(
+    innerPadding: PaddingValues,
+    locationService: LocationService
+) {
     val testViewModel: TestViewModel = hiltViewModel()
     val testResult by testViewModel.testResult.collectAsState()
 
@@ -56,6 +61,7 @@ fun Navigator(innerPadding: PaddingValues) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
+
     NavHost(
         navController = navController,
         startDestination = start,
@@ -110,7 +116,7 @@ fun Navigator(innerPadding: PaddingValues) {
             FavoriteRoutesScreen(navController)
         }
         composable(route = Destinations.NearestBusStop.route) {
-            NearestBusStopScreen(navController)
+            NearestBusStopScreen(navController, locationService = locationService)
         }
         composable(
             route = "${Destinations.RouteDetails.route}/{routeNumber}",

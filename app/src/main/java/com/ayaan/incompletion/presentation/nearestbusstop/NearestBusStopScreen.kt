@@ -39,6 +39,7 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import com.google.android.gms.maps.model.BitmapDescriptor
 import androidx.core.graphics.scale
+import com.ayaan.incompletion.data.location.LocationService
 import com.ayaan.incompletion.presentation.busstop.viewmodel.BusesForStopViewModel
 
 @SuppressLint("DefaultLocale")
@@ -47,11 +48,12 @@ import com.ayaan.incompletion.presentation.busstop.viewmodel.BusesForStopViewMod
 fun NearestBusStopScreen(
     navController: NavController,
     viewModel: NearestBusStopViewModel = hiltViewModel(),
-    busesForStopViewModel: BusesForStopViewModel = hiltViewModel()
+    busesForStopViewModel: BusesForStopViewModel = hiltViewModel(),
+    locationService: LocationService
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val busesForStopUiState by busesForStopViewModel.uiState.collectAsState()
-    val userLocation = LatLng(12.9098849, 77.5644359)
+    var userLocation by remember { mutableStateOf(LatLng(12.9098849, 77.5644359)) }
 
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -66,8 +68,61 @@ fun NearestBusStopScreen(
     }
 
     LaunchedEffect(Unit) {
-        Log.d("NearestBusStopScreen", "Screen opened - calling getBusesForStop endpoint")
-        busesForStopViewModel.getBusesForStop("S1")
+        // Get current location
+        try {
+            val currentLocation = locationService.getCurrentLocation()
+            currentLocation?.let { location ->
+                userLocation = LatLng(location.latitude, location.longitude)
+                Log.d("NearestBusStopScreen", "Current location updated: ${location.latitude}, ${location.longitude}")
+            } ?: run {
+                Log.d("NearestBusStopScreen", "Could not get current location, using default location")
+            }
+        } catch (e: Exception) {
+            Log.e("NearestBusStopScreen", "Failed to get current location: ${e.message}")
+        }
+
+        // Find nearest bus stops first
+        viewModel.findNearestBusStops()
+    }
+
+    // Call getBusesForStop when bus stops are loaded and we have the nearest one
+    LaunchedEffect(uiState.busStopsResponse) {
+        uiState.busStopsResponse?.let { response ->
+            if (response.stops.isNotEmpty()) {
+                // Find the nearest bus stop
+                val nearestBusStop = response.stops.minByOrNull { busStop ->
+                    calculateDistance(
+                        userLocation.latitude,
+                        userLocation.longitude,
+                        busStop.location.coordinates[1], // latitude
+                        busStop.location.coordinates[0]  // longitude
+                    )
+                }
+
+                nearestBusStop?.let { stop ->
+                    // Extract the stop ID from the nearest bus stop
+                    val nearestStopId = stop.stopId // Fallback to S1 if no ID
+                    Log.d("NearestBusStopScreen", "Calling getBusesForStop with nearest stop ID: $nearestStopId")
+                    busesForStopViewModel.getBusesForStop(nearestStopId)
+
+                    // Camera positioning logic
+                    if (!cameraPositioned) {
+                        val nearestLocation = LatLng(
+                            stop.location.coordinates[1], // latitude
+                            stop.location.coordinates[0]  // longitude
+                        )
+                        delay(300)
+                        cameraPositionState.position = CameraPosition.fromLatLngZoom(nearestLocation, 17f)
+                        cameraPositioned = true
+                        delay(100)
+                        cameraPositionState.animate(
+                            update = CameraUpdateFactory.newLatLngZoom(nearestLocation, 17f),
+                            durationMs = 800
+                        )
+                    }
+                }
+            }
+        }
     }
 
     LaunchedEffect(busesForStopUiState) {
@@ -91,7 +146,6 @@ fun NearestBusStopScreen(
         }
     }
 
-    // Function to focus camera on a specific bus stop
     fun focusOnBusStop(busStop: BusStop) {
         val position = LatLng(
             busStop.location.coordinates[1],
@@ -104,8 +158,6 @@ fun NearestBusStopScreen(
                 durationMs = 1000
             )
         }
-
-        // Close the bottom sheet
         showBottomSheet = false
     }
 
@@ -125,40 +177,6 @@ fun NearestBusStopScreen(
         }
     }
 
-    LaunchedEffect(Unit) {
-        viewModel.findNearestBusStops()
-    }
-
-    LaunchedEffect(uiState.busStopsResponse) {
-        uiState.busStopsResponse?.let { response ->
-            if (response.stops.isNotEmpty() && !cameraPositioned) {
-                // Find the nearest bus stop
-                val nearestBusStop = response.stops.minByOrNull { busStop ->
-                    calculateDistance(
-                        userLocation.latitude,
-                        userLocation.longitude,
-                        busStop.location.coordinates[1], // latitude
-                        busStop.location.coordinates[0]  // longitude
-                    )
-                }
-
-                nearestBusStop?.let { stop ->
-                    val nearestLocation = LatLng(
-                        stop.location.coordinates[1], // latitude
-                        stop.location.coordinates[0]  // longitude
-                    )
-                    delay(300)
-                    cameraPositionState.position = CameraPosition.fromLatLngZoom(nearestLocation, 17f)
-                    cameraPositioned = true
-                    delay(100)
-                    cameraPositionState.animate(
-                        update = CameraUpdateFactory.newLatLngZoom(nearestLocation, 17f),
-                        durationMs = 800
-                    )
-                }
-            }
-        }
-    }
 
     Scaffold(
         topBar = {
@@ -268,12 +286,12 @@ fun NearestBusStopScreen(
                                                 color = Color(0xFF666666)
                                             )
                                             Text(
-                                                text = "Approaching in: ${bus.duration}s",
+                                                text = "Approaching in: ${formatTime(bus.duration)}",
                                                 fontSize = 12.sp,
                                                 color = Color(0xFF666666)
                                             )
                                             Text(
-                                                text = "Distance: ${bus.distance} metres away",
+                                                text = "Distance: ${formatDistance(bus.distance)} away",
                                                 fontSize = 12.sp,
                                                 color = Color(0xFF666666)
                                             )
@@ -482,7 +500,7 @@ fun NearestBusStopScreen(
                                             busStop.location.coordinates[0]
                                         )
                                         Text(
-                                            text = "Distance: ${String.format("%.2f", distance)} km",
+                                            text = "Distance: ${formatDistanceFromKm(distance)}",
                                             fontSize = 12.sp,
                                             color = PrimaryBlue,
                                             fontWeight = FontWeight.Medium
@@ -510,7 +528,41 @@ fun getScaledBitmapDescriptor(context: Context, resId: Int, width: Int, height: 
     val bitmap = BitmapFactory.decodeResource(context.resources, resId)
     val scaledBitmap = bitmap.scale(width, height, false)
     return BitmapDescriptorFactory.fromBitmap(scaledBitmap)
+}
 
+// Utility function to format distance from meters
+fun formatDistance(distanceInMeters: Int): String {
+    return if (distanceInMeters >= 1000) {
+        val distanceInKm = distanceInMeters / 1000.0
+        String.format("%.1fkm", distanceInKm)
+    } else {
+        "${distanceInMeters}m"
+    }
+}
+
+// Utility function to format distance from kilometers (for the bottom sheet)
+fun formatDistanceFromKm(distanceInKm: Double): String {
+    return if (distanceInKm >= 1.0) {
+        String.format("%.1fkm", distanceInKm)
+    } else {
+        val distanceInMeters = (distanceInKm * 1000).toInt()
+        "${distanceInMeters}m"
+    }
+}
+
+// Utility function to format time from seconds
+fun formatTime(timeInSeconds: Int): String {
+    return if (timeInSeconds >= 60) {
+        val minutes = timeInSeconds / 60
+        val remainingSeconds = timeInSeconds % 60
+        if (remainingSeconds > 0) {
+            "${minutes}m ${remainingSeconds}s"
+        } else {
+            "${minutes}m"
+        }
+    } else {
+        "${timeInSeconds}s"
+    }
 }
 
 // Utility function to calculate distance between two points using Haversine formula

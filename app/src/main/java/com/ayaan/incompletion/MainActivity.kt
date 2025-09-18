@@ -12,11 +12,16 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import com.ayaan.incompletion.presentation.navigation.Navigator
 import com.ayaan.incompletion.ui.theme.IncompletionTheme
+import com.ayaan.incompletion.data.location.LocationService
 import com.google.android.libraries.places.api.Places
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @Inject
+    lateinit var locationService: LocationService
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge(
@@ -32,7 +37,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             IncompletionTheme(darkTheme = false) {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Navigator(innerPadding)
+                    Navigator(innerPadding, locationService)
                 }
             }
         }

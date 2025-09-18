@@ -31,7 +31,7 @@ data class BusStopLocation(
     @SerializedName("type")
     val type: String,
     @SerializedName("coordinates")
-    val coordinates: List<Double> // [longitude, latitude]
+    val coordinates: List<Double>
 )
 
 data class BusRoute(
