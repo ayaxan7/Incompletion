@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.ayaan.incompletion.presentation.common.components.GradientButton
+import com.ayaan.incompletion.data.model.BusStopData
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -30,8 +31,8 @@ fun AddFavoriteDialog(
     var sourceDropdownExpanded by remember { mutableStateOf(false) }
     var destinationDropdownExpanded by remember { mutableStateOf(false) }
 
-    // Generate bus stop options (S1 to S25)
-    val busStopOptions = (1..25).map { "S$it" }
+    // Use the same bus stop options from BusStopData
+    val busStopOptions = BusStopData.busStopOptions
 
     fun resetFields() {
         sourceSelection = null
@@ -95,7 +96,7 @@ fun AddFavoriteDialog(
                         onExpandedChange = { sourceDropdownExpanded = !sourceDropdownExpanded }
                     ) {
                         OutlinedTextField(
-                            value = sourceSelection ?: "Select source stop",
+                            value = sourceSelection?.let { BusStopData.getStopName(it) } ?: "Select source stop",
                             onValueChange = { },
                             readOnly = true,
                             trailingIcon = {
@@ -119,11 +120,25 @@ fun AddFavoriteDialog(
                             modifier= Modifier.height(300.dp)
                                 .background(Color.White)
                         ) {
-                            busStopOptions.forEach { stopId ->
+                            busStopOptions.forEach { busStop ->
                                 DropdownMenuItem(
-                                    text = { Text(stopId) },
+                                    text = {
+                                        Column {
+                                            Text(
+                                                text = busStop.name,
+                                                fontSize = 14.sp,
+                                                fontWeight = FontWeight.Medium,
+                                                color = Color(0xFF333333)
+                                            )
+                                            Text(
+                                                text = busStop.id,
+                                                fontSize = 12.sp,
+                                                color = Color(0xFF666666)
+                                            )
+                                        }
+                                    },
                                     onClick = {
-                                        sourceSelection = stopId
+                                        sourceSelection = busStop.id
                                         sourceDropdownExpanded = false
                                     }
                                 )
@@ -168,7 +183,7 @@ fun AddFavoriteDialog(
                         onExpandedChange = { destinationDropdownExpanded = !destinationDropdownExpanded }
                     ) {
                         OutlinedTextField(
-                            value = destinationSelection ?: "Select destination stop",
+                            value = destinationSelection?.let { BusStopData.getStopName(it) } ?: "Select destination stop",
                             onValueChange = { },
                             readOnly = true,
                             trailingIcon = {
@@ -192,11 +207,25 @@ fun AddFavoriteDialog(
                             modifier= Modifier.height(300.dp)
                                 .background(Color.White)
                         ) {
-                            busStopOptions.forEach { stopId ->
+                            busStopOptions.forEach { busStop ->
                                 DropdownMenuItem(
-                                    text = { Text(stopId) },
+                                    text = {
+                                        Column {
+                                            Text(
+                                                text = busStop.name,
+                                                fontSize = 14.sp,
+                                                fontWeight = FontWeight.Medium,
+                                                color = Color(0xFF333333)
+                                            )
+                                            Text(
+                                                text = busStop.id,
+                                                fontSize = 12.sp,
+                                                color = Color(0xFF666666)
+                                            )
+                                        }
+                                    },
                                     onClick = {
-                                        destinationSelection = stopId
+                                        destinationSelection = busStop.id
                                         destinationDropdownExpanded = false
                                     }
                                 )
@@ -214,9 +243,10 @@ fun AddFavoriteDialog(
                         enabled = !sourceSelection.isNullOrEmpty() && !destinationSelection.isNullOrEmpty(),
                         onClick = {
                             if (!sourceSelection.isNullOrEmpty() && !destinationSelection.isNullOrEmpty()) {
+                                val sourceName = BusStopData.getStopName(sourceSelection!!)
+                                val destinationName = BusStopData.getStopName(destinationSelection!!)
                                 // Pass: sourceName, sourceId, destinationName, destinationId
-                                // For bus stops like S1, S2, etc., the name and ID are the same
-                                onAddFavorite(sourceSelection!!, sourceSelection!!, destinationSelection!!, destinationSelection!!)
+                                onAddFavorite(sourceName, sourceSelection!!, destinationName, destinationSelection!!)
                                 resetFields()
                                 onDismiss()
                             }

@@ -79,7 +79,7 @@ fun RouteSelectionSection(
             onExpandedChange = { sourceDropdownExpanded = !sourceDropdownExpanded }
             ) {
             OutlinedTextField(
-                value = uiState.selectedSourceId ?: "Select source",
+                value = uiState.selectedSourceName ?: "Select source",
                 onValueChange = { },
                 readOnly = true,
                 trailingIcon = {
@@ -103,11 +103,25 @@ fun RouteSelectionSection(
                 modifier= Modifier.height(350.dp)
                     .background(Color.White)
             ) {
-                routeSelectionViewModel.busStopOptions.forEach { stopId ->
+                routeSelectionViewModel.busStopOptions.forEach { busStop ->
                     DropdownMenuItem(
-                        text = { Text(stopId) },
+                        text = {
+                            Column {
+                                Text(
+                                    text = busStop.name,
+                                    fontSize = 14.sp,
+                                    fontWeight = FontWeight.Medium,
+                                    color = Color(0xFF333333)
+                                )
+                                Text(
+                                    text = busStop.id,
+                                    fontSize = 12.sp,
+                                    color = Color(0xFF666666)
+                                )
+                            }
+                        },
                         onClick = {
-                            routeSelectionViewModel.updateSourceSelection(stopId)
+                            routeSelectionViewModel.updateSourceSelection(busStop.id)
                             sourceDropdownExpanded = false
                         }
                     )
@@ -151,7 +165,7 @@ fun RouteSelectionSection(
             onExpandedChange = { destinationDropdownExpanded = !destinationDropdownExpanded },
         ) {
             OutlinedTextField(
-                value = uiState.selectedDestinationId ?: "Select destination",
+                value = uiState.selectedDestinationName ?: "Select destination",
                 onValueChange = { },
                 readOnly = true,
                 trailingIcon = {
@@ -175,11 +189,25 @@ fun RouteSelectionSection(
                 modifier= Modifier.height(350.dp)
                     .background(Color.White)
             ) {
-                routeSelectionViewModel.busStopOptions.forEach { stopId ->
+                routeSelectionViewModel.busStopOptions.forEach { busStop ->
                     DropdownMenuItem(
-                        text = { Text(stopId) },
+                        text = {
+                            Column {
+                                Text(
+                                    text = busStop.name,
+                                    fontSize = 14.sp,
+                                    fontWeight = FontWeight.Medium,
+                                    color = Color(0xFF333333)
+                                )
+                                Text(
+                                    text = busStop.id,
+                                    fontSize = 12.sp,
+                                    color = Color(0xFF666666)
+                                )
+                            }
+                        },
                         onClick = {
-                            routeSelectionViewModel.updateDestinationSelection(stopId)
+                            routeSelectionViewModel.updateDestinationSelection(busStop.id)
                             destinationDropdownExpanded = false
                         }
                     )
@@ -257,6 +285,8 @@ fun RouteSelectionSection(
                     routes = uiState.routeResponse!!.commonRoutes,
                     sourceId = uiState.selectedSourceId ?: "",
                     destinationId = uiState.selectedDestinationId ?: "",
+                    sourceName = uiState.selectedSourceName ?: "",
+                    destinationName = uiState.selectedDestinationName ?: "",
                     routeDetailsViewModel=routeDetailsViewModel,
                     navController = navController
                 )
@@ -270,6 +300,8 @@ private fun CommonRoutesDisplay(
     routes: List<String>,
     sourceId: String,
     destinationId: String,
+    sourceName: String,
+    destinationName: String,
     routeDetailsViewModel: RouteDetailsViewModel=hiltViewModel(),
     navController: androidx.navigation.NavController? = null
 ) {
@@ -293,7 +325,7 @@ private fun CommonRoutesDisplay(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "From $sourceId to $destinationId",
+                text = "From $sourceName to $destinationName",
                 fontSize = 14.sp,
                 color = Color(0xFF666666)
             )
