@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -198,13 +199,13 @@ fun NearestBusStopScreen(
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back",
+                            contentDescription = stringResource(R.string.back),
                             tint = Color.White
                         )
                     }
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = "Nearest Bus Stops",
+                        text = stringResource(R.string.nearest_bus_stops),
                         fontWeight = FontWeight.Bold,
                         color = Color.White,
                         fontSize = 19.sp
@@ -250,7 +251,7 @@ fun NearestBusStopScreen(
                                 // Bus icon
                                 Icon(
                                     imageVector = Icons.Default.DirectionsBus,
-                                    contentDescription = "Buses",
+                                    contentDescription = stringResource(R.string.buses),
                                     tint = PrimaryBlue,
                                     modifier = Modifier.size(24.dp)
                                 )
@@ -261,10 +262,14 @@ fun NearestBusStopScreen(
                                     modifier = Modifier.weight(1f)
                                 ) {
                                     val busCount = busesForStopUiState.buses.size
-                                    val busText = if (busCount == 1) "bus is" else "buses are"
+                                    val busText = if (busCount == 1) {
+                                        stringResource(R.string.buses_approaching_single, busCount)
+                                    } else {
+                                        stringResource(R.string.buses_approaching_multiple, busCount)
+                                    }
 
                                     Text(
-                                        text = "$busCount $busText approaching",
+                                        text = busText,
                                         fontSize = 16.sp,
                                         fontWeight = FontWeight.Bold,
                                         color = Color(0xFF333333)
@@ -281,22 +286,22 @@ fun NearestBusStopScreen(
                                         val nearestBus = busesForStopUiState.buses.minByOrNull { it.duration }
                                         nearestBus?.let { bus ->
                                             Text(
-                                                text = "Route: ${bus.routeNo}",
+                                                text = stringResource(R.string.route_label, bus.routeNo),
                                                 fontSize = 12.sp,
                                                 color = Color(0xFF666666)
                                             )
                                             Text(
-                                                text = "Approaching in: ${formatTime(bus.duration)}",
+                                                text = stringResource(R.string.approaching_in, formatTime(bus.duration)),
                                                 fontSize = 12.sp,
                                                 color = Color(0xFF666666)
                                             )
                                             Text(
-                                                text = "Distance: ${formatDistance(bus.distance)} away",
+                                                text = stringResource(R.string.distance_away, formatDistance(bus.distance)),
                                                 fontSize = 12.sp,
                                                 color = Color(0xFF666666)
                                             )
                                             Text(
-                                                text = "Crowd Density: ${bus.crowdDensity}",
+                                                text = stringResource(R.string.crowd_density, bus.crowdDensity),
                                                 fontSize = 12.sp,
                                                 color = Color(0xFF666666)
                                             )
@@ -330,7 +335,7 @@ fun NearestBusStopScreen(
                             state = MarkerState(position = position),
                             icon = busStopIcon,
                             title = busStop.name,
-                            snippet = "Routes: ${busStop.routes?.joinToString(", ") { it.routeNumber } ?: "No routes available"}",
+                            snippet = stringResource(R.string.routes_label, busStop.routes?.joinToString(", ") { it.routeNumber } ?: stringResource(R.string.no_routes_available)),
                             onClick = {
                                 openGoogleMapsDirections(
                                     destinationLat = busStop.location.coordinates[1],
@@ -364,7 +369,7 @@ fun NearestBusStopScreen(
                                 )
                                 Spacer(modifier = Modifier.height(16.dp))
                                 Text(
-                                    text = "Finding nearest bus stops...",
+                                    text = stringResource(R.string.finding_nearest_bus_stops),
                                     fontSize = 16.sp,
                                     color = Color(0xFF666666)
                                 )
@@ -389,7 +394,7 @@ fun NearestBusStopScreen(
                             modifier = Modifier.padding(16.dp)
                         ) {
                             Text(
-                                text = "Error",
+                                text = stringResource(R.string.error),
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = Color(0xFFD32F2F)
@@ -410,7 +415,7 @@ fun NearestBusStopScreen(
                                     containerColor = PrimaryBlue
                                 )
                             ) {
-                                Text("Retry")
+                                Text(stringResource(R.string.retry))
                             }
                         }
                     }
@@ -429,7 +434,7 @@ fun NearestBusStopScreen(
                         ) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.List,
-                                contentDescription = "Show bus stops list"
+                                contentDescription = stringResource(R.string.show_bus_stops_list)
                             )
                         }
                     }
@@ -450,7 +455,7 @@ fun NearestBusStopScreen(
                             .padding(16.dp)
                     ) {
                         Text(
-                            text = "Found ${response.stops.size} nearby bus stop(s)",
+                            text = stringResource(R.string.found_nearby_stops, response.stops.size),
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold,
                             color = PrimaryBlue,
@@ -486,7 +491,7 @@ fun NearestBusStopScreen(
                                         if (!busStop.routes.isNullOrEmpty()) {
                                             Spacer(modifier = Modifier.height(4.dp))
                                             Text(
-                                                text = "Routes: ${busStop.routes.joinToString(", ") { it.routeNumber }}",
+                                                text = stringResource(R.string.routes_label, busStop.routes.joinToString(", ") { it.routeNumber }),
                                                 fontSize = 14.sp,
                                                 color = Color(0xFF666666)
                                             )
@@ -499,12 +504,6 @@ fun NearestBusStopScreen(
                                             busStop.location.coordinates[1],
                                             busStop.location.coordinates[0]
                                         )
-//                                        Text(
-//                                            text = "Distance: ${formatDistanceFromKm(distance)}",
-//                                            fontSize = 12.sp,
-//                                            color = PrimaryBlue,
-//                                            fontWeight = FontWeight.Medium
-//                                        )
                                     }
                                 }
                             }
@@ -512,7 +511,7 @@ fun NearestBusStopScreen(
 
                         Spacer(modifier = Modifier.height(16.dp))
                         Text(
-                            text = "Tap on any bus stop to focus the map on it",
+                            text = stringResource(R.string.tap_bus_stop_instruction),
                             fontSize = 14.sp,
                             color = Color(0xFF666666),
                             modifier = Modifier.padding(bottom = 32.dp)

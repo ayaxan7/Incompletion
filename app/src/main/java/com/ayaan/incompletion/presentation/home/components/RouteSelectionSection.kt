@@ -15,6 +15,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -23,6 +24,7 @@ import androidx.navigation.NavController
 import com.ayaan.incompletion.presentation.home.viewmodel.RouteSelectionViewModel
 import com.ayaan.incompletion.presentation.routedetails.viewmodel.RouteDetailsViewModel
 import com.ayaan.incompletion.ui.theme.PrimaryBlue
+import com.ayaan.incompletion.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -50,13 +52,13 @@ fun RouteSelectionSection(
         ) {
             Icon(
                 imageVector = Icons.Default.DirectionsBus,
-                contentDescription = "Bus Route",
+                contentDescription = stringResource(R.string.bus_route),
                 tint = PrimaryBlue,
                 modifier = Modifier.size(24.dp)
             )
             Spacer(modifier = Modifier.width(12.dp))
             Text(
-                text = "Find Common Routes",
+                text = stringResource(R.string.find_common_routes),
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF333333)
@@ -67,7 +69,7 @@ fun RouteSelectionSection(
 
         // Source Selection
         Text(
-            text = "From (Source)",
+            text = stringResource(R.string.from_source),
             fontSize = 14.sp,
             fontWeight = FontWeight.Medium,
             color = Color(0xFF666666),
@@ -79,13 +81,13 @@ fun RouteSelectionSection(
             onExpandedChange = { sourceDropdownExpanded = !sourceDropdownExpanded }
             ) {
             OutlinedTextField(
-                value = uiState.selectedSourceName ?: "Select source",
+                value = uiState.selectedSourceName ?: stringResource(R.string.select_source),
                 onValueChange = { },
                 readOnly = true,
                 trailingIcon = {
                     Icon(
                         imageVector = Icons.Default.ArrowDropDown,
-                        contentDescription = "Dropdown"
+                        contentDescription = stringResource(R.string.dropdown)
                     )
                 },
                 colors = OutlinedTextFieldDefaults.colors(
@@ -143,7 +145,7 @@ fun RouteSelectionSection(
             ) {
                 Icon(
                     imageVector = Icons.Default.SwapVert,
-                    contentDescription = "Swap Source and Destination",
+                    contentDescription = stringResource(R.string.swap_source_destination),
                     tint = PrimaryBlue
                 )
             }
@@ -153,7 +155,7 @@ fun RouteSelectionSection(
 
         // Destination Selection
         Text(
-            text = "To (Destination)",
+            text = stringResource(R.string.to_destination),
             fontSize = 14.sp,
             fontWeight = FontWeight.Medium,
             color = Color(0xFF666666),
@@ -165,13 +167,13 @@ fun RouteSelectionSection(
             onExpandedChange = { destinationDropdownExpanded = !destinationDropdownExpanded },
         ) {
             OutlinedTextField(
-                value = uiState.selectedDestinationName ?: "Select destination",
+                value = uiState.selectedDestinationName ?: stringResource(R.string.select_destination),
                 onValueChange = { },
                 readOnly = true,
                 trailingIcon = {
                     Icon(
                         imageVector = Icons.Default.ArrowDropDown,
-                        contentDescription = "Dropdown"
+                        contentDescription = stringResource(R.string.dropdown)
                     )
                 },
                 colors = OutlinedTextFieldDefaults.colors(
@@ -236,7 +238,7 @@ fun RouteSelectionSection(
                         )
                         Spacer(modifier = Modifier.height(16.dp))
                         Text(
-                            text = "Finding common routes...",
+                            text = stringResource(R.string.finding_common_routes),
                             fontSize = 14.sp,
                             color = Color(0xFF666666)
                         )
@@ -256,7 +258,7 @@ fun RouteSelectionSection(
                         modifier = Modifier.padding(16.dp)
                     ) {
                         Text(
-                            text = "Error",
+                            text = stringResource(R.string.error),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color(0xFFD32F2F)
@@ -274,7 +276,7 @@ fun RouteSelectionSection(
                                 containerColor = PrimaryBlue
                             )
                         ) {
-                            Text("Dismiss")
+                            Text(stringResource(R.string.dismiss))
                         }
                     }
                 }
@@ -316,7 +318,7 @@ private fun CommonRoutesDisplay(
             modifier = Modifier.padding(16.dp)
         ) {
             Text(
-                text = "Common Routes",
+                text = stringResource(R.string.common_routes),
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF333333)
@@ -325,7 +327,7 @@ private fun CommonRoutesDisplay(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "From $sourceName to $destinationName",
+                text = stringResource(R.string.from_to_format, sourceName, destinationName),
                 fontSize = 14.sp,
                 color = Color(0xFF666666)
             )
@@ -334,7 +336,7 @@ private fun CommonRoutesDisplay(
 
             if (routes.isEmpty()) {
                 Text(
-                    text = "No common routes found for this selection.",
+                    text = stringResource(R.string.no_common_routes_found),
                     fontSize = 14.sp,
                     color = Color(0xFF666666),
                     modifier = Modifier.padding(vertical = 16.dp)
@@ -380,13 +382,13 @@ private fun RouteItem(
         ) {
             Icon(
                 imageVector = Icons.Default.DirectionsBus,
-                contentDescription = "Bus Route",
+                contentDescription = stringResource(R.string.bus_route),
                 tint = PrimaryBlue,
                 modifier = Modifier.size(20.dp)
             )
             Spacer(modifier = Modifier.width(12.dp))
             Text(
-                text = "Route $routeNumber",
+                text = stringResource(R.string.route_number, routeNumber),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium,
                 color = Color(0xFF333333)

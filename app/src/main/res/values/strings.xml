@@ -1,3 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Musaafir</string>
+    <!-- App Name -->
+    <string name="app_name">Incompletion</string>
+
+    <!-- Common UI Elements -->
+    <string name="back">Back</string>
+    <string name="close">Close</string>
+    <string name="retry">Retry</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="loading">Loading...</string>
+    <string name="error">Error</string>
+    <string name="search">Search</string>
+    <string name="dropdown">Dropdown</string>
+
+    <!-- Authentication -->
+    <string name="welcome_back">Welcome Back</string>
+    <string name="sign_in_subtitle">Sign in to continue your journey</string>
+    <string name="email_address">Email Address</string>
+    <string name="password">Password</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="sign_in">Sign In</string>
+    <string name="dont_have_account">Don\'t have an account? </string>
+    <string name="sign_up">Sign Up</string>
+    <string name="hide_password">Hide password</string>
+    <string name="show_password">Show password</string>
+    <string name="gender">Gender</string>
+
+    <!-- Navigation -->
+    <string name="nearest_bus_stops">Nearest Bus Stops</string>
+    <string name="route_finder">Route Finder</string>
+    <string name="favorite_routes">Favorite Routes</string>
+    <string name="route_details">Route %1$s</string>
+
+    <!-- Nearest Bus Stop Screen -->
+    <string name="buses_approaching_single">%1$d bus is approaching</string>
+    <string name="buses_approaching_multiple">%1$d buses are approaching</string>
+    <string name="route_label">Route: %1$s</string>
+    <string name="approaching_in">Approaching in: %1$s</string>
+    <string name="distance_away">Distance: %1$s away</string>
+    <string name="crowd_density">Crowd Density: %1$s</string>
+    <string name="finding_nearest_bus_stops">Finding nearest bus stops...</string>
+    <string name="found_nearby_stops">Found %1$d nearby bus stop(s)</string>
+    <string name="routes_label">Routes: %1$s</string>
+    <string name="no_routes_available">No routes available</string>
+    <string name="show_bus_stops_list">Show bus stops list</string>
+    <string name="tap_bus_stop_instruction">Tap on any bus stop to focus the map on it</string>
+
+    <!-- Route Selection -->
+    <string name="find_common_routes">Find Common Routes</string>
+    <string name="from_source">From (Source)</string>
+    <string name="to_destination">To (Destination)</string>
+    <string name="select_source">Select source</string>
+    <string name="select_destination">Select destination</string>
+    <string name="select_source_stop">Select source stop</string>
+    <string name="select_destination_stop">Select destination stop</string>
+    <string name="swap_source_destination">Swap Source and Destination</string>
+    <string name="finding_common_routes">Finding common routes...</string>
+    <string name="common_routes">Common Routes</string>
+    <string name="from_to_format">From %1$s to %2$s</string>
+    <string name="no_common_routes_found">No common routes found for this selection.</string>
+    <string name="route_number">Route %1$s</string>
+    <string name="find_routes">Find Routes</string>
+    <string name="enter_stop_ids_instruction">Enter Stop IDs to Find Routes</string>
+    <string name="find_direct_routes_instruction">Find direct bus routes between two stops</string>
+
+    <!-- Route Details -->
+    <string name="loading_route_details">Loading route details...</string>
+    <string name="error_loading_route">Error Loading Route</string>
+    <string name="no_route_data_available">No route data available</string>
+
+    <!-- Favorites -->
+    <string name="add_favorite_route">Add Favorite Route</string>
+    <string name="add_to_favorites">Add to Favorites</string>
+    <string name="add_favourites">Add Favourites</string>
+    <string name="no_favorite_routes">No Favorite Routes</string>
+    <string name="add_frequently_used_routes">Add your frequently used routes for quick access</string>
+
+    <!-- Bus Stop Data -->
+    <string name="kempegowda_bus_station">Kempegowda Bus Station</string>
+    <string name="corporation">Corporation</string>
+    <string name="town_hall">Town Hall</string>
+    <string name="krishnarajendra_market">Krishnarajendra Market</string>
+    <string name="makkala_koota">Makkala Koota</string>
+    <string name="mahila_samaja">Mahila Samaja</string>
+    <string name="national_college">National College</string>
+    <string name="basavanagudi_police_station">Basavanagudi Police Station</string>
+    <string name="tata_silk_farm">Tata Silk Farm</string>
+    <string name="mm_industries">M M Industries</string>
+    <string name="shasthri_bekary">Shasthri Bekary</string>
+    <string name="monotype">Monotype</string>
+    <string name="cauvery_nagara">Cauvery Nagara</string>
+    <string name="yarab_nagara">Yarab Nagara</string>
+    <string name="kadirenahalli_cross">Kadirenahalli Cross</string>
+    <string name="dayananda_sagar_college">Dayananda Sagar College</string>
+    <string name="maharani_college">Maharani College</string>
+    <string name="kr_circle">KR Circle</string>
+    <string name="kumaraswamy_layout_police_station">Kumaraswamy Layout Police Station</string>
+    <string name="kumaraswamy_layout">Kumaraswamy Layout</string>
+    <string name="canara_bank">Canara Bank</string>
+    <string name="isro_layout">ISRO Layout</string>
+    <string name="kumaraswamy_layout_2nd_stage">Kumaraswamy Layout 2nd Stage</string>
+    <string name="water_tank_kumaraswamy_layout">Water Tank Kumaraswamy Layout</string>
+    <string name="cauvery_bhavana">Cauvery Bhavana</string>
+
+    <!-- Content Descriptions -->
+    <string name="buses">Buses</string>
+    <string name="bus_route">Bus Route</string>
+
+    <!-- Error Messages -->
+    <string name="network_error">Network error: %1$s</string>
+    <string name="invalid_request">Invalid request</string>
+    <string name="stop_not_found">Stop not found</string>
+    <string name="server_error">Server error. Please try again later.</string>
+    <string name="failed_get_buses_stop">Failed to get buses for stop. Please try again.</string>
+    <string name="no_internet_connection">No internet connection</string>
+    <string name="request_timeout">Request timeout. Please try again.</string>
+    <string name="unexpected_error">An unexpected error occurred: %1$s</string>
+    <string name="stop_id_required">Stop ID is required</string>
+    <string name="no_buses_found_stop">No buses found for this stop</string>
+    <string name="both_stops_required">Both source and destination stop IDs are required</string>
+    <string name="stops_cannot_be_same">Source and destination stops cannot be the same</string>
+    <string name="stop_ids_format_error">Stop IDs must be in the format S1 to S25</string>
+    <string name="no_data_from_server">No data received from server</string>
+    <string name="route_number_required">Route number is required</string>
+    <string name="route_not_found">Route not found</string>
+    <string name="invalid_route_number">Invalid route number</string>
+    <string name="failed_get_route">Failed to get route: %1$s</string>
+    <string name="check_connection">Please check your connection</string>
 </resources>
+

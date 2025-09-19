@@ -212,13 +212,13 @@ fun RouteMapView(
                     color = Color(0xFF666666)
                 )
 
-                if (decodedRoutePoints.isNotEmpty()) {
-                    Text(
-                        text = "${decodedRoutePoints.size} route points",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = Color(0xFF888888)
-                    )
-                }
+//                if (decodedRoutePoints.isNotEmpty()) {
+//                    Text(
+//                        text = "${decodedRoutePoints.size} route points",
+//                        style = MaterialTheme.typography.bodySmall,
+//                        color = Color(0xFF888888)
+//                    )
+//                }
 
                 Spacer(modifier = Modifier.height(8.dp))
 

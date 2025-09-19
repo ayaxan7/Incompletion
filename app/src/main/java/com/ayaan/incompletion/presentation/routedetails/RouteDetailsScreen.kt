@@ -10,6 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -18,6 +19,7 @@ import androidx.navigation.NavController
 import com.ayaan.incompletion.presentation.routedetails.components.RouteMapView
 import com.ayaan.incompletion.presentation.routedetails.viewmodel.RouteDetailsViewModel
 import com.ayaan.incompletion.ui.theme.PrimaryBlue
+import com.ayaan.incompletion.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,13 +55,13 @@ fun RouteDetailsScreen(
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back",
+                            contentDescription = stringResource(R.string.back),
                             tint = Color.White
                         )
                     }
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = "Route $routeNumber",
+                        text = stringResource(R.string.route_details, routeNumber),
                         fontWeight = FontWeight.Bold,
                         color = Color.White,
                         fontSize = 19.sp
@@ -88,7 +90,7 @@ fun RouteDetailsScreen(
                             )
                             Spacer(modifier = Modifier.height(16.dp))
                             Text(
-                                text = "Loading route details...",
+                                text = stringResource(R.string.loading_route_details),
                                 fontSize = 16.sp,
                                 color = Color(0xFF666666)
                             )
@@ -116,7 +118,7 @@ fun RouteDetailsScreen(
                             ) {
                                 Log.d("RouteDetailsScreen", "Error: ${uiState.errorMessage}")
                                 Text(
-                                    text = "Error Loading Route",
+                                    text = stringResource(R.string.error_loading_route),
                                     fontSize = 18.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = Color(0xFFD32F2F)
@@ -134,7 +136,7 @@ fun RouteDetailsScreen(
                                         containerColor = PrimaryBlue
                                     )
                                 ) {
-                                    Text("Retry")
+                                    Text(stringResource(R.string.retry))
                                 }
                             }
                         }
@@ -154,7 +156,7 @@ fun RouteDetailsScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = "No route data available",
+                            text = stringResource(R.string.no_route_data_available),
                             fontSize = 16.sp,
                             color = Color(0xFF666666)
                         )

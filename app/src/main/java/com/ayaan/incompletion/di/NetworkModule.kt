@@ -41,7 +41,7 @@ object NetworkModule {
     @Singleton
     fun provideRetrofit(gson: Gson, okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://10.235.40.110:3000")
+            .baseUrl("https://066af439bd39.ngrok-free.app")
 //            .baseUrl("http://10.0.2.2:3000/") // For Android emulator accessing localhost
 //            .baseUrl("http://192.168.1.13:3000/") // For physical device accessing computer's IP
             .client(okHttpClient)

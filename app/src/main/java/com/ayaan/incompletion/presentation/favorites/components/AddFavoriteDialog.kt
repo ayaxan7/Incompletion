@@ -12,12 +12,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.ayaan.incompletion.presentation.common.components.GradientButton
 import com.ayaan.incompletion.data.model.BusStopData
+import com.ayaan.incompletion.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -63,7 +65,7 @@ fun AddFavoriteDialog(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "Add Favorite Route",
+                            text = stringResource(R.string.add_favorite_route),
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color(0xFF333333)
@@ -74,7 +76,7 @@ fun AddFavoriteDialog(
                         }) {
                             Icon(
                                 imageVector = Icons.Default.Close,
-                                contentDescription = "Close",
+                                contentDescription = stringResource(R.string.close),
                                 tint = Color(0xFF666666)
                             )
                         }
@@ -84,7 +86,7 @@ fun AddFavoriteDialog(
 
                     // Source field
                     Text(
-                        text = "From (Source)",
+                        text = stringResource(R.string.from_source),
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium,
                         color = Color(0xFF666666),
@@ -96,13 +98,13 @@ fun AddFavoriteDialog(
                         onExpandedChange = { sourceDropdownExpanded = !sourceDropdownExpanded }
                     ) {
                         OutlinedTextField(
-                            value = sourceSelection?.let { BusStopData.getStopName(it) } ?: "Select source stop",
+                            value = sourceSelection?.let { BusStopData.getStopName(it) } ?: stringResource(R.string.select_source_stop),
                             onValueChange = { },
                             readOnly = true,
                             trailingIcon = {
                                 Icon(
                                     imageVector = Icons.Default.ArrowDropDown,
-                                    contentDescription = "Dropdown"
+                                    contentDescription = stringResource(R.string.dropdown)
                                 )
                             },
                             colors = OutlinedTextFieldDefaults.colors(
@@ -163,7 +165,7 @@ fun AddFavoriteDialog(
                         ) {
                             Icon(
                                 imageVector = Icons.Default.SwapVert,
-                                contentDescription = "Swap Source and Destination",
+                                contentDescription = stringResource(R.string.swap_source_destination),
                                 tint = Color(0xFF2196F3)
                             )
                         }
@@ -171,7 +173,7 @@ fun AddFavoriteDialog(
 
                     // Destination field
                     Text(
-                        text = "To (Destination)",
+                        text = stringResource(R.string.to_destination),
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium,
                         color = Color(0xFF666666),
@@ -183,13 +185,13 @@ fun AddFavoriteDialog(
                         onExpandedChange = { destinationDropdownExpanded = !destinationDropdownExpanded }
                     ) {
                         OutlinedTextField(
-                            value = destinationSelection?.let { BusStopData.getStopName(it) } ?: "Select destination stop",
+                            value = destinationSelection?.let { BusStopData.getStopName(it) } ?: stringResource(R.string.select_destination_stop),
                             onValueChange = { },
                             readOnly = true,
                             trailingIcon = {
                                 Icon(
                                     imageVector = Icons.Default.ArrowDropDown,
-                                    contentDescription = "Dropdown"
+                                    contentDescription = stringResource(R.string.dropdown)
                                 )
                             },
                             colors = OutlinedTextFieldDefaults.colors(
@@ -238,7 +240,7 @@ fun AddFavoriteDialog(
 
                     // Add button
                     GradientButton(
-                        text = "Add to Favorites",
+                        text = stringResource(R.string.add_to_favorites),
                         isLoading = false,
                         enabled = !sourceSelection.isNullOrEmpty() && !destinationSelection.isNullOrEmpty(),
                         onClick = {

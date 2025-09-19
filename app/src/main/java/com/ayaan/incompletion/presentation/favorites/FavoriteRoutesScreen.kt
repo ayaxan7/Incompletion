@@ -10,11 +10,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.ayaan.incompletion.R
 import com.ayaan.incompletion.presentation.common.components.GradientExtendedFloatingActionButton
 import com.ayaan.incompletion.presentation.favorites.components.AddFavoriteDialog
 import com.ayaan.incompletion.presentation.favorites.components.FavoriteRoutesList
@@ -49,13 +51,13 @@ fun FavoriteRoutesScreen(
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back",
+                            contentDescription = stringResource(R.string.back),
                             tint = Color.White
                         )
                     }
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = "Favorite Routes",
+                        text = stringResource(R.string.favorite_routes),
                         fontWeight = FontWeight.Bold,
                         color = Color.White,
                         fontSize = 19.sp
@@ -65,7 +67,7 @@ fun FavoriteRoutesScreen(
         },
         floatingActionButton = {
             GradientExtendedFloatingActionButton(
-                text = "Add Favourites",
+                text = stringResource(R.string.add_favourites),
                 icon = Icons.Default.Add,
                 onClick = { showAddFavoriteDialog = true },
                 enabled = true
@@ -89,14 +91,14 @@ fun FavoriteRoutesScreen(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                            text = "No Favorite Routes",
+                            text = stringResource(R.string.no_favorite_routes),
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Medium,
                             color = Color(0xFF666666)
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            text = "Add your frequently used routes for quick access",
+                            text = stringResource(R.string.add_frequently_used_routes),
                             fontSize = 14.sp,
                             color = Color(0xFF999999),
                             textAlign = androidx.compose.ui.text.style.TextAlign.Center

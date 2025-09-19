@@ -11,6 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -21,6 +22,7 @@ import com.ayaan.incompletion.presentation.common.components.GradientButton
 import kotlinx.coroutines.launch
 import com.ayaan.incompletion.ui.theme.*
 import com.ayaan.incompletion.presentation.common.components.ThemedTextField
+import com.ayaan.incompletion.R
 
 @Composable
 fun SignInScreen(
@@ -67,7 +69,7 @@ fun SignInScreen(
                 modifier = Modifier.padding(bottom = 48.dp)
             ) {
                 Text(
-                    text = "Welcome Back",
+                    text = stringResource(R.string.welcome_back),
                     style = MaterialTheme.typography.headlineLarge.copy(
                         fontWeight = FontWeight.Bold,
                         fontSize = 32.sp
@@ -79,7 +81,7 @@ fun SignInScreen(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = "Sign in to continue your journey",
+                    text = stringResource(R.string.sign_in_subtitle),
                     style = MaterialTheme.typography.bodyLarge,
                     color = OnSurfaceVariant,
                     textAlign = TextAlign.Center
@@ -95,7 +97,7 @@ fun SignInScreen(
                 ThemedTextField(
                     value = email,
                     onValueChange = { email = it },
-                    label = "Email Address",
+                    label = stringResource(R.string.email_address),
                     icon = Icons.Default.Email,
                     keyboardType = KeyboardType.Email,
                     enabled = signInState !is SignInState.Loading
@@ -105,7 +107,7 @@ fun SignInScreen(
                 ThemedTextField(
                     value = password,
                     onValueChange = { password = it },
-                    label = "Password",
+                    label = stringResource(R.string.password),
                     icon = Icons.Default.Lock,
                     keyboardType = KeyboardType.Password,
                     isPassword = true,
@@ -124,7 +126,7 @@ fun SignInScreen(
                         enabled = signInState !is SignInState.Loading
                     ) {
                         Text(
-                            text = "Forgot Password?",
+                            text = stringResource(R.string.forgot_password),
                             color = LinkColor,
                             style = MaterialTheme.typography.bodyMedium.copy(
                                 fontWeight = FontWeight.Medium
@@ -166,7 +168,7 @@ fun SignInScreen(
 
                 // Sign In Button
                 GradientButton(
-                    text = "Sign In",
+                    text = stringResource(R.string.sign_in),
                     isLoading = signInState is SignInState.Loading,
                     enabled = signInState !is SignInState.Loading,
                     onClick = {
@@ -183,7 +185,7 @@ fun SignInScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "Don't have an account? ",
+                        text = stringResource(R.string.dont_have_account),
                         color = OnSurfaceVariant,
                         style = MaterialTheme.typography.bodyMedium
                     )
@@ -192,7 +194,7 @@ fun SignInScreen(
                         enabled = signInState !is SignInState.Loading
                     ) {
                         Text(
-                            text = "Sign Up",
+                            text = stringResource(R.string.sign_up),
                             color = LinkColor,
                             style = MaterialTheme.typography.bodyMedium.copy(
                                 fontWeight = FontWeight.SemiBold
