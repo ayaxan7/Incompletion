@@ -2,7 +2,7 @@
 <resources>
     <!-- App Name -->
     <string name="app_name">Incompletion</string>
-
+    <string name="language_name">ਪੰਜਾਬੀ</string>
     <!-- Common UI Elements -->
     <string name="back">ਵਾਪਸ</string>
     <string name="close">ਬੰਦ ਕਰੋ</string>
@@ -18,6 +18,10 @@
     <string name="settings">ਸੈਟਿੰਗਜ਼</string>
     <string name="profile">ਪ੍ਰੋਫ਼ਾਈਲ</string>
     <string name="menu">ਮੇਨੂ</string>
+    <string name="hi_user">ਸਤ ਸ੍ਰੀ ਅਕਾਲ, ਆਯਾਨ</string>
+    <string name="quick_actions">ਤੇਜ਼ ਕਾਰਵਾਈਆਂ</string>
+    <string name="favourite_routes">ਪਸੰਦੀਦਾ ਰਸਤੇ</string>
+    <string name="nearest_bus_stop">ਨੇੜਲੇ ਬੱਸ ਸਟਾਪ</string>
 
     <!-- Authentication -->
     <string name="welcome_back">ਮੁੜ ਸੁਆਗਤ ਹੈ</string>

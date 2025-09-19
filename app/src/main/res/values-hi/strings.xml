@@ -2,7 +2,7 @@
 <resources>
     <!-- App Name -->
     <string name="app_name">इनकम्प्लीशन</string>
-
+    <string name="language_name">हिन्दी</string>
     <!-- Common UI Elements -->
     <string name="back">वापस</string>
     <string name="close">बंद करें</string>
@@ -18,6 +18,10 @@
     <string name="settings">सेटिंग्स</string>
     <string name="profile">प्रोफ़ाइल</string>
     <string name="menu">मेनू</string>
+    <string name="hi_user">नमस्ते, अयान</string>
+    <string name="quick_actions">त्वरित क्रियाएँ</string>
+    <string name="favourite_routes">पसंदीदा मार्ग</string>
+    <string name="nearest_bus_stop">नज़दीकी बस स्टॉप</string>
 
     <!-- Authentication -->
     <string name="welcome_back">वापस स्वागत है</string>

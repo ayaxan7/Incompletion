@@ -27,6 +27,7 @@ import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -52,9 +53,9 @@ data class Language(
 fun SettingsScreen(
     navController: NavController = rememberNavController(),
     viewModel: SettingsViewModel = hiltViewModel(),
-    language: String = "en"
 ) {
-    var selectedLanguage by remember { mutableStateOf("en") }
+    var selectedLanguage = viewModel.selectedLanguageCode.collectAsState().value
+
 
     val supportedLanguages = listOf(
         Language("en", "English", "English"),

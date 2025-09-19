@@ -64,7 +64,7 @@ class MainActivity : ComponentActivity() {
             }
                 IncompletionTheme(darkTheme = false) {
                     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                        Navigator(innerPadding, locationService, selectedLanguageCode)
+                        Navigator(innerPadding, locationService)
                     }
                 }
         }

@@ -27,7 +27,6 @@ fun RouteDetailsScreen(
     navController: NavController,
     routeNumber: String,
     routeDetailsViewModel: RouteDetailsViewModel = hiltViewModel(),
-    language:String="en"
 ) {
     val uiState by routeDetailsViewModel.uiState.collectAsState()
 

@@ -24,10 +24,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
+import com.ayaan.incompletion.R
 @Composable
 fun ActionButtonsSection(
     onFavoriteRoutesClick: () -> Unit,
@@ -40,7 +41,7 @@ fun ActionButtonsSection(
             .padding(16.dp)
     ) {
         Text(
-            text = "Quick Actions",
+            text = stringResource(R.string.quick_actions),
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
             color = Color(0xFF333333),
@@ -51,7 +52,7 @@ fun ActionButtonsSection(
             modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             ActionButton(
-                title = "Favourite Routes",
+                title = stringResource(R.string.favourite_routes),
                 icon = Icons.Default.Route,
                 backgroundColor = Color(0xFFE3F2FD),
                 iconColor = Color(0xFF1976D2),
@@ -60,7 +61,7 @@ fun ActionButtonsSection(
             )
 
             ActionButton(
-                title = "Nearest Bus Stop",
+                title = stringResource(R.string.nearest_bus_stop),
                 icon = Icons.Default.DirectionsBus,
                 backgroundColor = Color(0xFFE8F5E8),
                 iconColor = Color(0xFF4CAF50),

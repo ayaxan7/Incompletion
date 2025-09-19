@@ -2,7 +2,7 @@
 <resources>
     <!-- App Name -->
     <string name="app_name">Incompletion</string>
-    
+    <string name="language_name">English</string>
     <!-- Common UI Elements -->
     <string name="back">Back</string>
     <string name="close">Close</string>
@@ -18,7 +18,10 @@
     <string name="settings">Settings</string>
     <string name="profile">Profile</string>
     <string name="menu">Menu</string>
-
+    <string name="hi_user">Hi, Ayaan</string>
+    <string name="quick_actions">Quick Actions</string>
+    <string name="favourite_routes">Favourite Routes</string>
+    <string name="nearest_bus_stop">Nearest Bus Stops</string>
     <!-- Authentication -->
     <string name="welcome_back">Welcome Back</string>
     <string name="sign_in_subtitle">Sign in to continue your journey</string>

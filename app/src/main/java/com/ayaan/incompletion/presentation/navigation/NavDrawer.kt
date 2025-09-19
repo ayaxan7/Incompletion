@@ -40,7 +40,7 @@ fun NavDrawer(drawerState: DrawerState, scope: CoroutineScope, navController: Na
 
             NavigationDrawerItem(
                 icon = { Icon(Icons.Default.Home, contentDescription = "Home") },
-                label = { Text("Home") },
+                label = { Text(stringResource(R.string.home)) },
                 selected = false,
                 onClick = {
                     scope.launch {

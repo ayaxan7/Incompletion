@@ -33,7 +33,6 @@ fun RouteSelectionSection(
     routeSelectionViewModel: RouteSelectionViewModel = hiltViewModel(),
     routeDetailsViewModel: RouteDetailsViewModel=hiltViewModel(),
     navController: NavController? = null,
-    language: String="en"
 ) {
     val uiState by routeSelectionViewModel.uiState.collectAsState()
     var sourceDropdownExpanded by remember { mutableStateOf(false) }
