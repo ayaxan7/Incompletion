@@ -59,7 +59,7 @@ fun SettingsScreen(
     val supportedLanguages = listOf(
         Language("en", "English", "English"),
         Language("hi", "Hindi", "हिंदी"),
-        Language("pa", "Punjabi", "ਪੰਜਾਬੀ")
+        Language("pu", "Punjabi", "ਪੰਜਾਬੀ")
     )
 
     Scaffold(

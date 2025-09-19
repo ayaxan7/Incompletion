@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App Name -->
+    <string name="app_name">Incompletion</string>
+
+    <!-- Common UI Elements -->
+    <string name="back">ਵਾਪਸ</string>
+    <string name="close">ਬੰਦ ਕਰੋ</string>
+    <string name="retry">ਮੁੜ ਕੋਸ਼ਿਸ਼ ਕਰੋ</string>
+    <string name="dismiss">ਖਾਰਜ ਕਰੋ</string>
+    <string name="loading">ਲੋਡ ਹੋ ਰਿਹਾ ਹੈ...</string>
+    <string name="error">ਗਲਤੀ</string>
+    <string name="search">ਖੋਜੋ</string>
+    <string name="dropdown">ਡ੍ਰਾਪਡਾਊਨ</string>
+    <string name="home">ਘਰ</string>
+    <string name="book_ticket">ਟਿਕਟ ਬੁੱਕ ਕਰੋ</string>
+    <string name="navigation_menu">ਨੇਵੀਗੇਸ਼ਨ ਮੇਨੂ</string>
+    <string name="settings">ਸੈਟਿੰਗਜ਼</string>
+    <string name="profile">ਪ੍ਰੋਫ਼ਾਈਲ</string>
+    <string name="menu">ਮੇਨੂ</string>
+
+    <!-- Authentication -->
+    <string name="welcome_back">ਮੁੜ ਸੁਆਗਤ ਹੈ</string>
+    <string name="sign_in_subtitle">ਆਪਣੀ ਯਾਤਰਾ ਜਾਰੀ ਰੱਖਣ ਲਈ ਸਾਈਨ ਇਨ ਕਰੋ</string>
+    <string name="email_address">ਈਮੇਲ ਪਤਾ</string>
+    <string name="password">ਪਾਸਵਰਡ</string>
+    <string name="forgot_password">ਪਾਸਵਰਡ ਭੁੱਲ ਗਏ?</string>
+    <string name="sign_in">ਸਾਈਨ ਇਨ</string>
+    <string name="dont_have_account">ਕੀ ਤੁਹਾਡੇ ਕੋਲ ਖਾਤਾ ਨਹੀਂ ਹੈ? </string>
+    <string name="sign_up">ਸਾਈਨ ਅੱਪ</string>
+    <string name="hide_password">ਪਾਸਵਰਡ ਲੁਕਾਓ</string>
+    <string name="show_password">ਪਾਸਵਰਡ ਦਿਖਾਓ</string>
+    <string name="gender">ਲਿੰਗ</string>
+
+    <!-- Navigation -->
+    <string name="nearest_bus_stops">ਸਭ ਤੋਂ ਨੇੜਲੇ ਬੱਸ ਸਟਾਪ</string>
+    <string name="route_finder">ਰੂਟ ਫਾਈਂਡਰ</string>
+    <string name="favorite_routes">ਪਸੰਦੀਦਾ ਰਸਤੇ</string>
+    <string name="route_details">ਰੂਟ %1$s</string>
+
+    <!-- Nearest Bus Stop Screen -->
+    <string name="buses_approaching_single">%1$d ਬੱਸ ਆ ਰਹੀ ਹੈ</string>
+    <string name="buses_approaching_multiple">%1$d ਬੱਸਾਂ ਆ ਰਹੀਆਂ ਹਨ</string>
+    <string name="route_label">ਰੂਟ: %1$s</string>
+    <string name="approaching_in">ਆ ਰਹੀ ਹੈ: %1$s</string>
+    <string name="distance_away">ਦੂਰੀ: %1$s ਦੂਰ</string>
+    <string name="crowd_density">ਭੀੜ ਦੀ ਸੰਖਿਆ: %1$s</string>
+    <string name="finding_nearest_bus_stops">ਸਭ ਤੋਂ ਨੇੜਲੇ ਬੱਸ ਸਟਾਪ ਲੱਭ ਰਹੇ ਹਾਂ...</string>
+    <string name="found_nearby_stops">%1$d ਨੇੜਲੇ ਬੱਸ ਸਟਾਪ ਮਿਲੇ</string>
+    <string name="routes_label">ਰਸਤੇ: %1$s</string>
+    <string name="no_routes_available">ਕੋਈ ਰਸਤੇ ਉਪਲਬਧ ਨਹੀਂ</string>
+    <string name="show_bus_stops_list">ਬੱਸ ਸਟਾਪ ਦੀ ਸੂਚੀ ਦਿਖਾਓ</string>
+    <string name="tap_bus_stop_instruction">ਨਕਸ਼ੇ ਤੇ ਧਿਆਨ ਦੇਣ ਲਈ ਕਿਸੇ ਵੀ ਬੱਸ ਸਟਾਪ ਤੇ ਟੈਪ ਕਰੋ</string>
+
+    <!-- Route Selection -->
+    <string name="find_common_routes">ਸਾਂਝੇ ਰਸਤੇ ਲੱਭੋ</string>
+    <string name="from_source">ਕਿੱਥੋਂ (ਸਰੋਤ)</string>
+    <string name="to_destination">ਕਿੱਥੇ (ਮੰਜ਼ਿਲ)</string>
+    <string name="select_source">ਸਰੋਤ ਚੁਣੋ</string>
+    <string name="select_destination">ਮੰਜ਼ਿਲ ਚੁਣੋ</string>
+    <string name="select_source_stop">ਸਰੋਤ ਸਟਾਪ ਚੁਣੋ</string>
+    <string name="select_destination_stop">ਮੰਜ਼ਿਲ ਸਟਾਪ ਚੁਣੋ</string>
+    <string name="swap_source_destination">ਸਰੋਤ ਅਤੇ ਮੰਜ਼ਿਲ ਬਦਲੋ</string>
+    <string name="finding_common_routes">ਸਾਂਝੇ ਰਸਤੇ ਲੱਭ ਰਹੇ ਹਾਂ...</string>
+    <string name="common_routes">ਸਾਂਝੇ ਰਸਤੇ</string>
+    <string name="from_to_format">%1$s ਤੋਂ %2$s ਤੱਕ</string>
+    <string name="no_common_routes_found">ਇਸ ਚੋਣ ਲਈ ਕੋਈ ਸਾਂਝੇ ਰਸਤੇ ਨਹੀਂ ਮਿਲੇ।</string>
+    <string name="route_number">ਰੂਟ %1$s</string>
+    <string name="find_routes">ਰਸਤੇ ਲੱਭੋ</string>
+    <string name="enter_stop_ids_instruction">ਰਸਤੇ ਲੱਭਣ ਲਈ ਸਟਾਪ ਆਈਡੀ ਦਰਜ ਕਰੋ</string>
+    <string name="find_direct_routes_instruction">ਦੋ ਸਟਾਪਾਂ ਵਿੱਚ ਸਿੱਧੇ ਰਸਤੇ ਲੱਭੋ</string>
+
+    <!-- Route Details -->
+    <string name="loading_route_details">ਰੂਟ ਵੇਰਵੇ ਲੋਡ ਕੀਤੇ ਜਾ ਰਹੇ ਹਨ...</string>
+    <string name="error_loading_route">ਰੂਟ ਲੋਡ ਕਰਨ ਵਿੱਚ ਗਲਤੀ</string>
+    <string name="no_route_data_available">ਕੋਈ ਰੂਟ ਡਾਟਾ ਉਪਲਬਧ ਨਹੀਂ</string>
+
+    <!-- Favorites -->
+    <string name="add_favorite_route">ਪਸੰਦੀਦਾ ਰੂਟ ਸ਼ਾਮਲ ਕਰੋ</string>
+    <string name="add_to_favorites">ਪਸੰਦਾਂ ਵਿੱਚ ਸ਼ਾਮਲ ਕਰੋ</string>
+    <string name="add_favourites">ਪਸੰਦੀਦਾ ਸ਼ਾਮਲ ਕਰੋ</string>
+    <string name="no_favorite_routes">ਕੋਈ ਪਸੰਦੀਦਾ ਰਸਤੇ ਨਹੀਂ</string>
+    <string name="add_frequently_used_routes">ਆਪਣੇ ਅਕਸਰ ਵਰਤੇ ਜਾਣ ਵਾਲੇ ਰਸਤੇ ਤੇਜ਼ ਪਹੁੰਚ ਲਈ ਸ਼ਾਮਲ ਕਰੋ</string>
+
+    <!-- Bus Stop Data -->
+    <string name="kempegowda_bus_station">ਕੇਮਪੇਗੌਡਾ ਬੱਸ ਸਟੇਸ਼ਨ</string>
+    <string name="corporation">ਕਾਰਪੋਰੇਸ਼ਨ</string>
+    <string name="town_hall">ਟਾਊਨ ਹਾਲ</string>
+    <string name="krishnarajendra_market">ਕ੍ਰਿਸ਼ਨਰਾਜੇਂਦਰਾ ਮਾਰਕੀਟ</string>
+    <string name="makkala_koota">ਮੱਕਲਾ ਕੂਟਾ</string>
+    <string name="mahila_samaja">ਮਹਿਲਾ ਸਮਾਜ</string>
+    <string name="national_college">ਨੈਸ਼ਨਲ ਕਾਲਜ</string>
+    <string name="basavanagudi_police_station">ਬਸਵਨਗੁਡੀ ਪੁਲੀਸ ਸਟੇਸ਼ਨ</string>
+    <string name="tata_silk_farm">ਟਾਟਾ ਸਿਲਕ ਫਾਰਮ</string>
+    <string name="mm_industries">ਐਮ ਐਮ ਇੰਡਸਟਰੀਜ਼</string>
+    <string name="shasthri_bekary">ਸ਼ਾਸਤਰੀ ਬੇਕਰੀ</string>
+    <string name="monotype">ਮੋਨੋਟਾਈਪ</string>
+    <string name="cauvery_nagara">ਕਾਵੇਰੀ ਨਗਰਾ</string>
+    <string name="yarab_nagara">ਯਾਰਬ ਨਗਰਾ</string>
+    <string name="kadirenahalli_cross">ਕਾਦੀਰੇਨਹੱਲੀ ਕ੍ਰਾਸ</string>
+    <string name="dayananda_sagar_college">ਦਿਆਨੰਦਾ ਸਾਗਰ ਕਾਲਜ</string>
+    <string name="maharani_college">ਮਹਾਰਾਣੀ ਕਾਲਜ</string>
+    <string name="kr_circle">ਕੇ ਆਰ ਸਰਕਲ</string>
+    <string name="kumaraswamy_layout_police_station">ਕੁਮਾਰਸਵਾਮੀ ਲੇਆਊਟ ਪੁਲੀਸ ਸਟੇਸ਼ਨ</string>
+    <string name="kumaraswamy_layout">ਕੁਮਾਰਸਵਾਮੀ ਲੇਆਊਟ</string>
+    <string name="canara_bank">ਕੈਨਰਾ ਬੈਂਕ</string>
+    <string name="isro_layout">ਇਸਰੋ ਲੇਆਊਟ</string>
+    <string name="kumaraswamy_layout_2nd_stage">ਕੁਮਾਰਸਵਾਮੀ ਲੇਆਊਟ ਦੂਜਾ ਪੜਾਅ</string>
+    <string name="water_tank_kumaraswamy_layout">ਵਾਟਰ ਟੈਂਕ ਕੁਮਾਰਸਵਾਮੀ ਲੇਆਊਟ</string>
+    <string name="cauvery_bhavana">ਕਾਵੇਰੀ ਭਵਨ</string>
+
+    <!-- Content Descriptions -->
+    <string name="buses">ਬੱਸਾਂ</string>
+    <string name="bus_route">ਬੱਸ ਰੂਟ</string>
+
+    <!-- Error Messages -->
+    <string name="network_error">ਨੈੱਟਵਰਕ ਗਲਤੀ: %1$s</string>
+    <string name="invalid_request">ਗਲਤ ਬੇਨਤੀ</string>
+    <string name="stop_not_found">ਸਟਾਪ ਨਹੀਂ ਮਿਲਿਆ</string>
+    <string name="server_error">ਸਰਵਰ ਗਲਤੀ। ਬਾਅਦ ਵਿੱਚ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।</string>
+    <string name="failed_get_buses_stop">ਸਟਾਪ ਲਈ ਬੱਸਾਂ ਪ੍ਰਾਪਤ ਕਰਨ ਵਿੱਚ ਅਸਫਲ। ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।</string>
+    <string name="no_internet_connection">ਇੰਟਰਨੈੱਟ ਕਨੈਕਸ਼ਨ ਨਹੀਂ ਹੈ</string>
+    <string name="request_timeout">ਬੇਨਤੀ ਦਾ ਸਮਾਂ ਸਮਾਪਤ। ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।</string>
+    <string name="unexpected_error">ਅਣਅਪੇਖਿਤ ਗਲਤੀ ਆਈ: %1$s</string>
+    <string name="stop_id_required">ਸਟਾਪ ਆਈਡੀ ਲੋੜੀਂਦੀ ਹੈ</string>
+    <string name="no_buses_found_stop">ਇਸ ਸਟਾਪ ਲਈ ਕੋਈ ਬੱਸ ਨਹੀਂ ਮਿਲੀ</string>
+    <string name="both_stops_required">ਸਰੋਤ ਅਤੇ ਮੰਜ਼ਿਲ ਸਟਾਪ ਆਈਡੀ ਦੋਵੇਂ ਲੋੜੀਂਦੀਆਂ ਹਨ</string>
+    <string name="stops_cannot_be_same">ਸਰੋਤ ਅਤੇ ਮੰਜ਼ਿਲ ਸਟਾਪ ਇਕੋ ਨਹੀਂ ਹੋ ਸਕਦੇ</string>
+    <string name="stop_ids_format_error">ਸਟਾਪ ਆਈਡੀ S1 ਤੋਂ S25 ਦੇ ਫਾਰਮੈਟ ਵਿੱਚ ਹੋਣੀਆਂ ਚਾਹੀਦੀਆਂ ਹਨ</string>
+    <string name="no_data_from_server">ਸਰਵਰ ਤੋਂ ਕੋਈ ਡਾਟਾ ਪ੍ਰਾਪਤ ਨਹੀਂ ਹੋਇਆ</string>
+    <string name="route_number_required">ਰੂਟ ਨੰਬਰ ਲੋੜੀਂਦਾ ਹੈ</string>
+    <string name="route_not_found">ਰੂਟ ਨਹੀਂ ਮਿਲਿਆ</string>
+    <string name="invalid_route_number">ਗਲਤ ਰੂਟ ਨੰਬਰ</string>
+    <string name="failed_get_route">ਰੂਟ ਪ੍ਰਾਪਤ ਕਰਨ ਵਿੱਚ ਅਸਫਲ: %1$s</string>
+    <string name="check_connection">ਕਿਰਪਾ ਕਰਕੇ ਆਪਣਾ ਕਨੈਕਸ਼ਨ ਚੈੱਕ ਕਰੋ</string>
+</resources>
