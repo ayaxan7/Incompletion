@@ -26,7 +26,8 @@ import com.ayaan.incompletion.R
 fun RouteDetailsScreen(
     navController: NavController,
     routeNumber: String,
-    routeDetailsViewModel: RouteDetailsViewModel = hiltViewModel()
+    routeDetailsViewModel: RouteDetailsViewModel = hiltViewModel(),
+    language:String="en"
 ) {
     val uiState by routeDetailsViewModel.uiState.collectAsState()
 

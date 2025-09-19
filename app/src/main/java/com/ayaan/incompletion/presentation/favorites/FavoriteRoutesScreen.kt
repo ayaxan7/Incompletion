@@ -28,7 +28,8 @@ import com.ayaan.incompletion.ui.theme.PrimaryBlue
 fun FavoriteRoutesScreen(
     navController: NavController,
     favoriteRouteViewModel: FavoriteRouteViewModel = hiltViewModel(),
-    routeSelectionViewModel: RouteSelectionViewModel = hiltViewModel()
+    routeSelectionViewModel: RouteSelectionViewModel = hiltViewModel(),
+    language:String="en"
 ) {
     val favoriteRoutes by favoriteRouteViewModel.favoriteRoutes.collectAsState()
     var showAddFavoriteDialog by remember { mutableStateOf(false) }

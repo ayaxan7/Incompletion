@@ -29,7 +29,8 @@ fun SignInScreen(
     onSignInClick: () -> Unit,
     onSignUpClick: () -> Unit,
     onForgotPasswordClick: () -> Unit,
-    viewModel: SignInViewModel = viewModel()
+    viewModel: SignInViewModel = viewModel(),
+    language:String="en"
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }

@@ -32,7 +32,8 @@ import javax.inject.Inject
 @Composable
 fun Navigator(
     innerPadding: PaddingValues,
-    locationService: LocationService
+    locationService: LocationService,
+    language: String
 ) {
     val testViewModel: TestViewModel = hiltViewModel()
     val testResult by testViewModel.testResult.collectAsState()
@@ -69,7 +70,7 @@ fun Navigator(
         modifier = Modifier.padding(innerPadding)
     ) {
         composable(route = Destinations.Home.route) {
-            HomeScreen(navController)
+            HomeScreen(navController,language=language)
         }
         composable(route = Destinations.Login.route) {
             SignInScreen(
@@ -78,6 +79,7 @@ fun Navigator(
                         popUpTo(Destinations.Login.route) { inclusive = true }
                     }
                 },
+                language = language,
                 onSignUpClick = { navController.navigate(Destinations.SignUp.route) },
                 onForgotPasswordClick = { navController.navigate(Destinations.ForgotPassword.route) })
         }
@@ -109,18 +111,19 @@ fun Navigator(
                     popUpTo(Destinations.Login.route) { inclusive = true }
                 }
             },
+                language=language,
             onSignInClick = {
                 navController.navigate(Destinations.Login.route)
             })
         }
         composable(route = Destinations.FavoriteRoutes.route) {
-            FavoriteRoutesScreen(navController)
+            FavoriteRoutesScreen(navController,language=language)
         }
         composable(route = Destinations.NearestBusStop.route) {
-            NearestBusStopScreen(navController, locationService = locationService)
+            NearestBusStopScreen(navController, locationService = locationService,language=language)
         }
         composable (Destinations.Settings.route){
-             SettingsScreen(navController)
+             SettingsScreen(navController,language=language)
         }
         composable(
             route = "${Destinations.RouteDetails.route}/{routeNumber}",
@@ -131,7 +134,8 @@ fun Navigator(
             val routeNumber = backStackEntry.arguments?.getString("routeNumber") ?: ""
             RouteDetailsScreen(
                 navController = navController,
-                routeNumber = routeNumber
+                routeNumber = routeNumber,
+                language=language
             )
         }
     }

@@ -42,8 +42,8 @@ class MainActivity : ComponentActivity() {
             Log.e("MainActivity", "Places initialization failed", e)
         }
         setContent {
-//            val settingsViewModel: SettingsViewModel = hiltViewModel()
-//            val selectedLanguageCode by settingsViewModel.selectedLanguageCode.collectAsState()
+            val settingsViewModel: SettingsViewModel = hiltViewModel()
+            val selectedLanguageCode by settingsViewModel.selectedLanguageCode.collectAsState()
 //            LaunchedEffect(selectedLanguageCode) {
 //                while (true) {
 //                    Log.d("MainActivity", "Selected language code: $selectedLanguageCode")
@@ -53,7 +53,7 @@ class MainActivity : ComponentActivity() {
 
             IncompletionTheme(darkTheme = false) {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Navigator(innerPadding, locationService)
+                    Navigator(innerPadding, locationService,selectedLanguageCode)
                 }
             }
         }

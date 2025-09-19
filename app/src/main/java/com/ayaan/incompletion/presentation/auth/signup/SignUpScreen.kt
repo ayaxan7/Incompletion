@@ -28,7 +28,8 @@ import com.ayaan.incompletion.ui.theme.*
 fun SignUpScreen(
     onSignUpClick: () -> Unit,
     onSignInClick: () -> Unit,
-    viewModel: SignUpViewModel = viewModel()
+    viewModel: SignUpViewModel = viewModel(),
+    language:String="en"
 ) {
     var fullName by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }

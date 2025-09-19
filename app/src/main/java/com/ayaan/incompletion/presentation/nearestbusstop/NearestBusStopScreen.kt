@@ -49,7 +49,8 @@ fun NearestBusStopScreen(
     navController: NavController,
     viewModel: NearestBusStopViewModel = hiltViewModel(),
     busesForStopViewModel: BusesForStopViewModel = hiltViewModel(),
-    locationService: LocationService
+    locationService: LocationService,
+    language:String="en"
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val busesForStopUiState by busesForStopViewModel.uiState.collectAsState()

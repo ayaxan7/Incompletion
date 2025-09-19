@@ -54,7 +54,8 @@ data class Language(
 @Composable
 fun SettingsScreen(
     navController: NavController= rememberNavController(),
-    viewModel: SettingsViewModel = hiltViewModel()
+    viewModel: SettingsViewModel = hiltViewModel(),
+    language:String="en"
 ) {
     var selectedLanguage by remember { mutableStateOf("en") }
 

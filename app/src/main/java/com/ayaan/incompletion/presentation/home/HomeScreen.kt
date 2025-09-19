@@ -43,7 +43,8 @@ import com.ayaan.incompletion.ui.theme.PrimaryBlue
 @Composable
 fun HomeScreen(
     navController: NavController,
-    favoriteRouteViewModel: FavoriteRouteViewModel = hiltViewModel()
+    favoriteRouteViewModel: FavoriteRouteViewModel = hiltViewModel(),
+    language:String="en"
 ) {
     var showAddFavoriteDialog by remember { mutableStateOf(false) }
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
