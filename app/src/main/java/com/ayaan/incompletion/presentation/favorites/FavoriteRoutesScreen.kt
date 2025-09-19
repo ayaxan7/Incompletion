@@ -20,13 +20,15 @@ import com.ayaan.incompletion.R
 import com.ayaan.incompletion.presentation.common.components.GradientExtendedFloatingActionButton
 import com.ayaan.incompletion.presentation.favorites.components.AddFavoriteDialog
 import com.ayaan.incompletion.presentation.favorites.components.FavoriteRoutesList
+import com.ayaan.incompletion.presentation.home.viewmodel.RouteSelectionViewModel
 import com.ayaan.incompletion.ui.theme.PrimaryBlue
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FavoriteRoutesScreen(
     navController: NavController,
-    favoriteRouteViewModel: FavoriteRouteViewModel = hiltViewModel()
+    favoriteRouteViewModel: FavoriteRouteViewModel = hiltViewModel(),
+    routeSelectionViewModel: RouteSelectionViewModel = hiltViewModel()
 ) {
     val favoriteRoutes by favoriteRouteViewModel.favoriteRoutes.collectAsState()
     var showAddFavoriteDialog by remember { mutableStateOf(false) }
@@ -111,7 +113,8 @@ fun FavoriteRoutesScreen(
                     onDeleteFavorite = { favoriteRoute ->
                         favoriteRouteViewModel.removeFavoriteRoute(favoriteRoute)
                     },
-                    navController = navController
+                    navController = navController,
+                    routeSelectionViewModel = routeSelectionViewModel
                 )
             }
             // Add favorite dialog

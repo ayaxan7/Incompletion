@@ -1,5 +1,6 @@
 package com.ayaan.incompletion.presentation.favorites.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -18,16 +19,25 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.ayaan.incompletion.data.local.entity.FavoriteRoute
-import com.ayaan.incompletion.presentation.navigation.Destinations
+import com.ayaan.incompletion.presentation.home.viewmodel.RouteSelectionViewModel
 import com.ayaan.incompletion.R
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FavoriteRoutesList(
     favoriteRoutes: List<FavoriteRoute>,
     onDeleteFavorite: (FavoriteRoute) -> Unit,
-    navController: NavController
+    navController: NavController,
+    routeSelectionViewModel: RouteSelectionViewModel = hiltViewModel()
 ) {
+    val uiState by routeSelectionViewModel.uiState.collectAsState()
+    val bottomSheetState = rememberModalBottomSheetState()
+    var showBottomSheet by remember { mutableStateOf(false) }
+    var selectedRoute by remember { mutableStateOf<FavoriteRoute?>(null) }
+
     if (favoriteRoutes.isNotEmpty()) {
         Column(
             modifier = Modifier
@@ -62,15 +72,42 @@ fun FavoriteRoutesList(
                         favoriteRoute = favoriteRoute,
                         onDeleteClick = { onDeleteFavorite(favoriteRoute) },
                         onItemClick = {
-                            val route = "${Destinations.BookTicket.route}?sourceName=${favoriteRoute.sourceName}&sourceId=${favoriteRoute.sourceId}&destName=${favoriteRoute.destinationName}&destId=${favoriteRoute.destinationId}"
-                            navController.navigate(route) {
-                                popUpTo(Destinations.Home.route)
-                                launchSingleTop = true
-                            }
+                            selectedRoute = favoriteRoute
+                            // Set the source and destination in the ViewModel
+                            routeSelectionViewModel.updateSourceSelection(favoriteRoute.sourceId)
+                            routeSelectionViewModel.updateDestinationSelection(favoriteRoute.destinationId)
+                            showBottomSheet = true
                         }
                     )
                 }
             }
+        }
+    }
+
+    // BottomSheet for displaying common routes
+    if (showBottomSheet && selectedRoute != null) {
+        ModalBottomSheet(
+            onDismissRequest = {
+                showBottomSheet = false
+                routeSelectionViewModel.clearSelections()
+            },
+            sheetState = bottomSheetState,
+            modifier = Modifier.fillMaxHeight(),
+            containerColor= Color.White
+        ) {
+            CommonRoutesBottomSheet(
+                uiState = uiState,
+                selectedRoute = selectedRoute!!,
+                onDismiss = {
+                    showBottomSheet = false
+                    routeSelectionViewModel.clearSelections()
+                },
+                onRetry = {
+                    routeSelectionViewModel.updateSourceSelection(selectedRoute!!.sourceId)
+                    routeSelectionViewModel.updateDestinationSelection(selectedRoute!!.destinationId)
+                },
+                navController = navController
+            )
         }
     }
 }
