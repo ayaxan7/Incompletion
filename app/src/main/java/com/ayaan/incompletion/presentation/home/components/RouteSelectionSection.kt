@@ -32,7 +32,8 @@ fun RouteSelectionSection(
     modifier: Modifier = Modifier,
     routeSelectionViewModel: RouteSelectionViewModel = hiltViewModel(),
     routeDetailsViewModel: RouteDetailsViewModel=hiltViewModel(),
-    navController: NavController? = null
+    navController: NavController? = null,
+    language: String="en"
 ) {
     val uiState by routeSelectionViewModel.uiState.collectAsState()
     var sourceDropdownExpanded by remember { mutableStateOf(false) }
@@ -58,7 +59,7 @@ fun RouteSelectionSection(
             )
             Spacer(modifier = Modifier.width(12.dp))
             Text(
-                text = stringResource(R.string.find_common_routes),
+                text=stringResource(R.string.find_common_routes) ,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF333333)

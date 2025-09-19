@@ -22,6 +22,7 @@ import com.google.android.libraries.places.api.Places
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.Locale
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -50,7 +51,11 @@ class MainActivity : ComponentActivity() {
 //                    delay(5000)
 //                }
 //            }
-
+            val locale = Locale("hi") // Hindi
+            Locale.setDefault(locale)
+            val config = resources.configuration
+            config.setLocale(locale)
+            resources.updateConfiguration(config, resources.displayMetrics)
             IncompletionTheme(darkTheme = false) {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Navigator(innerPadding, locationService,selectedLanguageCode)

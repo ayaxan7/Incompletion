@@ -1,6 +1,5 @@
 package com.ayaan.incompletion.presentation.settings
 
-import androidx.navigation.compose.rememberNavController
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -18,22 +17,18 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -44,7 +39,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.ayaan.incompletion.ui.theme.PrimaryBlue
+
 data class Language(
     val code: String,
     val name: String,
@@ -53,9 +50,9 @@ data class Language(
 
 @Composable
 fun SettingsScreen(
-    navController: NavController= rememberNavController(),
+    navController: NavController = rememberNavController(),
     viewModel: SettingsViewModel = hiltViewModel(),
-    language:String="en"
+    language: String = "en"
 ) {
     var selectedLanguage by remember { mutableStateOf("en") }
 
@@ -78,8 +75,7 @@ fun SettingsScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     IconButton(
-                        onClick = { navController.navigateUp() }
-                    ) {
+                        onClick = { navController.navigateUp() }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back",
@@ -96,8 +92,7 @@ fun SettingsScreen(
                     )
                 }
             }
-        },
-        containerColor = Color.White
+        }, containerColor = Color.White
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -124,8 +119,7 @@ fun SettingsScreen(
                             viewModel.updateLanguagePreference(language.code)
                             // Here you can save the language preference
                             // saveLanguagePreference(language.code)
-                        }
-                    )
+                        })
                 }
             }
         }
@@ -134,9 +128,7 @@ fun SettingsScreen(
 
 @Composable
 fun LanguageItem(
-    language: Language,
-    isSelected: Boolean,
-    onLanguageSelected: () -> Unit
+    language: Language, isSelected: Boolean, onLanguageSelected: () -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -161,8 +153,7 @@ fun LanguageItem(
                 selected = isSelected,
                 onClick = { onLanguageSelected() },
                 colors = RadioButtonDefaults.colors(
-                    selectedColor = PrimaryBlue,
-                    unselectedColor = Color.Gray
+                    selectedColor = PrimaryBlue, unselectedColor = Color.Gray
                 )
             )
 

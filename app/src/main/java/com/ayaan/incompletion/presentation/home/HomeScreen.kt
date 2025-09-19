@@ -95,7 +95,7 @@ fun HomeScreen(
                     .padding(innerPadding)
                     .verticalScroll(rememberScrollState())
             ) {
-                RouteSelectionSection(navController = navController)
+                RouteSelectionSection(navController = navController, language = language)
 
                 // Action buttons section
                 ActionButtonsSection(
