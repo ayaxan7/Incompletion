@@ -78,7 +78,11 @@ dependencies {
 
     // Hilt
     implementation(libs.hilt.android)
+    implementation(libs.androidx.datastore.core)
     ksp(libs.hilt.compiler)
+
+    // DataStore Preferences
+    implementation("androidx.datastore:datastore-preferences:1.1.7")
 
     // Firebase & Auth (using BOM for version management)
     implementation(platform(libs.firebase.bom))

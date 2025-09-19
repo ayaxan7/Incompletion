@@ -25,6 +25,7 @@ import com.ayaan.incompletion.presentation.common.components.test.TestResult
 import com.ayaan.incompletion.presentation.common.components.test.TestViewModel
 import com.ayaan.incompletion.presentation.routedetails.RouteDetailsScreen
 import com.ayaan.incompletion.data.location.LocationService
+import com.ayaan.incompletion.presentation.settings.SettingsScreen
 import com.google.firebase.auth.FirebaseAuth
 import javax.inject.Inject
 
@@ -118,6 +119,9 @@ fun Navigator(
         composable(route = Destinations.NearestBusStop.route) {
             NearestBusStopScreen(navController, locationService = locationService)
         }
+        composable (Destinations.Settings.route){
+             SettingsScreen(navController)
+        }
         composable(
             route = "${Destinations.RouteDetails.route}/{routeNumber}",
             arguments = listOf(
@@ -142,4 +146,5 @@ sealed class Destinations(val route: String) {
     data object FavoriteRoutes : Destinations("favorite_routes")
     data object NearestBusStop : Destinations("nearest_bus_stop")
     data object RouteDetails : Destinations("route_details")
+    data object Settings : Destinations("settings")
 }

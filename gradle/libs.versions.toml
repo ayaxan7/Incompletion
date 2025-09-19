@@ -31,6 +31,7 @@ ksp = "2.0.21-1.0.25"
 room = "2.6.1"
 places = "4.1.0"
 coroutinesPlayServices = "1.9.0"
+datastoreCore = "1.1.7"
 
 [libraries]
 maps-compose = { group = "com.google.maps.android", name = "maps-compose", version.ref = "maps-compose" }
@@ -87,6 +88,7 @@ coroutines-play-services = { group = "org.jetbrains.kotlinx", name = "kotlinx-co
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+androidx-datastore-core = { group = "androidx.datastore", name = "datastore-core", version.ref = "datastoreCore" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

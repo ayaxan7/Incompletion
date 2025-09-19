@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App Name -->
+    <string name="app_name">इनकम्प्लीशन</string>
+
+    <!-- Common UI Elements -->
+    <string name="back">वापस</string>
+    <string name="close">बंद करें</string>
+    <string name="retry">पुनः प्रयास</string>
+    <string name="dismiss">खारिज करें</string>
+    <string name="loading">लोड हो रहा है...</string>
+    <string name="error">त्रुटि</string>
+    <string name="search">खोज</string>
+    <string name="dropdown">ड्रॉपडाउन</string>
+    <string name="home">होम</string>
+    <string name="book_ticket">टिकट बुक करें</string>
+    <string name="navigation_menu">नेवीगेशन मेनू</string>
+    <string name="settings">सेटिंग्स</string>
+    <string name="profile">प्रोफ़ाइल</string>
+    <string name="menu">मेनू</string>
+
+    <!-- Authentication -->
+    <string name="welcome_back">वापस स्वागत है</string>
+    <string name="sign_in_subtitle">अपनी यात्रा जारी रखने के लिए साइन इन करें</string>
+    <string name="email_address">ईमेल पता</string>
+    <string name="password">पासवर्ड</string>
+    <string name="forgot_password">पासवर्ड भूल गए?</string>
+    <string name="sign_in">साइन इन</string>
+    <string name="dont_have_account">खाता नहीं है? </string>
+    <string name="sign_up">साइन अप</string>
+    <string name="hide_password">पासवर्ड छुपाएं</string>
+    <string name="show_password">पासवर्ड दिखाएं</string>
+    <string name="gender">लिंग</string>
+
+    <!-- Navigation -->
+    <string name="nearest_bus_stops">नजदीकी बस स्टॉप</string>
+    <string name="route_finder">रूट खोजक</string>
+    <string name="favorite_routes">पसंदीदा रूट</string>
+    <string name="route_details">रूट %1$s</string>
+
+    <!-- Nearest Bus Stop Screen -->
+    <string name="buses_approaching_single">%1$d बस आ रही है</string>
+    <string name="buses_approaching_multiple">%1$d बसें आ रही हैं</string>
+    <string name="route_label">रूट: %1$s</string>
+    <string name="approaching_in">आने में: %1$s</string>
+    <string name="distance_away">दूरी: %1$s दूर</string>
+    <string name="crowd_density">भीड़ घनत्व: %1$s</string>
+    <string name="finding_nearest_bus_stops">नजदीकी बस स्टॉप खोजे जा रहे हैं...</string>
+    <string name="found_nearby_stops">%1$d नजदीकी बस स्टॉप मिले</string>
+    <string name="routes_label">रूट: %1$s</string>
+    <string name="no_routes_available">कोई रूट उपलब्ध नहीं</string>
+    <string name="show_bus_stops_list">बस स्टॉप की सूची दिखाएं</string>
+    <string name="tap_bus_stop_instruction">मैप पर फोकस करने के लिए किसी भी बस स्टॉप पर टैप करें</string>
+
+    <!-- Route Selection -->
+    <string name="find_common_routes">सामान्य रूट खोजें</string>
+    <string name="from_source">से (स्रोत)</string>
+    <string name="to_destination">तक (गंतव्य)</string>
+    <string name="select_source">स्रोत चुनें</string>
+    <string name="select_destination">गंतव्य चुनें</string>
+    <string name="select_source_stop">स्रोत स्टॉप चुनें</string>
+    <string name="select_destination_stop">गंतव्य स्टॉप चुनें</string>
+    <string name="swap_source_destination">स्रोत और गंतव्य की अदला-बदली</string>
+    <string name="finding_common_routes">सामान्य रूट खोजे जा रहे हैं...</string>
+    <string name="common_routes">सामान्य रूट</string>
+    <string name="from_to_format">%1$s से %2$s तक</string>
+    <string name="no_common_routes_found">इस चयन के लिए कोई सामान्य रूट नहीं मिला।</string>
+    <string name="route_number">रूट %1$s</string>
+    <string name="find_routes">रूट खोजें</string>
+    <string name="enter_stop_ids_instruction">रूट खोजने के लिए स्टॉप आईडी दर्ज करें</string>
+    <string name="find_direct_routes_instruction">दो स्टॉप के बीच सीधे बस रूट खोजें</string>
+
+    <!-- Route Details -->
+    <string name="loading_route_details">रूट विवरण लोड हो रहा है...</string>
+    <string name="error_loading_route">रूट लोड करने में त्रुटि</string>
+    <string name="no_route_data_available">कोई रूट डेटा उपलब्ध नहीं</string>
+
+    <!-- Favorites -->
+    <string name="add_favorite_route">पसंदीदा रूट जोड़ें</string>
+    <string name="add_to_favorites">पसंदीदा में जोड़ें</string>
+    <string name="add_favourites">पसंदीदा जोड़ें</string>
+    <string name="no_favorite_routes">कोई पसंदीदा रूट नहीं</string>
+    <string name="add_frequently_used_routes">त्वरित पहुंच के लिए अपने अक्सर उपयोग किए जाने वाले रूट जोड़ें</string>
+
+    <!-- Bus Stop Data -->
+    <string name="kempegowda_bus_station">केम्पेगौड़ा बस स्टेशन</string>
+    <string name="corporation">निगम</string>
+    <string name="town_hall">टाउन हॉल</string>
+    <string name="krishnarajendra_market">कृष्णराजेन्द्र मार्केट</string>
+    <string name="makkala_koota">मक्कला कूटा</string>
+    <string name="mahila_samaja">महिला समाज</string>
+    <string name="national_college">नेशनल कॉलेज</string>
+    <string name="basavanagudi_police_station">बसवनगुड़ी पुलिस स्टेशन</string>
+    <string name="tata_silk_farm">टाटा सिल्क फार्म</string>
+    <string name="mm_industries">एम एम इंडस्ट्रीज</string>
+    <string name="shasthri_bekary">शास्त्री बेकरी</string>
+    <string name="monotype">मोनोटाइप</string>
+    <string name="cauvery_nagara">कावेरी नगर</string>
+    <string name="yarab_nagara">यारब नगर</string>
+    <string name="kadirenahalli_cross">कादिरेनहल्ली क्रॉस</string>
+    <string name="dayananda_sagar_college">दयानंद सागर कॉलेज</string>
+    <string name="maharani_college">महारानी कॉलेज</string>
+    <string name="kr_circle">केआर सर्कल</string>
+    <string name="kumaraswamy_layout_police_station">कुमारस्वामी लेआउट पुलिस स्टेशन</string>
+    <string name="kumaraswamy_layout">कुमारस्वामी लेआउट</string>
+    <string name="canara_bank">केनरा बैंक</string>
+    <string name="isro_layout">इसरो लेआउट</string>
+    <string name="kumaraswamy_layout_2nd_stage">कुमारस्वामी लेआउट दूसरा चरण</string>
+    <string name="water_tank_kumaraswamy_layout">वाटर टैंक कुमारस्वामी लेआउट</string>
+    <string name="cauvery_bhavana">कावेरी भवन</string>
+
+    <!-- Content Descriptions -->
+    <string name="buses">बसें</string>
+    <string name="bus_route">बस रूट</string>
+
+    <!-- Error Messages -->
+    <string name="network_error">नेटवर्क त्रुटि: %1$s</string>
+    <string name="invalid_request">अमान्य अनुरोध</string>
+    <string name="stop_not_found">स्टॉप नहीं मिला</string>
+    <string name="server_error">सर्वर त्रुटि। कृपया बाद में पुनः प्रयास करें।</string>
+    <string name="failed_get_buses_stop">स्टॉप के लिए बसें प्राप्त करने में असफल। कृपया पुनः प्रयास करें।</string>
+    <string name="no_internet_connection">कोई इंटरनेट कनेक्शन नहीं</string>
+    <string name="request_timeout">अनुरोध समय समाप्त। कृपया पुनः प्रयास करें।</string>
+    <string name="unexpected_error">एक अनपेक्षित त्रुटि हुई: %1$s</string>
+    <string name="stop_id_required">स्टॉप आईडी आवश्यक है</string>
+    <string name="no_buses_found_stop">इस स्टॉप के लिए कोई बस नहीं मिली</string>
+    <string name="both_stops_required">स्रोत और गंतव्य दोनों स्टॉप आईडी आवश्यक हैं</string>
+    <string name="stops_cannot_be_same">स्रोत और गंतव्य स्टॉप समान नहीं हो सकते</string>
+    <string name="stop_ids_format_error">स्टॉप आईडी S1 से S25 प्रारूप में होना चाहिए</string>
+    <string name="no_data_from_server">सर्वर से कोई डेटा प्राप्त नहीं हुआ</string>
+    <string name="route_number_required">रूट नंबर आवश्यक है</string>
+    <string name="route_not_found">रूट नहीं मिला</string>
+    <string name="invalid_route_number">अमान्य रूट नंबर</string>
+    <string name="failed_get_route">रूट प्राप्त करने में असफल: %1$s</string>
+    <string name="check_connection">कृपया अपना कनेक्शन जांचें</string>
+</resources>
