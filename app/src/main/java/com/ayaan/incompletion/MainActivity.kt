@@ -7,12 +7,16 @@ import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ayaan.incompletion.presentation.navigation.Navigator
 import com.ayaan.incompletion.ui.theme.IncompletionTheme
@@ -45,22 +49,24 @@ class MainActivity : ComponentActivity() {
         setContent {
             val settingsViewModel: SettingsViewModel = hiltViewModel()
             val selectedLanguageCode by settingsViewModel.selectedLanguageCode.collectAsState()
-//            LaunchedEffect(selectedLanguageCode) {
-//                while (true) {
-//                    Log.d("MainActivity", "Selected language code: $selectedLanguageCode")
-//                    delay(5000)
-//                }
-//            }
-            val locale = Locale("hi") // Hindi
-            Locale.setDefault(locale)
-            val config = resources.configuration
-            config.setLocale(locale)
-            resources.updateConfiguration(config, resources.displayMetrics)
-            IncompletionTheme(darkTheme = false) {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Navigator(innerPadding, locationService,selectedLanguageCode)
+            LaunchedEffect(selectedLanguageCode) {
+                while (true) {
+                    Log.d("MainActivity", "Selected language code: $selectedLanguageCode")
+                    delay(5000)
                 }
             }
+            LaunchedEffect(selectedLanguageCode) {
+                    val locale = Locale(selectedLanguageCode)
+                    Locale.setDefault(locale)
+                    val config = resources.configuration
+                    config.setLocale(locale)
+                    resources.updateConfiguration(config, resources.displayMetrics)
+            }
+                IncompletionTheme(darkTheme = false) {
+                    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                        Navigator(innerPadding, locationService, selectedLanguageCode)
+                    }
+                }
         }
     }
 }

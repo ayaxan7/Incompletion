@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
@@ -25,8 +26,10 @@ import com.ayaan.incompletion.presentation.common.components.test.TestResult
 import com.ayaan.incompletion.presentation.common.components.test.TestViewModel
 import com.ayaan.incompletion.presentation.routedetails.RouteDetailsScreen
 import com.ayaan.incompletion.data.location.LocationService
+import com.ayaan.incompletion.presentation.SplashScreen
 import com.ayaan.incompletion.presentation.settings.SettingsScreen
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @Composable
@@ -57,18 +60,22 @@ fun Navigator(
             }
         }
     }
-    val auth = FirebaseAuth.getInstance()
-    val user = auth.currentUser
-    val start = if (user != null) Destinations.Home.route else Destinations.Login.route
+//    val auth = FirebaseAuth.getInstance()
+//    val user = auth.currentUser
+//    val start = if (user != null) Destinations.Home.route else Destinations.SignUp.route
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
     NavHost(
         navController = navController,
-        startDestination = start,
+        startDestination = Destinations.Splash.route,
+//        startDestination = start,
         modifier = Modifier.padding(innerPadding)
     ) {
+        composable(route= Destinations.Splash.route){
+            SplashScreen(navController)
+        }
         composable(route = Destinations.Home.route) {
             HomeScreen(navController,language=language)
         }
@@ -144,6 +151,7 @@ fun Navigator(
 sealed class Destinations(val route: String) {
     data object Login : Destinations("login")
     data object Home : Destinations("home")
+    data object Splash : Destinations("splash")
     data object BookTicket : Destinations("bookticket")
     data object SignUp : Destinations("signup")
     data object ForgotPassword : Destinations("forgotpassword")

@@ -17,6 +17,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ayaan.incompletion.presentation.common.components.GradientButton
 import kotlinx.coroutines.launch
@@ -29,7 +30,7 @@ fun SignInScreen(
     onSignInClick: () -> Unit,
     onSignUpClick: () -> Unit,
     onForgotPasswordClick: () -> Unit,
-    viewModel: SignInViewModel = viewModel(),
+    viewModel: SignInViewModel = hiltViewModel(),
     language:String="en"
 ) {
     var email by remember { mutableStateOf("") }

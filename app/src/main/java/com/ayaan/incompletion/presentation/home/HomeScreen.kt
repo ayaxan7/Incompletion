@@ -1,5 +1,6 @@
 package com.ayaan.incompletion.presentation.home
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -38,6 +39,7 @@ import com.ayaan.incompletion.presentation.navigation.Destinations
 import com.ayaan.incompletion.presentation.home.components.RouteSelectionSection
 import com.ayaan.incompletion.presentation.favorites.FavoriteRouteViewModel
 import com.ayaan.incompletion.ui.theme.PrimaryBlue
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -96,7 +98,7 @@ fun HomeScreen(
                     .verticalScroll(rememberScrollState())
             ) {
                 RouteSelectionSection(navController = navController, language = language)
-
+                Log.d("LocaleDebug", "Current locale: ${Locale.getDefault().language}")
                 // Action buttons section
                 ActionButtonsSection(
                     onFavoriteRoutesClick = {

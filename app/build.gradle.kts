@@ -116,7 +116,7 @@ dependencies {
     implementation(libs.kotlin.reflect)
     implementation(libs.accompanist.systemuicontroller)
     implementation("com.google.accompanist:accompanist-swiperefresh:0.32.0")
-
+    implementation("androidx.core:core-splashscreen:1.0.1")
     // Google Directions API
     implementation("com.google.maps:google-maps-services:2.2.0")
     implementation("org.slf4j:slf4j-simple:1.7.25")
