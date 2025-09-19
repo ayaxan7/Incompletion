@@ -1,4 +1,4 @@
-package com.ayaan.incompletion.presentation.busstop.viewmodel
+package com.ayaan.incompletion.presentation.nearestbusstop
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

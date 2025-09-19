@@ -10,6 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -19,6 +20,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ayaan.incompletion.presentation.auth.components.GenderSelectionCard
 import com.ayaan.incompletion.presentation.common.components.GradientButton
 import com.ayaan.incompletion.presentation.common.components.ThemedTextField
+import com.ayaan.incompletion.R
 import kotlinx.coroutines.launch
 import com.ayaan.incompletion.ui.theme.*
 
@@ -130,7 +132,7 @@ fun SignUpScreen(
                 ThemedTextField(
                     value = email,
                     onValueChange = { email = it },
-                    label = "Email Address",
+                    label = stringResource(R.string.email_address),
                     icon = Icons.Default.Email,
                     keyboardType = KeyboardType.Email,
                     enabled = signUpState !is SignUpState.Loading
@@ -228,7 +230,7 @@ fun SignUpScreen(
                         enabled = signUpState !is SignUpState.Loading
                     ) {
                         Text(
-                            text = "Sign In",
+                            text = stringResource(R.string.sign_in),
                             color = LinkColor,
                             style = MaterialTheme.typography.bodyMedium.copy(
                                 fontWeight = FontWeight.SemiBold
@@ -240,8 +242,3 @@ fun SignUpScreen(
         }
     }
 }
-
-
-
-
-

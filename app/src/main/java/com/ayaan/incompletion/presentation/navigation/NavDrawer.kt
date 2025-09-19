@@ -17,11 +17,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-
+import com.ayaan.incompletion.R
 @Composable
 fun NavDrawer(drawerState: DrawerState, scope: CoroutineScope, navController: NavController) {
     ModalDrawerSheet(
@@ -56,8 +57,8 @@ fun NavDrawer(drawerState: DrawerState, scope: CoroutineScope, navController: Na
             Spacer(modifier = Modifier.height(8.dp))
 
             NavigationDrawerItem(
-                icon = { Icon(Icons.Default.DirectionsBus, contentDescription = "Book Ticket") },
-                label = { Text("Book Ticket") },
+                icon = { Icon(Icons.Default.DirectionsBus, contentDescription = stringResource(R.string.book_ticket)) },
+                label = { Text(stringResource(R.string.book_ticket)) },
                 selected = false,
                 onClick = {
                     scope.launch {

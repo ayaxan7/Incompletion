@@ -7,10 +7,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.ayaan.incompletion.R
 import com.ayaan.incompletion.ui.theme.*
+
 @Composable
  fun GenderSelectionCard(
     selectedGender: String,
@@ -30,7 +33,7 @@ import com.ayaan.incompletion.ui.theme.*
             modifier = Modifier.padding(16.dp)
         ) {
             Text(
-                text = "Gender",
+                text = stringResource(R.string.gender),
                 style = MaterialTheme.typography.titleMedium.copy(
                     fontWeight = FontWeight.Medium
                 ),
